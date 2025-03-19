@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<materials>
+  <material depletable="true" id="1" name="Plutonium nitrate solution">
+    <density units="sum" />
+    <nuclide ao="9.7592e-10" name="Pu238" />
+    <nuclide ao="2.3201e-05" name="Pu239" />
+    <nuclide ao="5.9809e-07" name="Pu240" />
+    <nuclide ao="1.772e-08" name="Pu241" />
+    <nuclide ao="3.2939e-09" name="Pu242" />
+    <nuclide ao="0.00076076" name="N14" />
+    <nuclide ao="0.065121" name="H1" />
+    <nuclide ao="0.03451" name="O16" />
+    <sab name="c_H_in_H2O" />
+  </material>
+  <material id="2" name="1100 Aluminum">
+    <density units="sum" />
+    <nuclide ao="0.059881" name="Al27" />
+    <nuclide ao="0.00034835150136" name="Si28" />
+    <nuclide ao="1.7688295320000002e-05" name="Si29" />
+    <nuclide ao="1.166020332e-05" name="Si30" />
+    <nuclide ao="3.5518206e-05" name="Cu63" />
+    <nuclide ao="1.5845794e-05" name="Cu65" />
+    <nuclide ao="1.2271848600000001e-05" name="Zn64" />
+    <nuclide ao="6.9208534e-06" name="Zn66" />
+    <nuclide ao="1.0083032e-06" name="Zn67" />
+    <nuclide ao="4.604751e-06" name="Zn68" />
+    <nuclide ao="1.522438e-07" name="Zn70" />
+    <nuclide ao="1.4853e-05" name="Mn55" />
+  </material>
+</materials>

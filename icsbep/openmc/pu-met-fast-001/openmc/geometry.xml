@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<geometry>
+
+  <!--
+  ==========================================
+  Description: Bare Pu-239 Jezebel Benchmark
+  Case:        PU-MET-FAST-001
+  Written By:  Paul Romano
+  Date:        9/1/2011
+  ==========================================
+  -->
+
+  <surface id="1" type="sphere" coeffs="0. 0. 0. 6.3849" boundary="vacuum" />
+
+  <cell id="1" material="1" region="-1" />
+
+</geometry>

@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8'?>
+<materials>
+  <material depletable="true" id="1" name="HEU">
+    <density units="sum" />
+    <nuclide ao="0.00052111" name="U234" />
+    <nuclide ao="0.042064" name="U235" />
+    <nuclide ao="0.0043626" name="U238" />
+    <nuclide ao="0.0011074" name="C0" />
+    <nuclide ao="1.129254e-05" name="Fe54" />
+    <nuclide ao="0.000177268728" name="Fe56" />
+    <nuclide ao="4.093908e-06" name="Fe57" />
+    <nuclide ao="5.44824e-07" name="Fe58" />
+    <nuclide ao="6.455759999999999e-08" name="W180" />
+    <nuclide ao="1.4256470000000001e-05" name="W182" />
+    <nuclide ao="7.698493800000001e-06" name="W183" />
+    <nuclide ao="1.6483707200000002e-05" name="W184" />
+    <nuclide ao="1.5294771400000002e-05" name="W186" />
+  </material>
+</materials>

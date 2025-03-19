@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<settings>
+
+  
+
+  <run_mode>eigenvalue</run_mode>
+  <batches>200</batches>
+  <inactive>20</inactive>
+  <particles>10000</particles>
+
+  <source>
+    <space type="point" parameters="0. 0. 0." />
+  </source>
+
+</settings>

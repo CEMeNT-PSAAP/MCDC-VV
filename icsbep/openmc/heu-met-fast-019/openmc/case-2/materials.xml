@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<materials>
+  <material depletable="true" id="1" name="HEU">
+    <density units="sum" />
+    <nuclide ao="0.00052315" name="U234" />
+    <nuclide ao="0.042256" name="U235" />
+    <nuclide ao="0.0043799" name="U238" />
+    <nuclide ao="0.0010894" name="C0" />
+    <nuclide ao="1.11762245e-05" name="Fe54" />
+    <nuclide ao="0.0001754428234" name="Fe56" />
+    <nuclide ao="4.0517399e-06" name="Fe57" />
+    <nuclide ao="5.392122000000001e-07" name="Fe58" />
+    <nuclide ao="6.36228e-08" name="W180" />
+    <nuclide ao="1.4050035000000002e-05" name="W182" />
+    <nuclide ao="7.587018900000001e-06" name="W183" />
+    <nuclide ao="1.62450216e-05" name="W184" />
+    <nuclide ao="1.50733017e-05" name="W186" />
+  </material>
+  <material id="2" name="c_Graphite">
+    <density units="sum" />
+    <nuclide ao="0.076716" name="C0" />
+    <sab name="c_Graphite" />
+  </material>
+</materials>
