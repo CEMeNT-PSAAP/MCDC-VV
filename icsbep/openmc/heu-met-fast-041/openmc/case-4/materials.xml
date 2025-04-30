@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<materials>
+  <material depletable="true" id="1" name="HEU">
+    <density units="sum" />
+    <nuclide ao="0.00049079" name="U234" />
+    <nuclide ao="0.044989" name="U235" />
+    <nuclide ao="0.0024032" name="U238" />
+  </material>
+  <material id="2" name="c_Graphite">
+    <density units="sum" />
+    <nuclide ao="0.083731" name="C0" />
+    <sab name="c_Graphite" />
+  </material>
+</materials>

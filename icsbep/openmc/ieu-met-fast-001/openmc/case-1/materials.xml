@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='utf-8'?>
+<materials>
+  <material depletable="true" id="1" name="Tuballoy">
+    <density units="sum" />
+    <nuclide ao="2.6423e-06" name="U234" />
+    <nuclide ao="0.00034591" name="U235" />
+    <nuclide ao="0.047694" name="U238" />
+  </material>
+  <material depletable="true" id="2" name="Oralloy">
+    <density units="sum" />
+    <nuclide ao="0.00049156" name="U234" />
+    <nuclide ao="0.044824" name="U235" />
+    <nuclide ao="0.0026391" name="U238" />
+  </material>
+  <material depletable="true" id="3" name="Mixed Uranium">
+    <density units="sum" />
+    <nuclide ao="0.00025561" name="U234" />
+    <nuclide ao="0.023353" name="U235" />
+    <nuclide ao="0.021939" name="U238" />
+  </material>
+  <material id="4" name="2024 Aluminum">
+    <density units="sum" />
+    <nuclide ao="0.0008128005450000001" name="Mg24" />
+    <nuclide ao="0.0001031559" name="Mg25" />
+    <nuclide ao="0.000113543555" name="Mg26" />
+    <nuclide ao="0.057868" name="Al27" />
+    <nuclide ao="0.00015182" name="Mn55" />
+    <nuclide ao="0.0007986825" name="Cu63" />
+    <nuclide ao="0.0003563175" name="Cu65" />
+  </material>
+  <material id="5" name="Stainless Steel">
+    <density units="sum" />
+    <nuclide ao="0.0007183154000000001" name="Cr50" />
+    <nuclide ao="0.013851997480000001" name="Cr52" />
+    <nuclide ao="0.0015707053200000002" name="Cr53" />
+    <nuclide ao="0.00039098180000000005" name="Cr54" />
+    <nuclide ao="0.0036985991000000004" name="Fe54" />
+    <nuclide ao="0.05806009612" name="Fe56" />
+    <nuclide ao="0.0013408608200000001" name="Fe57" />
+    <nuclide ao="0.00017844396" name="Fe58" />
+    <nuclide ao="0.0044314658055" name="Ni58" />
+    <nuclide ao="0.0017069926944999999" name="Ni60" />
+    <nuclide ao="7.420179049999999e-05" name="Ni61" />
+    <nuclide ao="0.0002365877775" name="Ni62" />
+    <nuclide ao="6.0251932e-05" name="Ni64" />
+  </material>
+</materials>
