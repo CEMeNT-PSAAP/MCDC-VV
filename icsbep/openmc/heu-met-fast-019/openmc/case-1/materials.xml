@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='utf-8'?>
+<materials>
+  <material depletable="true" id="1" name="HEU, Layer 1">
+    <density units="sum" />
+    <nuclide ao="0.00053913" name="U234" />
+    <nuclide ao="0.041845" name="U235" />
+    <nuclide ao="0.0045054" name="U238" />
+    <nuclide ao="0.0011058" name="C12" />
+    <nuclide ao="1.15842055e-05" name="Fe54" />
+    <nuclide ao="0.0001818472526" name="Fe56" />
+    <nuclide ao="4.1996461e-06" name="Fe57" />
+    <nuclide ao="5.588958e-07" name="Fe58" />
+    <nuclide ao="6.501959999999999e-08" name="W180" />
+    <nuclide ao="1.4358495000000001e-05" name="W182" />
+    <nuclide ao="7.7535873e-06" name="W183" />
+    <nuclide ao="1.66016712e-05" name="W184" />
+    <nuclide ao="1.54042269e-05" name="W186" />
+  </material>
+  <material depletable="true" id="2" name="HEU, Layer 2">
+    <density units="sum" />
+    <nuclide ao="0.00054361" name="U234" />
+    <nuclide ao="0.041769" name="U235" />
+    <nuclide ao="0.0045313" name="U238" />
+    <nuclide ao="0.0012895" name="C12" />
+    <nuclide ao="1.2736839500000001e-05" name="Fe54" />
+    <nuclide ao="0.0001999411414" name="Fe56" />
+    <nuclide ao="4.6175129e-06" name="Fe57" />
+    <nuclide ao="6.145062e-07" name="Fe58" />
+    <nuclide ao="7.943159999999998e-08" name="W180" />
+    <nuclide ao="1.7541145e-05" name="W182" />
+    <nuclide ao="9.4722183e-06" name="W183" />
+    <nuclide ao="2.0281535199999998e-05" name="W184" />
+    <nuclide ao="1.88186699e-05" name="W186" />
+  </material>
+  <material depletable="true" id="3" name="HEU, Layer 3">
+    <density units="sum" />
+    <nuclide ao="0.0005194" name="U234" />
+    <nuclide ao="0.04239" name="U235" />
+    <nuclide ao="0.0043476" name="U238" />
+    <nuclide ao="0.0010214" name="C12" />
+    <nuclide ao="1.05052185e-05" name="Fe54" />
+    <nuclide ao="0.0001649094642" name="Fe56" />
+    <nuclide ao="3.8084787e-06" name="Fe57" />
+    <nuclide ao="5.068386e-07" name="Fe58" />
+    <nuclide ao="6.5514e-08" name="W180" />
+    <nuclide ao="1.4467675e-05" name="W182" />
+    <nuclide ao="7.8125445e-06" name="W183" />
+    <nuclide ao="1.6727908e-05" name="W184" />
+    <nuclide ao="1.55213585e-05" name="W186" />
+  </material>
+  <material depletable="true" id="4" name="HEU, Layer 4">
+    <density units="sum" />
+    <nuclide ao="0.00051956" name="U234" />
+    <nuclide ao="0.04236" name="U235" />
+    <nuclide ao="0.0043676" name="U238" />
+    <nuclide ao="0.0012074" name="C12" />
+    <nuclide ao="1.2843218500000002e-05" name="Fe54" />
+    <nuclide ao="0.0002016110642" name="Fe56" />
+    <nuclide ao="4.6560787000000004e-06" name="Fe57" />
+    <nuclide ao="6.196386e-07" name="Fe58" />
+    <nuclide ao="7.28148e-08" name="W180" />
+    <nuclide ao="1.6079935e-05" name="W182" />
+    <nuclide ao="8.6831649e-06" name="W183" />
+    <nuclide ao="1.85920456e-05" name="W184" />
+    <nuclide ao="1.72510397e-05" name="W186" />
+  </material>
+  <material depletable="true" id="5" name="HEU, Layer 5">
+    <density units="sum" />
+    <nuclide ao="0.00051351" name="U234" />
+    <nuclide ao="0.042363" name="U235" />
+    <nuclide ao="0.0043006" name="U238" />
+    <nuclide ao="0.00083383" name="C12" />
+    <nuclide ao="9.3175145e-06" name="Fe54" />
+    <nuclide ao="0.0001462650514" name="Fe56" />
+    <nuclide ao="3.3778979e-06" name="Fe57" />
+    <nuclide ao="4.4953619999999997e-07" name="Fe58" />
+    <nuclide ao="5.0842799999999997e-08" name="W180" />
+    <nuclide ao="1.1227785e-05" name="W182" />
+    <nuclide ao="6.0630039e-06" name="W183" />
+    <nuclide ao="1.29818616e-05" name="W184" />
+    <nuclide ao="1.20455067e-05" name="W186" />
+  </material>
+  <material depletable="true" id="6" name="HEU, Layer 6">
+    <density units="sum" />
+    <nuclide ao="0.00052352" name="U234" />
+    <nuclide ao="0.042309" name="U235" />
+    <nuclide ao="0.0043843" name="U238" />
+    <nuclide ao="0.00092736" name="C12" />
+    <nuclide ao="9.326282e-06" name="Fe54" />
+    <nuclide ao="0.0001464026824" name="Fe56" />
+    <nuclide ao="3.3810764e-06" name="Fe57" />
+    <nuclide ao="4.499592e-07" name="Fe58" />
+    <nuclide ao="5.08908e-08" name="W180" />
+    <nuclide ao="1.1238385000000001e-05" name="W182" />
+    <nuclide ao="6.0687279e-06" name="W183" />
+    <nuclide ao="1.2994117600000001e-05" name="W184" />
+    <nuclide ao="1.2056878699999999e-05" name="W186" />
+  </material>
+  <material depletable="true" id="7" name="HEU, Layer 7">
+    <density units="sum" />
+    <nuclide ao="0.00052439" name="U234" />
+    <nuclide ao="0.042337" name="U235" />
+    <nuclide ao="0.0043869" name="U238" />
+    <nuclide ao="0.0013005" name="C12" />
+    <nuclide ao="1.2844972e-05" name="Fe54" />
+    <nuclide ao="0.0002016385904" name="Fe56" />
+    <nuclide ao="4.6567144e-06" name="Fe57" />
+    <nuclide ao="6.197232e-07" name="Fe58" />
+    <nuclide ao="7.28232e-08" name="W180" />
+    <nuclide ao="1.6081790000000002e-05" name="W182" />
+    <nuclide ao="8.6841666e-06" name="W183" />
+    <nuclide ao="1.85941904e-05" name="W184" />
+    <nuclide ao="1.72530298e-05" name="W186" />
+  </material>
+  <material id="8" name="c_Graphite">
+    <density units="sum" />
+    <nuclide ao="0.076716" name="C12" />
+    <sab name="c_Graphite" />
+  </material>
+</materials>

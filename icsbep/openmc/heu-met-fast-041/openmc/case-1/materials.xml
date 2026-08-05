@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<materials>
+  <material depletable="true" id="1" name="HEU">
+    <density units="sum" />
+    <nuclide ao="0.00048554" name="U234" />
+    <nuclide ao="0.044508" name="U235" />
+    <nuclide ao="0.0023775" name="U238" />
+  </material>
+  <material id="2" name="Beryllium">
+    <density units="sum" />
+    <nuclide ao="0.12295" name="Be9" />
+    <sab name="c_Be" />
+  </material>
+</materials>

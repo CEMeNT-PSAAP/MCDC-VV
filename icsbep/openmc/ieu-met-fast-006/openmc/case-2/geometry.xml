@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<geometry>
+
+  <!--
+  ================================================================
+  Description: Duralumin-reflected Spherical Assembly of 36% U-235
+  Case:        IEU-MET-FAST-006 Simplified model
+  ================================================================
+  -->
+
+  <surface id="1" type="sphere" coeffs="0. 0. 0. 2.100" />
+  <surface id="2" type="sphere" coeffs="0. 0. 0. 13.25" />
+  <surface id="3" type="sphere" coeffs="0. 0. 0. 15.00" />
+  <surface id="4" type="sphere" coeffs="0. 0. 0. 25.00" boundary="vacuum" />
+
+  <cell id="1" material="void" region="  -1" />
+  <cell id="2" material="1"    region="1 -2" />
+  <cell id="3" material="2"    region="2 -3" />
+  <cell id="4" material="3"    region="3 -4" />
+
+</geometry>

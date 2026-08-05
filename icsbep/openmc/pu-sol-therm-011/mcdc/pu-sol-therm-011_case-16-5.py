@@ -1,0 +1,67 @@
+import mcdc
+import numpy as np
+
+
+##############################
+#__________Materials__________
+##############################
+
+# Material Name: Plutonium nitrate solution
+# S(a,b): c_H_in_H2O (Not Implemented)
+# Depletable
+m1 = mcdc.material(nuclides=[
+	['Pu239',0.00010484],
+	['Pu240',4.5432e-06],
+	['N14',0.0027369],
+	['H1',0.06023300000000001],
+	['O16',0.037177],
+	['Fe54',1.1282019000000001e-07],
+	['Fe56',1.7710357080000002e-06],
+	['Fe57',4.0900938000000004e-08],
+	['Fe58',5.4431640000000005e-09]])
+# Material Name: 347 Stainless Steel
+m2 = mcdc.material(nuclides=[
+	['Fe54',0.0035295617000000003],
+	['Fe56',0.055406570440000004],
+	['Fe57',0.00127957934],
+	['Fe58',0.00017028851999999998],
+	['Cr50',0.0007246590999999999],
+	['Cr52',0.013974329419999999],
+	['Cr53',0.0015845767799999998],
+	['Cr54',0.00039443469999999995],
+	['Ni58',0.0067058469576],
+	['Ni60',0.0025830802424],
+	['Ni61',0.0001122847096],
+	['Ni62',0.000358012788],
+	['Ni64',9.117530240000001e-05]])
+mvoid = mcdc.material(nuclides=[['N14',1e-10]])
+##############################
+#__________Geometry__________
+##############################
+
+# Surface(s)
+s1 = mcdc.surface('sphere', center=[0.0, 0.0, 0.0], radius=20.1206, bc='interface')
+s2 = mcdc.surface('sphere', center=[0.0, 0.0, 0.0], radius=20.2476, bc='vacuum')
+
+# Material Cell(s)
+c1 = mcdc.cell(-s1, fill=m1)
+c2 = mcdc.cell(+s1 & -s2, fill=m2)
+# Root Universe Cells List:
+u0_cells = []
+# Material Universe(s)
+
+##############################
+#__________Settings__________
+##############################
+
+# Simulation Parameters
+mcdc.eigenmode(N_inactive=20, N_active=180)
+mcdc.setting(N_particle=10000)
+
+# Source Parameters
+# Particle: neutron
+# Space Type: box
+mcdc.source(x=[-1.0,1.0], y=[-1.0,1.0], z=[-1.0,1.0], prob=1.0)
+
+mcdc.run()
+

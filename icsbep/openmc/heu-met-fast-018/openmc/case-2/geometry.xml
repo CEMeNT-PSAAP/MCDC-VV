@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<geometry>
+
+  <!--
+  =========================================================
+  Description: Bare Spherical Assembly of 90% U-235, VNIIEF
+  Case:        HEU-MET-FAST-018 Simplified model
+  =========================================================
+  -->
+
+  <surface id="1" type="sphere" coeffs="0. 0. 0. 1.000" />
+  <surface id="2" type="sphere" coeffs="0. 0. 0. 9.154" boundary="vacuum" />
+
+  <cell id="1" material="void" region="-1" />
+  <cell id="2" material="1"    region="1 -2" />
+
+</geometry>

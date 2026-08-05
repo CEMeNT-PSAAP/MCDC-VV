@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<materials>
+  <material depletable="true" id="1" name="Plutonium core">
+    <density units="sum" />
+    <nuclide ao="0.036049" name="Pu239" />
+    <nuclide ao="0.0019562" name="Pu240" />
+    <nuclide ao="0.00011459" name="Pu241" />
+    <nuclide ao="0.000801720504" name="Ga69" />
+    <nuclide ao="0.000532079496" name="Ga71" />
+  </material>
+  <material depletable="true" id="2" name="Thorium reflector">
+    <density units="sum" />
+    <nuclide ao="0.030054" name="Th232" />
+  </material>
+</materials>

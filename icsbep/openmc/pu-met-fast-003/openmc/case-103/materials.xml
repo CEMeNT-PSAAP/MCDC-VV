@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='utf-8'?>
+<materials>
+  <material depletable="true" id="1" name="Pure Pu">
+    <density units="sum" />
+    <nuclide ao="0.04601" name="Pu239" />
+    <nuclide ao="0.0029236" name="Pu240" />
+    <nuclide ao="0.00022433" name="Pu241" />
+    <nuclide ao="4.8566e-06" name="Pu242" />
+  </material>
+  <material id="2" name="Aluminum">
+    <density units="sum" />
+    <nuclide ao="0.060263" name="Al27" />
+  </material>
+  <material id="3" name="Aluminum">
+    <density units="sum" />
+    <nuclide ao="0.053031" name="Al27" />
+  </material>
+  <material id="4" name="Al Heat Sink: Top">
+    <density units="sum" />
+    <nuclide ao="0.036742" name="Al27" />
+  </material>
+  <material id="5" name="Al Heat Sink: Bottom">
+    <density units="sum" />
+    <nuclide ao="0.030139" name="Al27" />
+  </material>
+  <material id="6" name="Steel">
+    <density units="sum" />
+    <nuclide ao="0.004916930900000001" name="Fe54" />
+    <nuclide ao="0.07718529988" name="Fe56" />
+    <nuclide ao="0.0017825451800000001" name="Fe57" />
+    <nuclide ao="0.00023722404000000002" name="Fe58" />
+  </material>
+  <material id="7" name="Steel (Table Support at 7% density)">
+    <density units="sum" />
+    <nuclide ao="0.000344182825" name="Fe54" />
+    <nuclide ao="0.00540293429" name="Fe56" />
+    <nuclide ao="0.000124777315" name="Fe57" />
+    <nuclide ao="1.660557e-05" name="Fe58" />
+  </material>
+  <material id="8" name="Stainless Steel: Shoe">
+    <density units="sum" />
+    <nuclide ao="0.02926" name="Al27" />
+    <nuclide ao="0.00045538979499999997" name="Fe54" />
+    <nuclide ao="0.007148645893999999" name="Fe56" />
+    <nuclide ao="0.000165093409" name="Fe57" />
+    <nuclide ao="2.1970902e-05" name="Fe58" />
+  </material>
+</materials>

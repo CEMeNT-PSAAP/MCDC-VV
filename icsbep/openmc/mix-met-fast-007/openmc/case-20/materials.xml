@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8'?>
+<materials>
+  <material depletable="true" id="1" name="Pu core">
+    <density units="sum" />
+    <nuclide ao="0.045536" name="Pu239" />
+    <nuclide ao="0.0027719" name="Pu240" />
+    <nuclide ao="0.00017313" name="Pu241" />
+  </material>
+  <material depletable="true" id="2" name="HEU">
+    <density units="sum" />
+    <nuclide ao="0.044401" name="U235" />
+    <nuclide ao="0.0032137" name="U238" />
+  </material>
+  <material id="3" name="Beryllium">
+    <density units="sum" />
+    <nuclide ao="0.12295" name="Be9" />
+    <sab name="c_Be" />
+  </material>
+</materials>

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<geometry>
+
+  <!--
+  =================================================
+  Description: Bare Spherical Assembly of 36% U-235
+  Case:        IEU-MET-FAST-003 Simplified model
+  =================================================
+  -->
+
+  <surface id="1" type="sphere" coeffs="0. 0. 0. 15.324" boundary="vacuum" />
+
+  <cell id="1" material="1" region="-1" />
+
+</geometry>

@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<materials>
+  <material depletable="true" id="1" name="U233 Inner Sphere">
+    <density units="sum"/>
+    <nuclide ao="0.047312" name="U233"/>
+    <nuclide ao="0.0005277" name="U235"/>
+    <nuclide ao="0.00033015" name="U238"/>
+  </material>
+  <material depletable="true" id="2" name="U235 Outer Shell">
+    <density units="sum"/>
+    <nuclide ao="0.044892" name="U235"/>
+    <nuclide ao="0.003234" name="U238"/>
+  </material>
+</materials>

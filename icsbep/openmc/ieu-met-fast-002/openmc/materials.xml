@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<materials>
+
+  <!--
+  ==========================================================================
+  Description: Jemima, Natural U Reflected Assembly of Uranium Plates
+  Case:        IEU-MET-FAST-002
+  ==========================================================================
+  -->
+
+  <!-- Oralloy -->
+  <material id="1">
+    <density units="sum" />
+    <nuclide name="U234" ao="8.4430e-05" />
+    <nuclide name="U235" ao="7.7777e-03" />
+    <nuclide name="U238" ao="3.9671e-02" />
+  </material>
+
+  <!-- Natural Uranium -->
+  <material id="2">
+    <density units="sum" />
+    <nuclide name="U234" ao="2.6433e-06" />
+    <nuclide name="U235" ao="3.4603e-04" />
+    <nuclide name="U238" ao="4.7711e-02" />
+  </material>
+
+</materials>

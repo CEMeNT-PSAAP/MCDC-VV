@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<geometry>
+
+  <!--
+  =========================================================
+  Description: 3x3x3 Pu Buttons
+  Case:        PU-MET-FAST-003 Case 103
+  =========================================================
+  -->
+
+  <surface id="1"  type="x-plane" coeffs="-66.00" boundary="vacuum" />
+  <surface id="2"  type="x-plane" coeffs=" 66.00" boundary="vacuum" />
+  <surface id="3"  type="y-plane" coeffs="-23.00" boundary="vacuum" />
+  <surface id="4"  type="y-plane" coeffs=" 23.00" boundary="vacuum" />
+  <surface id="5"  type="z-plane" coeffs="-32.54" boundary="vacuum" />
+  <surface id="6"  type="z-plane" coeffs="-2.54"  />
+  <surface id="7"  type="z-plane" coeffs=" 0.000" /> <!-- top of table top -->
+  <surface id="8"  type="z-plane" coeffs=" 8.300" /> <!-- top of shoe -->
+  <surface id="9"  type="z-plane" coeffs="14.529" /> <!-- top of bottom spacer -->
+  <surface id="10" type="z-plane" coeffs="15.164" /> <!-- top of bottom heat sink -->
+  <surface id="11" type="z-plane" coeffs="15.185" /> <!-- top of steel lid -->
+  <surface id="12" type="z-plane" coeffs="19.818" /> <!-- top of bottom button -->
+  <surface id="13" type="z-plane" coeffs="19.905" /> <!-- top of aluminum -->
+  <surface id="14" type="z-plane" coeffs="20.384" /> <!-- top of top heat sink -->
+  <surface id="15" type="z-plane" coeffs="22.239" /> <!-- top of middle spacer -->
+  <surface id="16" type="z-plane" coeffs="22.874" /> <!-- top of bottom heat sink -->
+  <surface id="17" type="z-plane" coeffs="22.895" /> <!-- top of steel lid -->
+  <surface id="18" type="z-plane" coeffs="27.528" /> <!-- top of middle button -->
+  <surface id="19" type="z-plane" coeffs="27.615" /> <!-- top of aluminum -->
+  <surface id="20" type="z-plane" coeffs="28.094" /> <!-- top of top heat sink -->
+  <surface id="21" type="z-plane" coeffs="29.949" /> <!-- top of top spacer -->
+  <surface id="22" type="z-plane" coeffs="30.584" /> <!-- top of bottom heat sink -->
+  <surface id="23" type="z-plane" coeffs="30.605" /> <!-- top of steel lid -->
+  <surface id="24" type="z-plane" coeffs="35.238" /> <!-- top of top button -->
+  <surface id="25" type="z-plane" coeffs="35.325" /> <!-- top of aluminum -->
+  <surface id="26" type="z-plane" coeffs="35.804" /> <!-- top of top heat sink -->
+  <surface id="27" type="z-plane" coeffs="45.733" boundary="vacuum" /> <!-- top -->
+
+  <surface id="28" type="z-cylinder" coeffs="0. 0. 3.1040" /> <!-- spacer IR -->
+  <surface id="29" type="z-cylinder" coeffs="0. 0. 3.3260" /> <!-- spacer OR -->
+  <surface id="30" type="z-cylinder" coeffs="0. 0. 3.2625" /> <!-- button OR -->
+  <surface id="31" type="z-cylinder" coeffs="0. 0. 3.2995" /> <!-- heat sink OR -->
+  <surface id="32" type="z-cylinder" coeffs="0. 0. 3.4250" /> <!-- tube IR -->
+  <surface id="33" type="z-cylinder" coeffs="0. 0. 3.6090" /> <!-- tube OR -->
+
+  <!-- Lattice bounding surfaces -->
+  <surface id="40" type="x-plane" coeffs="-14.4" />
+  <surface id="41" type="x-plane" coeffs="14.4" />
+  <surface id="42" type="y-plane" coeffs="-14.4" />
+  <surface id="43" type="y-plane" coeffs="14.4" />
+
+  <!-- Table top and support -->
+  <cell id="1" material="7" region="  1   -2    3   -4    5   -6   "  />       <!-- table support -->
+  <cell id="2" material="3" region="  1   -2    3   -4    6   -7   "  />       <!-- table top -->
+
+  <!-- universe 1:  Tube with Plutonium Buttons and Spacers -->
+  <cell id="3"  universe="1" material="8"    region=" -8  -32"          /> <!-- shoe -->
+  <cell id="4"  universe="1" material="void" region="8   -9  -28"       /> <!-- bottom spacer void -->
+  <cell id="5"  universe="1" material="2"    region="8   -9   28  -29"  /> <!-- bottom spacer -->
+  <cell id="6"  universe="1" material="void" region="8   -9   29  -32"  /> <!-- bottom spacer gap -->
+  <cell id="7"  universe="1" material="void" region="26  -32"           /> <!-- void above sink -->
+  <cell id="8"  universe="1" material="2"    region="32  -33"           /> <!-- tube -->
+  <cell id="80" universe="1" material="void" region="33"                /> <!-- void -->
+
+  <!-- Bottom Plutonium Button -->
+  <cell id="9"  universe="1" material="5"    region="9  -10  -31"       /> <!-- bottom heat sink -->
+  <cell id="10" universe="1" material="6"    region="10  -11  -31"      /> <!-- steel lid -->
+  <cell id="11" universe="1" material="1"    region="11  -12  -30"      /> <!-- plutonium button -->
+  <cell id="12" universe="1" material="2"    region="11  -12   30  -31" /> <!-- aluminum shell -->
+  <cell id="13" universe="1" material="2"    region="12  -13  -31"      /> <!-- aluminum bottom -->
+  <cell id="14" universe="1" material="4"    region="13  -14  -31"      /> <!-- top heat sink -->
+  <cell id="15" universe="1" material="void" region="9  -14   31  -32"  /> <!-- gap -->
+
+  <!-- Region between Bottom and Middle Buttons -->
+  <cell id="16" universe="1" material="void" region="14  -15  -28"      /> <!-- inner spacer void -->
+  <cell id="17" universe="1" material="2"    region="14  -15   28  -29" /> <!-- spacer -->
+  <cell id="18" universe="1" material="void" region="14  -15   29  -32" /> <!-- outer spacer void -->
+
+  <!-- Middle Plutonium Button -->
+  <cell id="19" universe="1" material="5"    region="15  -16  -31"      /> <!-- bottom heat sink -->
+  <cell id="20" universe="1" material="6"    region="16  -17  -31"      /> <!-- steel lid -->
+  <cell id="21" universe="1" material="1"    region="17  -18  -30"      /> <!-- plutonium button -->
+  <cell id="22" universe="1" material="2"    region="17  -18   30  -31" /> <!-- aluminum shell -->
+  <cell id="23" universe="1" material="2"    region="18  -19  -31"      /> <!-- aluminum bottom -->
+  <cell id="24" universe="1" material="4"    region="19  -20  -31"      /> <!-- top heat sink -->
+  <cell id="25" universe="1" material="void" region="15  -20   31  -32" /> <!-- gap -->
+
+  <!-- Region between Middle and Top Buttons -->
+  <cell id="26" universe="1" material="void" region="20  -21  -28"      /> <!-- inner spacer void -->
+  <cell id="27" universe="1" material="2"    region="20  -21   28  -29" /> <!-- spacer -->
+  <cell id="28" universe="1" material="void" region="20  -21   29  -32" /> <!-- outer spacer void -->
+
+  <!-- Top Plutonium Button -->
+  <cell id="29" universe="1" material="5"    region="21  -22  -31"      /> <!-- bottom heat sink -->
+  <cell id="30" universe="1" material="6"    region="22  -23  -31"      /> <!-- steel lid -->
+  <cell id="31" universe="1" material="1"    region="23  -24  -30"      /> <!-- plutonium button -->
+  <cell id="32" universe="1" material="2"    region="23  -24   30  -31" /> <!-- aluminum shell -->
+  <cell id="33" universe="1" material="2"    region="24  -25  -31"      /> <!-- aluminum bottom -->
+  <cell id="34" universe="1" material="4"    region="25  -26  -31"      /> <!-- top heat sink -->
+  <cell id="35" universe="1" material="void" region="21  -26   31  -32" /> <!-- gap -->
+
+  <!-- Cell containing lattice and voids surrounding -->
+  <cell id="36" fill="100"      region="40 -41 42 -43  7 -27" />
+  <cell id="37" material="void" region=" 1  -2  3 -42  7 -27" />
+  <cell id="38" material="void" region=" 1 -40 42 -43  7 -27" />
+  <cell id="39" material="void" region="41  -2 42 -43  7 -27" />
+  <cell id="40" material="void" region=" 1  -2 43  -4  7 -27" />
+
+  <lattice id="100">
+    <dimension>3 3</dimension>
+    <lower_left>-14.4 -14.4</lower_left>
+    <pitch>9.60 9.60</pitch>
+    <universes>
+      1 1 1
+      1 1 1
+      1 1 1
+    </universes>
+  </lattice>
+
+</geometry>

@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='utf-8'?>
+<materials>
+  <material depletable="true" id="1" name="Plutonium nitrate solution">
+    <density units="sum" />
+    <nuclide ao="9.6526e-10" name="Pu238" />
+    <nuclide ao="2.3402e-05" name="Pu239" />
+    <nuclide ao="6.0327e-07" name="Pu240" />
+    <nuclide ao="1.7873e-08" name="Pu241" />
+    <nuclide ao="3.3224e-09" name="Pu242" />
+    <nuclide ao="0.00076951" name="N14" />
+    <nuclide ao="0.065031" name="H1" />
+    <nuclide ao="0.034493" name="O16" />
+    <nuclide ao="2.111e-06" name="Al27" />
+    <nuclide ao="1.461725e-09" name="B10" />
+    <nuclide ao="5.913275e-09" name="B11" />
+    <nuclide ao="4.4160149999999995e-12" name="Cd106" />
+    <nuclide ao="3.149736e-12" name="Cd108" />
+    <nuclide ao="4.423109e-11" name="Cd110" />
+    <nuclide ao="4.5383865e-11" name="Cd111" />
+    <nuclide ao="8.5514623e-11" name="Cd112" />
+    <nuclide ao="4.3369169e-11" name="Cd113" />
+    <nuclide ao="1.01990438e-10" name="Cd114" />
+    <nuclide ao="2.6645064e-11" name="Cd116" />
+    <nuclide ao="2.4335621639999998e-08" name="Cl35" />
+    <nuclide ao="7.784378360000001e-09" name="Cl37" />
+    <nuclide ao="4.13259483e-08" name="Ca40" />
+    <nuclide ao="2.758161e-10" name="Ca42" />
+    <nuclide ao="5.75505e-11" name="Ca43" />
+    <nuclide ao="8.892617999999999e-10" name="Ca44" />
+    <nuclide ao="1.7052e-12" name="Ca46" />
+    <nuclide ao="7.97181e-11" name="Ca48" />
+    <nuclide ao="7.138835000000001e-09" name="Cr50" />
+    <nuclide ao="1.37665327e-07" name="Cr52" />
+    <nuclide ao="1.5610143e-08" name="Cr53" />
+    <nuclide ao="3.885695e-09" name="Cr54" />
+    <nuclide ao="7.244e-13" name="Gd152" />
+    <nuclide ao="7.89596e-12" name="Gd154" />
+    <nuclide ao="5.3605599999999996e-11" name="Gd155" />
+    <nuclide ao="7.414234e-11" name="Gd156" />
+    <nuclide ao="5.66843e-11" name="Gd157" />
+    <nuclide ao="8.997048e-11" name="Gd158" />
+    <nuclide ao="7.917692e-11" name="Gd160" />
+    <nuclide ao="2.4554117999999995e-07" name="Ga69" />
+    <nuclide ao="1.6295882e-07" name="Ga71" />
+    <nuclide ao="4.172161e-08" name="Fe54" />
+    <nuclide ao="6.549400520000001e-07" name="Fe56" />
+    <nuclide ao="1.5125422e-08" name="Fe57" />
+    <nuclide ao="2.012916e-09" name="Fe58" />
+    <nuclide ao="2.998e-07" name="F19" />
+    <nuclide ao="3.69885435e-08" name="Mg24" />
+    <nuclide ao="4.69437e-09" name="Mg25" />
+    <nuclide ao="5.1670864999999995e-09" name="Mg26" />
+    <nuclide ao="1.555e-08" name="Mn55" />
+    <nuclide ao="6.606182376e-08" name="Ni58" />
+    <nuclide ao="2.544689624e-08" name="Ni60" />
+    <nuclide ao="1.10615896e-09" name="Ni61" />
+    <nuclide ao="3.5269188e-09" name="Ni62" />
+    <nuclide ao="8.9820224e-10" name="Ni64" />
+    <nuclide ao="1.839e-07" name="P31" />
+    <nuclide ao="1.358770517e-08" name="K39" />
+    <nuclide ao="1.70469e-12" name="K40" />
+    <nuclide ao="9.8059014e-10" name="K41" />
+    <nuclide ao="1.6879235424000002e-07" name="S32" />
+    <nuclide ao="1.32967344e-09" name="S33" />
+    <nuclide ao="7.45207824e-09" name="S34" />
+    <nuclide ao="2.589408e-11" name="S36" />
+    <nuclide ao="9.352089552e-08" name="Si28" />
+    <nuclide ao="4.74872424e-09" name="Si29" />
+    <nuclide ao="3.13038024e-09" name="Si30" />
+    <nuclide ao="7.431e-08" name="Na23" />
+    <nuclide ao="7.269e-09" name="U235" />
+    <sab name="c_H_in_H2O" />
+  </material>
+  <material id="2" name="1100 Aluminum">
+    <density units="sum" />
+    <nuclide ao="0.059881" name="Al27" />
+    <nuclide ao="0.00034835150136" name="Si28" />
+    <nuclide ao="1.7688295320000002e-05" name="Si29" />
+    <nuclide ao="1.166020332e-05" name="Si30" />
+    <nuclide ao="3.5518206e-05" name="Cu63" />
+    <nuclide ao="1.5845794e-05" name="Cu65" />
+    <nuclide ao="1.2271848600000001e-05" name="Zn64" />
+    <nuclide ao="6.9208534e-06" name="Zn66" />
+    <nuclide ao="1.0083032e-06" name="Zn67" />
+    <nuclide ao="4.604751e-06" name="Zn68" />
+    <nuclide ao="1.522438e-07" name="Zn70" />
+    <nuclide ao="1.4853e-05" name="Mn55" />
+  </material>
+</materials>

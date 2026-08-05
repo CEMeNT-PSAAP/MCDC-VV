@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<materials>
+
+  <!--
+  =====================================================================
+  Description: Bare, Highly Enriched Uranium Sphere (Godiva) Simplified
+  Case:        HEU-MET-FAST-001 case 2
+  Written By:  Paul Romano
+  Date:        2013-03-22
+  =====================================================================
+  -->
+
+  <!-- Godiva sphere at 18.74 g/cm3 -->
+  <material id="1">
+    <density units="sum" />
+    <nuclide name="U234" ao="4.9184e-04" />
+    <nuclide name="U235" ao="4.4994e-02" />
+    <nuclide name="U238" ao="2.4984e-03" />
+  </material>
+
+</materials>
