@@ -9,14 +9,14 @@ from PIL import Image
 
 # Get results
 with h5py.File("output_4.h5", "r") as f:
-    fluxes = f["tallies/mesh_tally_0/flux/mean"][()]
-    densities = f["tallies/global_tally_0/density/mean"][()]
-    fluxes_sd = f["tallies/mesh_tally_0/flux/sdev"][()]
-    densities_sd = f["tallies/global_tally_0/density/sdev"][()]
-    x = f["tallies/mesh_tally_0/grid/x"][()]
-    y = f["tallies/mesh_tally_0/grid/y"][()]
-    z = f["tallies/mesh_tally_0/grid/z"][()]
-    t = f["tallies/mesh_tally_0/grid/t"][()]
+    fluxes = f["tallies/tracklength_tally_0/flux/mean"][()]
+    densities = f["tallies/tracklength_tally_0/density/mean"][()]
+    fluxes_sd = f["tallies/tracklength_tally_0/flux/sdev"][()]
+    densities_sd = f["tallies/tracklength_tally_0/density/sdev"][()]
+    x = f["tallies/tracklength_tally_0/grid/x"][()]
+    y = f["tallies/tracklength_tally_0/grid/y"][()]
+    z = f["tallies/tracklength_tally_0/grid/z"][()]
+    t = f["tallies/tracklength_tally_0/grid/time"][()]
 
 # The grids
 t_mid = 0.5 * (t[:-1] + t[1:])

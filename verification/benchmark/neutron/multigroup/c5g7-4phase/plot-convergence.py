@@ -18,7 +18,7 @@ difference = np.zeros(NN)
 
 # Getting the reference
 with h5py.File("mcdc/output_4.h5", "r") as f:
-    fission_mcdc = f["tallies/mesh_tally_0/fission/mean"][()]
+    fission_mcdc = f["tallies/tracklength_tally_0/fission/mean"][()]
 
 with openmc.StatePoint("openmc_/output_4.h5") as sp:
     tally = sp.get_tally(name="pincell fission")
@@ -36,7 +36,7 @@ reference = reference[non_zeros]
 for n in range(NN):
     # Get results
     with h5py.File("mcdc/output_%i.h5" % n, "r") as f:
-        fission_mcdc = f["tallies/mesh_tally_0/fission/mean"][()]
+        fission_mcdc = f["tallies/tracklength_tally_0/fission/mean"][()]
 
     # Get results
     with openmc.StatePoint("openmc_/output_%i.h5" % n) as sp:

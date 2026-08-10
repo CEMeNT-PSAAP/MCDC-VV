@@ -1,6 +1,8 @@
 import numpy as np
 import mcdc
 
+simulation = mcdc.Simulation("AZURV1")
+
 # ======================================================================================
 # Set model
 # ======================================================================================
@@ -9,7 +11,7 @@ import mcdc
 # Effective scattering ratio c = 1.0
 
 # Set materials
-m = mcdc.MaterialMG(
+m = mcdc.Material.multigroup(
     capture=np.array([1.0 / 3.0]),
     scatter=np.array([[1.0 / 3.0]]),
     fission=np.array([1.0 / 3.0]),
@@ -21,19 +23,21 @@ s1 = mcdc.Surface.PlaneX(x=-1e10, boundary_condition="reflective")
 s2 = mcdc.Surface.PlaneX(x=1e10, boundary_condition="reflective")
 
 # Set cells
-mcdc.Cell(region=+s1 & -s2, fill=m)
+cell = mcdc.Cell(region=+s1 & -s2, fill=m)
+simulation.set_model([cell])
 
 # ======================================================================================
 # Set source
 # ======================================================================================
 # Isotropic pulse at x=t=0
 
-mcdc.Source(
+source = mcdc.Source(
     position=[0.0, 0.0, 0.0],
     isotropic=True,
-    energy_group=0,
+    energy=0,
     time=0.0,
 )
+simulation.set_sources([source])
 
 # ======================================================================================
 # Set tallies, settings, and run MC/DC
@@ -41,11 +45,12 @@ mcdc.Source(
 
 # Tallies
 mesh = mcdc.MeshStructured(x=np.linspace(-20.5, 20.5, 202))
-mcdc.Tally(mesh=mesh, scores=["flux"], time=np.linspace(0.0, 20.0, 21))
+tally = mcdc.Tally(mesh=mesh, scores=["flux"], time=np.linspace(0.0, 20.0, 21))
+simulation.set_tallies([tally])
 
 # Settings
-mcdc.settings.N_particle = 100
-mcdc.settings.N_batch = 2
+simulation.settings.N_particle = 100
+simulation.settings.N_batch = 2
 
 # Run
-mcdc.run()
+simulation.run()

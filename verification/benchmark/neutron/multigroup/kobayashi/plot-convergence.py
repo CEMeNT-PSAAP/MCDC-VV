@@ -13,7 +13,7 @@ difference = np.zeros(NN)
 
 # Getting the reference
 with h5py.File("mcdc/output_4.h5", "r") as f:
-    flux_mcdc = f["tallies/mesh_tally_0/flux/mean"][()]
+    flux_mcdc = f["tallies/tracklength_tally_0/flux/mean"][()]
 with openmc.StatePoint("openmc_/output_4.h5") as sp:
     tally = sp.get_tally(scores=["flux"])
     flux_openmc = tally.mean.reshape((100, 60, 100, 60))
@@ -29,7 +29,7 @@ reference = reference[non_zeros]
 for n in range(NN):
     # Get results
     with h5py.File("mcdc/output_%i.h5" % n, "r") as f:
-        flux_mcdc = f["tallies/mesh_tally_0/flux/mean"][()]
+        flux_mcdc = f["tallies/tracklength_tally_0/flux/mean"][()]
 
     # Get results
     with openmc.StatePoint("openmc_/output_%i.h5" % n) as sp:

@@ -7,12 +7,12 @@ import shutil
 
 # Get results
 with h5py.File("output.h5", "r") as f:
-    fission_total = f["tallies/mesh_tally_0/fission/mean"][()]
-    fluxes = f["tallies/mesh_tally_2/flux/mean"][:, 1, :, :]
-    x = f["tallies/mesh_tally_2/grid/x"][()]
-    y = f["tallies/mesh_tally_2/grid/y"][()]
-    z = f["tallies/mesh_tally_2/grid/z"][()]
-    t = f["tallies/mesh_tally_2/grid/t"][()]
+    fission_total = f["tallies/tracklength_tally_0/fission/mean"][()]
+    fluxes = f["tallies/tracklength_tally_2/flux/mean"][:, 1, :, :]
+    x = f["tallies/tracklength_tally_2/grid/x"][()]
+    y = f["tallies/tracklength_tally_2/grid/y"][()]
+    z = f["tallies/tracklength_tally_2/grid/z"][()]
+    t = f["tallies/tracklength_tally_2/grid/time"][()]
 
 # The grids
 t_mid = 0.5 * (t[:-1] + t[1:])
