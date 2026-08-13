@@ -1,8 +1,12 @@
+from pathlib import Path
+
 import numpy as np
 import matplotlib.pyplot as plt
 import h5py
 import sys
 import matplotlib.animation as animation
+
+SHEM361_DATA = Path(__file__).resolve().parents[2] / "data" / "SHEM-361.npz"
 
 # Reference solution
 data = np.load("reference.npz")
@@ -11,7 +15,7 @@ n_ref = data["n"]
 
 # Load results
 output = sys.argv[1]
-with np.load("../../data/MGXS-SHEM361.npz") as data:
+with np.load(SHEM361_DATA) as data:
     E = data["E"]
     G = data["G"]
     speed = data["v"]

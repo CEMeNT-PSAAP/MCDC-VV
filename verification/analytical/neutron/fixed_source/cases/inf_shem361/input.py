@@ -1,5 +1,9 @@
+from pathlib import Path
+
 import numpy as np
 import mcdc
+
+SHEM361_DATA = Path(__file__).resolve().parents[2] / "data" / "SHEM-361.npz"
 
 simulation = mcdc.Simulation("Infinite SHEM-361")
 
@@ -9,7 +13,7 @@ simulation = mcdc.Simulation("Infinite SHEM-361")
 # The infinite homogenous medium is modeled with reflecting slab
 
 # Load material data
-with np.load("SHEM-361.npz") as data:
+with np.load(SHEM361_DATA) as data:
     SigmaC = data["SigmaC"] * 1.5  # /cm
     SigmaS = data["SigmaS"]
     SigmaF = data["SigmaF"]

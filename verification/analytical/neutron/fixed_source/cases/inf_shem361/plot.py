@@ -2,12 +2,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 import h5py
 import sys
+from pathlib import Path
 
 from reference import reference
 
+SHEM361_DATA = Path(__file__).resolve().parents[2] / "data" / "SHEM-361.npz"
+
 # Load results
 output = sys.argv[1]
-with np.load("../../data/MGXS-SHEM361.npz") as data:
+with np.load(SHEM361_DATA) as data:
     E = data["E"]
     G = data["G"]
     E_mid = 0.5 * (E[1:] + E[:-1])

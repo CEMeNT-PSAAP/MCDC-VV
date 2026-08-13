@@ -1,9 +1,13 @@
+from pathlib import Path
+
 import numpy as np
+
+SHEM361_DATA = Path(__file__).resolve().parents[2] / "data" / "SHEM-361.npz"
 
 
 def reference():
     # Load material data
-    with np.load("SHEM-361.npz") as data:
+    with np.load(SHEM361_DATA) as data:
         SigmaT = data["SigmaT"]
         SigmaC = data["SigmaC"]
         SigmaS = data["SigmaS"]

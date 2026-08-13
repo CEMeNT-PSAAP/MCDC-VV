@@ -1,12 +1,16 @@
+from pathlib import Path
+
 import numpy as np
 from scipy.linalg import expm
+
+SHEM361_DATA = Path(__file__).resolve().parents[2] / "data" / "SHEM-361.npz"
 
 # Time grid
 t = np.insert(np.logspace(-8, 1, 100), 0, 0.0)
 K = len(t) - 1
 
 # Load material data
-with np.load("../../data/MGXS-SHEM361.npz") as data:
+with np.load(SHEM361_DATA) as data:
     SigmaT = data["SigmaT"]
     SigmaC = data["SigmaC"]
     SigmaS = data["SigmaS"]
