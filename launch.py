@@ -1,3 +1,5 @@
+"""Launch configured VVP suites and record enough context to reproduce each run."""
+
 import argparse
 import datetime
 import importlib.metadata
@@ -7,13 +9,13 @@ from pathlib import Path
 
 import yaml
 
-
 # ======================================================================================
 # Bootstrap VVP imports
 # ======================================================================================
 
 REPO_DIR = Path(__file__).resolve().parent
 
+# Support launching this script from any working directory without installing VVP.
 if str(REPO_DIR) not in sys.path:
     sys.path.insert(0, str(REPO_DIR))
 
@@ -22,14 +24,15 @@ if str(REPO_DIR) not in sys.path:
 # Load launch configuration
 # ======================================================================================
 
-from configs.launch_config import LAUNCH_CONFIG  # noqa: E402
-
+from configs.launch_config import LAUNCH_CONFIG
 
 # ======================================================================================
 # Helper functions
 # ======================================================================================
 
+
 def get_git_hash(repo_dir):
+    """Return the commit that identifies the VVP source used for the launch."""
     return subprocess.check_output(
         ["git", "-C", str(repo_dir), "rev-parse", "HEAD"],
         stderr=subprocess.DEVNULL,
@@ -38,6 +41,7 @@ def get_git_hash(repo_dir):
 
 
 def is_git_dirty(repo_dir):
+    """Report whether the launch includes changes not captured by the commit hash."""
     result = subprocess.run(
         ["git", "-C", str(repo_dir), "status", "--porcelain"],
         stdout=subprocess.PIPE,
@@ -49,6 +53,7 @@ def is_git_dirty(repo_dir):
 
 
 def get_mcdc_version():
+    """Return the installed MC/DC version when package metadata is available."""
     try:
         return importlib.metadata.version("mcdc")
     except importlib.metadata.PackageNotFoundError:
@@ -63,7 +68,7 @@ parser = argparse.ArgumentParser(description="Launch enabled MC/DC VVP suites.")
 parser.add_argument(
     "--platform",
     default=None,
-    help="Active platform. Use None/omit for local suites.",
+    help="Select suites configured for PLATFORM; omit for local run.",
 )
 args = parser.parse_args()
 
@@ -87,6 +92,7 @@ else:
 
 metadata.setdefault("launches", [])
 
+# Keep an append-only launch history so reruns do not erase provenance.
 metadata["launches"].append(
     {
         "launched_at": datetime.datetime.now(datetime.UTC).isoformat(),
@@ -120,6 +126,7 @@ for suite, options in LAUNCH_CONFIG.items():
 
     suite_platform = options.get("platform")
 
+    # Launch only suites explicitly assigned to this invocation's platform.
     if suite_platform != active_platform:
         print(
             f"Skip platform mismatch: {suite} "
@@ -136,11 +143,13 @@ for suite, options in LAUNCH_CONFIG.items():
     if not launcher.is_file():
         raise FileNotFoundError(f"Suite launcher not found: {launcher}")
 
+    # Reuse the active interpreter so suite launchers inherit this environment.
     command = [
         sys.executable,
         str(launcher),
     ]
 
+    # Forward only options that are meaningful for the configured suite.
     if suite_platform is not None:
         command.extend(["--platform", suite_platform])
 
