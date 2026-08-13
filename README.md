@@ -6,7 +6,7 @@
 
 A collection of verification, validation, and performance (VVP) test suites for [MC/DC](https://github.com/mcdc-project/mcdc).
 
-The repository provides a unified framework for launching, processing, and organizing MC/DC verification campaigns on local workstations and HPC platforms. Each verification, validation, and performance suite is self-contained and can be executed independently, while the top-level workflow enables reproducible campaign-wide execution. On supported HPC systems, campaign orchestration is performed using [Maestro](https://github.com/llnl/maestrowf).
+The repository provides a unified framework for launching, processing, and organizing MC/DC-VVP campaigns on local workstations and HPC platforms. Each verification, validation, and performance suite is self-contained and can be executed independently, while the top-level workflow enables reproducible campaign-wide execution. On supported HPC systems, campaign orchestration is performed using [Maestro](https://github.com/llnl/maestrowf).
 
 ## Repository organization
 
@@ -59,7 +59,7 @@ Analytical verification demonstrates the expected statistical convergence of MC/
 
 | Physics | Suite | Description |
 | :------ | :---- | :---------- |
-| Neutron transport | Analytical fixed-source | Multigroup steady-state and transient fixed-source verification problems, including Reed's problem, AZURV1 variants, and infinite SHEM-361 benchmarks. |
+| Neutron transport | Fixed-source | Multigroup steady-state and transient fixed-source problems, including Reed's problem, AZURV1 variants, and infinite SHEM-361 benchmarks. |
 
 ### Benchmark verification
 
@@ -89,6 +89,5 @@ Comprehensive user and developer documentation will be available on Read the Doc
 - Framework architecture
 - Launch and processing workflow
 - Platform and user configuration
-- Adding new suites
-- Adding new verification cases
+- Adding new suites and cases
 - Developer guidelines
