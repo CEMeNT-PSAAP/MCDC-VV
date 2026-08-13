@@ -10,7 +10,7 @@ simulation = mcdc.Simulation("Infinite SHEM-361")
 # ======================================================================================
 # Set model
 # ======================================================================================
-# The infinite homogenous medium is modeled with reflecting slab
+# The infinite homogeneous medium is modeled with a reflecting slab
 
 # Load material data
 with np.load(SHEM361_DATA) as data:
@@ -21,9 +21,6 @@ with np.load(SHEM361_DATA) as data:
     nu_d = data["nu_d"]
     chi_p = data["chi_p"]
     chi_d = data["chi_d"]
-    G = data["G"]
-    speed = data["v"]
-    lamd = data["lamd"]
 
 # Set material
 m = mcdc.Material.multigroup(
@@ -63,7 +60,7 @@ simulation.set_sources([source])
 tally = mcdc.Tally(scores=["flux"], energy="all")
 simulation.set_tallies([tally])
 
-# Swttings
+# Settings
 simulation.settings.N_particle = 40
 simulation.settings.N_batch = 2
 simulation.settings.active_bank_buffer = 1000

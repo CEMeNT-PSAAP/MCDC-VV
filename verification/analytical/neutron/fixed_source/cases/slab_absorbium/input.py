@@ -34,7 +34,7 @@ source = mcdc.Source(z=[0.0, 6.0], isotropic=True, energy=0)
 simulation.set_sources([source])
 
 # ======================================================================================
-# Set tallies, settings, and run mcdc
+# Set tallies, settings, and run MC/DC
 # ======================================================================================
 
 # Tallies

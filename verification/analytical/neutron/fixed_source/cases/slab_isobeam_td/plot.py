@@ -65,6 +65,6 @@ def animate(k):
     return line1, line2, text
 
 
-simulation = animation.FuncAnimation(fig, animate, frames=K)
-writervideo = animation.FFMpegWriter(fps=6)
+# Uncomment to animate all time bins.
+# _simulation = animation.FuncAnimation(fig, animate, frames=K)
 plt.show()

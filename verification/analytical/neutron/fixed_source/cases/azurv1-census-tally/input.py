@@ -55,7 +55,7 @@ simulation.settings.census_bank_buffer_ratio = 5.0
 simulation.settings.source_bank_buffer_ratio = 5.0
 simulation.settings.set_time_census(np.linspace(0.0, 20.0, 5)[1:], tally_frequency=5)
 
-# Tecniques
+# Techniques
 simulation.technique.population_control()
 
 # Run

@@ -12,7 +12,6 @@ SHEM361_DATA = Path(__file__).resolve().parents[2] / "data" / "SHEM-361.npz"
 output = sys.argv[1]
 with np.load(SHEM361_DATA) as data:
     E = data["E"]
-    G = data["G"]
     E_mid = 0.5 * (E[1:] + E[:-1])
     dE = E[1:] - E[:-1]
 with h5py.File(output, "r") as f:

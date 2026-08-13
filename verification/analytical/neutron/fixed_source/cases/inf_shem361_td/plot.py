@@ -17,7 +17,6 @@ n_ref = data["n"]
 output = sys.argv[1]
 with np.load(SHEM361_DATA) as data:
     E = data["E"]
-    G = data["G"]
     speed = data["v"]
     E_mid = 0.5 * (E[1:] + E[:-1])
     dE = E[1:] - E[:-1]
@@ -91,6 +90,6 @@ def animate(k):
     return line1, line2
 
 
-simulation = animation.FuncAnimation(fig, animate, frames=K)
-writervideo = animation.FFMpegWriter(fps=6)
+# Uncomment to animate all time bins.
+# _simulation = animation.FuncAnimation(fig, animate, frames=K)
 plt.show()

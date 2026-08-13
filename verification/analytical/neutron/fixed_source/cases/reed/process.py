@@ -2,18 +2,19 @@ import numpy as np
 import h5py
 import sys
 
+from reference import reference
+
 sys.path.append("../../")
 import util
 
-# Cases run
+# Particle counts
 N_min = int(sys.argv[1])
 N_max = int(sys.argv[2])
 N = int(sys.argv[3])
-N_particle_list = np.logspace(N_min, N_max, N)
+N_particle_list = np.logspace(N_min, N_max, N, dtype=int)
 
-# Reference solution
-data = np.load("reference.npz")
-phi_ref = data["phi"]
+# Analytical reference solution
+_, phi_ref = reference()
 
 # Error containers
 error = np.zeros(len(N_particle_list))

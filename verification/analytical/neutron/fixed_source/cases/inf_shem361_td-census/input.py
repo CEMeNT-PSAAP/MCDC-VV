@@ -10,7 +10,7 @@ simulation = mcdc.Simulation("Infinite SHEM-361 time-dependent census")
 # ======================================================================================
 # Set model
 # ======================================================================================
-# The infinite homogenous medium is modeled with reflecting slab
+# The infinite homogeneous medium is modeled with a reflecting slab
 
 # Load material data
 with np.load(SHEM361_DATA) as data:
@@ -21,7 +21,6 @@ with np.load(SHEM361_DATA) as data:
     nu_d = data["nu_d"]
     chi_p = data["chi_p"]
     chi_d = data["chi_d"]
-    G = data["G"]
     speed = data["v"]
     lamd = data["lamd"]
 

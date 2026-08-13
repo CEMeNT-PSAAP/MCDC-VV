@@ -5,12 +5,12 @@ import mcdc
 
 SHEM361_DATA = Path(__file__).resolve().parents[2] / "data" / "SHEM-361.npz"
 
-simulation = mcdc.Simulation("Infinite SHEM-361 time dependent")
+simulation = mcdc.Simulation("Infinite SHEM-361 time-dependent")
 
 # ======================================================================================
 # Set model
 # ======================================================================================
-# The infinite homogenous medium is modeled with reflecting slab
+# The infinite homogeneous medium is modeled with a reflecting slab
 
 # Load material data
 with np.load(SHEM361_DATA) as data:
@@ -21,7 +21,6 @@ with np.load(SHEM361_DATA) as data:
     nu_d = data["nu_d"]
     chi_p = data["chi_p"]
     chi_d = data["chi_d"]
-    G = data["G"]
     speed = data["v"]
     lamd = data["lamd"]
 
@@ -69,7 +68,7 @@ tally = mcdc.Tally(
 )
 simulation.set_tallies([tally])
 
-# Swttings
+# Settings
 simulation.settings.N_particle = 50
 simulation.settings.N_batch = 2
 simulation.settings.active_bank_buffer = 1000

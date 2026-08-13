@@ -16,13 +16,10 @@ with np.load(SHEM361_DATA) as data:
     SigmaS = data["SigmaS"]
     nuSigmaF_p = data["nuSigmaF_p"]
     SigmaF = data["SigmaF"]
-    nu_p = data["nu_p"]
     nu_d = data["nu_d"]
-    chi_p = data["chi_p"]
     chi_d = data["chi_d"]
     G = data["G"]
     J = data["J"]
-    E = data["E"]
     v = data["v"]
     lamd = data["lamd"]
 SigmaT += SigmaC * 0.5
