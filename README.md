@@ -70,11 +70,12 @@ Processed figures, metadata, and summary results are written to the `results/` d
 
 ### Analytical verification
 
-Analytical verification demonstrates the expected statistical convergence of MC/DC by comparing numerical solutions against analytical reference solutions as the number of source particles is increased.
+Analytical verification demonstrates the expected statistical convergence of MC/DC by comparing numerical solutions against analytical reference solutions as the sampling effort is increased.
 
 | Physics | Suite | Description |
 | :------ | :---- | :---------- |
 | Neutron transport | [Fixed-source](verification/analytical/neutron/fixed_source/README.md) | Multigroup steady-state and transient fixed-source cases, including Reed's problem, AZURV1 variants, and infinite SHEM-361 benchmarks. |
+| Neutron transport | [$k$-eigenvalue](verification/analytical/neutron/k_eigenvalue/README.md) | Infinite homogeneous SHEM-361 criticality cases with analytical eigenvalue and energy-spectrum references. |
 
 ### Benchmark verification
 
