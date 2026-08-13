@@ -76,6 +76,7 @@ The top-level `process.py` collects these figures under the repository's `result
 | [`azurv1-census`](cases/azurv1-census/) | AZURV1 with time censuses. |
 | [`azurv1-census-tally`](cases/azurv1-census-tally/) | AZURV1 using time-census-based tallying. |
 | [`azurv1-basic_techniques`](cases/azurv1-basic_techniques/) | AZURV1 with implicit capture, weighted emission, and global weight roulette. |
+| [`azurv1-weight_windows`](cases/azurv1-weight_windows/) | AZURV1 with spatial weight windows derived from the time-averaged analytical solution. |
 | [`inf_shem361`](cases/inf_shem361/) | Infinite homogeneous SHEM-361 steady-state spectrum. |
 | [`inf_shem361_td`](cases/inf_shem361_td/) | Time-dependent SHEM-361 spectrum evolution. |
 | [`inf_shem361_td-census`](cases/inf_shem361_td-census/) | Time-dependent SHEM-361 spectrum evolution with time censuses. |
