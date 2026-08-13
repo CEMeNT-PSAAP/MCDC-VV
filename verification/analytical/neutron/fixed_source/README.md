@@ -10,15 +10,18 @@ The suite can be executed independently or as part of the top-level MC/DC-VVP wo
 
 ```text
 cases/              Verification problem definitions and processing scripts
-launch.py           Build and launch the Maestro study
-process.py          Process a completed Maestro study
-run_case.py         Run one problem over its particle-count study
-cleanup.py          Remove generated outputs and figures
-task.yaml           Configure the particle-count study for each problem
-util.py             Provide shared processing and plotting utilities
-study.yaml           Generated Maestro study definition
 maestro_run_*/      Generated Maestro workflow directories
 results/            Generated figures from processed problems
+
+task.yaml           Configure the particle-count study for each problem
+study.yaml          Generated Maestro study definition
+
+launch.py           Build and launch the Maestro study
+run_case.py         Run one problem over its particle-count study
+process.py          Process a completed Maestro study
+
+cleanup.py          Remove generated outputs and figures
+util.py             Provide shared processing and plotting utilities
 ```
 
 ## Configuration
@@ -64,16 +67,16 @@ The top-level `process.py` collects these figures under the repository's `result
 | Problem | Description |
 | :------ | :---------- |
 | [`slab_absorbium`](cases/slab_absorbium/) | Steady-state flux distribution in a purely absorbing multilayer slab. |
-| [`reed`](cases/reed/) | Reed's classic one-dimensional transport benchmark. |
 | [`slab_isobeam_td`](cases/slab_isobeam_td/) | Time-dependent flux propagation from an isotropic planar source. |
+| [`reed`](cases/reed/) | Reed's classic one-dimensional transport benchmark. |
 | [`azurv1`](cases/azurv1/) | AZURV1 transient benchmark. |
 | [`azurv1_sub`](cases/azurv1_sub/) | Subcritical variant of AZURV1. |
 | [`azurv1_super`](cases/azurv1_super/) | Supercritical variant of AZURV1. |
-| [`azurv1-census`](cases/azurv1-census/) | AZURV1 with census-based time discretization. |
-| [`azurv1-census-tally`](cases/azurv1-census-tally/) | AZURV1 using census tallying. |
-| [`inf_shem361`](cases/inf_shem361/) | Infinite homogeneous SHEM-361 multigroup spectrum evolution. |
+| [`azurv1-census`](cases/azurv1-census/) | AZURV1 with time censuses. |
+| [`azurv1-census-tally`](cases/azurv1-census-tally/) | AZURV1 using time-census-based tallying. |
+| [`inf_shem361`](cases/inf_shem361/) | Infinite homogeneous SHEM-361 steady-state spectrum. |
 | [`inf_shem361_td`](cases/inf_shem361_td/) | Time-dependent SHEM-361 spectrum evolution. |
-| [`inf_shem361_td-census`](cases/inf_shem361_td-census/) | Time-dependent SHEM-361 spectrum evolution using census discretization. |
+| [`inf_shem361_td-census`](cases/inf_shem361_td-census/) | Time-dependent SHEM-361 spectrum evolution with time censuses. |
 
 ## References
 
