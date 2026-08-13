@@ -14,15 +14,20 @@ Workflow orchestration is performed using [Maestro](https://github.com/llnl/maes
 
 ```text
 configs/        Shared platform, user, and launch configurations
-verification/   Verification test suites
+verification/   Verification suites and their cases
 results/        Generated campaign metadata and processed results
 
 launch.py       Launch all enabled suites
 process.py      Process all enabled suites
 ```
 
-Integrated suites contain their own launcher, processor, problem definitions, and README.
-They may be executed independently or through the top-level campaign scripts.
+MC/DC-VVP uses **suite** and **case** as standard terms for its two organizational levels:
+
+- A **suite** is a self-contained collection of related VVP cases with a shared launch and processing workflow.
+- A **case** is one individual problem definition and its inputs, reference solution or data, and processing logic.
+
+The top-level workflow launches and processes enabled suites, while each suite workflow runs and processes its cases.
+Every integrated suite provides a README that describes its layout, configuration, workflow, and cases.
 
 ## Configuration
 
@@ -69,16 +74,16 @@ Analytical verification demonstrates the expected statistical convergence of MC/
 
 | Physics | Suite | Description |
 | :------ | :---- | :---------- |
-| Neutron transport | [Fixed-source](verification/analytical/neutron/fixed_source/README.md) | Multigroup steady-state and transient fixed-source problems, including Reed's problem, AZURV1 variants, and infinite SHEM-361 benchmarks. |
+| Neutron transport | [Fixed-source](verification/analytical/neutron/fixed_source/README.md) | Multigroup steady-state and transient fixed-source cases, including Reed's problem, AZURV1 variants, and infinite SHEM-361 benchmarks. |
 
 ### Benchmark verification
 
-Benchmark verification compares MC/DC against established reference Monte Carlo codes on problems without analytical solutions.
+Benchmark verification compares MC/DC against established reference Monte Carlo codes for cases without analytical solutions.
 
 | Physics | Suite | Description |
 | :------ | :---- | :---------- |
-| Neutron transport (multigroup) | Benchmark multigroup | Time-dependent benchmark problems, including the Kobayashi Dog-Leg and C5G7 transient benchmarks. |
-| Neutron transport (continuous energy) | [Benchmark continuous energy](verification/benchmark/neutron/continuous_energy/README.md) | Continuous-energy benchmark problems for representative reactor systems. |
+| Neutron transport (multigroup) | Benchmark multigroup | Time-dependent benchmark cases, including the Kobayashi Dog-Leg and C5G7 transient benchmarks. |
+| Neutron transport (continuous energy) | [Benchmark continuous energy](verification/benchmark/neutron/continuous_energy/README.md) | Continuous-energy benchmark cases for representative reactor systems. |
 
 ## Validation
 
@@ -94,11 +99,4 @@ Performance suites evaluate computational performance, scalability, and efficien
 
 ## Documentation
 
-Comprehensive user and developer documentation will be available on Read the Docs.
-Planned topics include:
-
-- Framework architecture
-- Launch and processing workflow
-- Platform and user configuration
-- Adding new suites and cases
-- Developer guidelines
+The top-level and suite READMEs provide the repository-specific documentation for MC/DC-VVP.

@@ -1,6 +1,6 @@
 # Analytical Neutron Fixed-Source Verification
 
-This suite verifies MC/DC neutron transport using multigroup fixed-source problems with analytical reference solutions.
+This suite verifies MC/DC neutron transport using multigroup fixed-source cases with analytical reference solutions.
 It exercises geometry tracking, surface crossings, material lookup, source sampling, particle transport, and tallying.
 Verification checks for the expected $N^{-1/2}$ statistical convergence as the number of source particles increases.
 
@@ -9,15 +9,15 @@ The suite can be executed independently or as part of the top-level MC/DC-VVP wo
 ## Directory layout
 
 ```text
-cases/              Verification problem definitions and processing scripts
+cases/              Verification case definitions and processing scripts
 maestro_run_*/      Generated Maestro workflow directories
-results/            Generated figures from processed problems
+results/            Generated figures from processed cases
 
-task.yaml           Configure the particle-count study for each problem
+task.yaml           Configure the particle-count study for each case
 study.yaml          Generated Maestro study definition
 
 launch.py           Build and launch the Maestro study
-run_case.py         Run one problem over its particle-count study
+run_case.py         Run one case over its particle-count study
 process.py          Process a completed Maestro study
 
 cleanup.py          Remove generated outputs and figures
@@ -26,7 +26,7 @@ util.py             Provide shared processing and plotting utilities
 
 ## Configuration
 
-The `task.yaml` file selects the problems and defines the particle-count range and number of tasks for each problem.
+The `task.yaml` file selects the cases and defines the particle-count range and number of tasks for each case.
 Edit this file to change the study without modifying the launch or processing scripts.
 
 HPC runs use the shared platform settings in the repository's `configs/platform_config.py` and the user-specific settings in `configs/user_config.py`.
@@ -45,7 +45,7 @@ Launch the study on a supported HPC platform:
 python launch.py --platform tuolumne --mpi
 ```
 
-Use `--walltime HOURS` to limit the requested walltime and `--rewrite` to replace existing problem output.
+Use `--walltime HOURS` to limit the requested walltime and `--rewrite` to replace existing case output.
 
 After all jobs have completed, process the latest Maestro run:
 
@@ -62,10 +62,10 @@ python process.py maestro_run_<timestamp>
 Processed figures are written to this suite's `results/` directory.
 The top-level `process.py` collects these figures under the repository's `results/` directory.
 
-## Problems
+## Cases
 
-| Problem | Description |
-| :------ | :---------- |
+| Case | Description |
+| :--- | :---------- |
 | [`slab_absorbium`](cases/slab_absorbium/) | Steady-state flux distribution in a purely absorbing multilayer slab. |
 | [`slab_isobeam_td`](cases/slab_isobeam_td/) | Time-dependent flux propagation from an isotropic planar source. |
 | [`reed`](cases/reed/) | Reed's classic one-dimensional transport benchmark. |
