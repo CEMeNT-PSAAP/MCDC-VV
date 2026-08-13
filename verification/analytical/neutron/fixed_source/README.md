@@ -80,6 +80,7 @@ The top-level `process.py` collects these figures under the repository's `result
 | [`inf_shem361`](cases/inf_shem361/) | Infinite homogeneous SHEM-361 steady-state spectrum. |
 | [`inf_shem361_td`](cases/inf_shem361_td/) | Time-dependent SHEM-361 spectrum evolution. |
 | [`inf_shem361_td-census`](cases/inf_shem361_td-census/) | Time-dependent SHEM-361 spectrum evolution with time censuses. |
+| [`inf_shem361-weight_windows`](cases/inf_shem361-weight_windows/) | Infinite homogeneous SHEM-361 with energy-dependent weight windows derived from the analytical spectrum. |
 
 ### SHEM-361 multigroup data
 

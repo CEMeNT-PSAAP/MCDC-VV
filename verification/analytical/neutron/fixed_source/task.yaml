@@ -91,6 +91,11 @@ inf_shem361:
   logN_max: 7
   N_task: 7
 
+inf_shem361-weight_windows:
+  logN_min: 5
+  logN_max: 7
+  N_task: 7
+
 inf_shem361_td:
   logN_min: 5
   logN_max: 7
