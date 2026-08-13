@@ -6,44 +6,54 @@
 
 A collection of verification, validation, and performance (VVP) test suites for [MC/DC](https://github.com/mcdc-project/mcdc).
 
-The repository provides a unified framework for launching, processing, and organizing MC/DC-VVP campaigns on local workstations and HPC platforms. Each verification, validation, and performance suite is self-contained and can be executed independently, while the top-level workflow enables reproducible campaign-wide execution. On supported HPC systems, campaign orchestration is performed using [Maestro](https://github.com/llnl/maestrowf).
+The repository provides a unified framework for launching, processing, and organizing MC/DC-VVP campaigns on local workstations and HPC platforms.
+Each suite is self-contained and can be executed independently, while the top-level workflow enables reproducible campaign-wide execution.
+Workflow orchestration is performed using [Maestro](https://github.com/llnl/maestrowf).
 
-## Repository organization
+## Directory layout
 
 ```text
 configs/        Shared platform, user, and launch configurations
 verification/   Verification test suites
-validation/     Validation test suites
-performance/    Performance test suites
-results/        Processed results from completed campaigns
+results/        Generated campaign metadata and processed results
 
 launch.py       Launch all enabled suites
 process.py      Process all enabled suites
 ```
 
-Each suite contains its own launch and processing workflow and may also be executed manually without the top-level scripts.
+Integrated suites contain their own launcher, processor, problem definitions, and README.
+They may be executed independently or through the top-level campaign scripts.
 
-## Quick start
+## Configuration
 
-1. Create a user launch configuration:
+Create the local launch configuration:
 
 ```bash
 cp configs/launch_config.py.template configs/launch_config.py
 ```
 
-2. Edit `configs/launch_config.py` to enable the desired suites and select the target platform.
+Edit `configs/launch_config.py` to enable the desired suites and set their platform and launch options.
+Use `platform=None` for local execution or a name from `configs/platform_config.py` for HPC execution.
 
-3. Launch the enabled suites:
+For HPC execution, also create `configs/user_config.py` from its template and provide the account and optional queue, reservation, and Python paths for the target platform.
+
+## Launching and processing
+
+Launch locally enabled suites configured with `platform=None`:
 
 ```bash
-# Local execution
 python launch.py
+```
 
-# HPC execution
+Launch enabled suites configured for a specific HPC platform:
+
+```bash
 python launch.py --platform tuolumne
 ```
 
-4. After all jobs have completed, process the results:
+The `--platform` option selects suites with a matching configured platform; it does not override their configuration.
+
+After all jobs have completed, process every enabled suite:
 
 ```bash
 python process.py
@@ -51,7 +61,7 @@ python process.py
 
 Processed figures, metadata, and summary results are written to the `results/` directory.
 
-## Verification suites
+## Suites
 
 ### Analytical verification
 
@@ -84,7 +94,8 @@ Performance suites evaluate computational performance, scalability, and efficien
 
 ## Documentation
 
-Comprehensive user and developer documentation will be available on Read the Docs. It will include:
+Comprehensive user and developer documentation will be available on Read the Docs.
+Planned topics include:
 
 - Framework architecture
 - Launch and processing workflow
