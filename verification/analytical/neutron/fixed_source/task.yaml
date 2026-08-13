@@ -46,6 +46,11 @@ azurv1:
   logN_max: 7
   N_task: 7
 
+azurv1-basic_techniques:
+  logN_min: 5
+  logN_max: 7
+  N_task: 7
+
 azurv1-census:
   logN_min: 5
   logN_max: 7
