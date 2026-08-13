@@ -52,8 +52,8 @@ azurv1-basic_techniques:
   N_task: 7
 
 azurv1-weight_windows:
-  logN_min: 5
-  logN_max: 7
+  logN_min: 4
+  logN_max: 6
   N_task: 7
 
 azurv1-census:
@@ -92,8 +92,8 @@ inf_shem361:
   N_task: 7
 
 inf_shem361-weight_windows:
-  logN_min: 5
-  logN_max: 7
+  logN_min: 3
+  logN_max: 5
   N_task: 7
 
 inf_shem361_td:
