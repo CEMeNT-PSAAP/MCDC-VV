@@ -51,7 +51,7 @@ Launch enabled suites configured for a specific HPC platform:
 python launch.py --platform tuolumne
 ```
 
-The `--platform` option selects suites with a matching configured platform; it does not override their configuration.
+The `--platform` option selects suites with a matching configured platform.
 
 After all jobs have completed, process every enabled suite:
 
