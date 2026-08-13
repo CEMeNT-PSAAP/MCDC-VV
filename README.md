@@ -59,7 +59,7 @@ Analytical verification demonstrates the expected statistical convergence of MC/
 
 | Physics | Suite | Description |
 | :------ | :---- | :---------- |
-| Neutron transport | Fixed-source | Multigroup steady-state and transient fixed-source problems, including Reed's problem, AZURV1 variants, and infinite SHEM-361 benchmarks. |
+| Neutron transport | [Fixed-source](verification/analytical/neutron/fixed_source/README.md) | Multigroup steady-state and transient fixed-source problems, including Reed's problem, AZURV1 variants, and infinite SHEM-361 benchmarks. |
 
 ### Benchmark verification
 
@@ -68,7 +68,7 @@ Benchmark verification compares MC/DC against established reference Monte Carlo 
 | Physics | Suite | Description |
 | :------ | :---- | :---------- |
 | Neutron transport (multigroup) | Benchmark multigroup | Time-dependent benchmark problems, including the Kobayashi Dog-Leg and C5G7 transient benchmarks. |
-| Neutron transport (continuous energy) | Benchmark continuous energy | Continuous-energy benchmark problems for representative reactor systems. |
+| Neutron transport (continuous energy) | [Benchmark continuous energy](verification/benchmark/neutron/continuous_energy/README.md) | Continuous-energy benchmark problems for representative reactor systems. |
 
 ## Validation
 
