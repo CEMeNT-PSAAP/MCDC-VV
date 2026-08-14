@@ -8,7 +8,7 @@ SHEM361_DATA = (
 )
 
 CAPTURE_FACTOR = 1.5
-N_PARTICLE = 1000
+N_PARTICLE = 10000
 N_INACTIVE = 20
 N_ACTIVE = 20
 
@@ -66,6 +66,7 @@ simulation.set_tallies([tally])
 simulation.settings.N_particle = N_PARTICLE
 simulation.settings.set_eigenmode(N_inactive=N_INACTIVE, N_active=N_ACTIVE)
 simulation.settings.census_bank_buffer_ratio = 4.0
+simulation.settings.source_bank_buffer_ratio = 4.0
 
 # Keep exactly N_particle source histories after each eigenvalue cycle.
 simulation.technique.population_control()
