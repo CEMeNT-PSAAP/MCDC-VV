@@ -60,6 +60,12 @@ def get_mcdc_version():
         return None
 
 
+def write_metadata(metadata_file, metadata):
+    """Persist launch metadata after each submission milestone."""
+    with metadata_file.open("w") as f:
+        yaml.dump(metadata, f, sort_keys=False)
+
+
 # ======================================================================================
 # Command-line arguments
 # ======================================================================================
@@ -93,24 +99,26 @@ else:
 metadata.setdefault("launches", [])
 
 # Keep an append-only launch history so reruns do not erase provenance.
-metadata["launches"].append(
-    {
-        "launched_at": datetime.datetime.now(datetime.UTC).isoformat(),
-        "active_platform": active_platform,
-        "mcdc_version": get_mcdc_version(),
-        "mcdc_vvp_hash": get_git_hash(REPO_DIR),
-        "mcdc_vvp_dirty": is_git_dirty(REPO_DIR),
-        "launch_config": LAUNCH_CONFIG,
-    }
-)
+launch_time = datetime.datetime.now(datetime.UTC)
+launch_record = {
+    "launch_id": launch_time.strftime("%Y%m%dT%H%M%S%fZ"),
+    "launched_at": launch_time.isoformat(),
+    "active_platform": active_platform,
+    "mcdc_version": get_mcdc_version(),
+    "mcdc_vvp_hash": get_git_hash(REPO_DIR),
+    "mcdc_vvp_dirty": is_git_dirty(REPO_DIR),
+    "launch_config": LAUNCH_CONFIG,
+    "suite_runs": {},
+}
+metadata["launches"].append(launch_record)
 
-with metadata_file.open("w") as f:
-    yaml.dump(metadata, f, sort_keys=False)
+write_metadata(metadata_file, metadata)
 
 print("=" * 80)
 print("Prepared VVP results metadata")
 print(f"Results directory : {results_dir}")
 print(f"Metadata file     : {metadata_file}")
+print(f"Launch ID         : {launch_record['launch_id']}")
 print(f"Active platform   : {active_platform}")
 print("=" * 80)
 
@@ -167,12 +175,30 @@ for suite, options in LAUNCH_CONFIG.items():
     print("Command:", " ".join(command))
     print("=" * 80)
 
+    maestro_runs_before = set(suite_dir.glob("maestro_run_*"))
     subprocess.run(command, cwd=suite_dir, check=True)
+
+    # Associate this campaign with the exact generated suite launch.
+    maestro_runs_after = set(suite_dir.glob("maestro_run_*"))
+    new_maestro_runs = maestro_runs_after - maestro_runs_before
+
+    if not new_maestro_runs:
+        raise RuntimeError(f"Suite did not create a new Maestro run: {suite}")
+
+    maestro_run = max(new_maestro_runs, key=lambda path: path.stat().st_mtime)
+    launch_record["suite_runs"][suite] = str(maestro_run.relative_to(REPO_DIR))
+    write_metadata(metadata_file, metadata)
 
 
 # ======================================================================================
 # Summary
 # ======================================================================================
 
+launch_record["submission_completed_at"] = datetime.datetime.now(
+    datetime.UTC
+).isoformat()
+write_metadata(metadata_file, metadata)
+
 print()
+print(f"Launch ID: {launch_record['launch_id']}")
 print("Launch complete.")

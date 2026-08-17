@@ -13,12 +13,13 @@ Workflow orchestration is performed using [Maestro](https://github.com/llnl/maes
 ## Directory layout
 
 ```text
-configs/        Shared platform, user, and launch configurations
-verification/   Verification suites and their cases
-results/        Generated campaign metadata and processed results
+configs/               Shared platform, user, and launch configurations
+verification/          Verification suites and their cases
+results/metadata.yaml  Append-only launch and processing history
+results/<launch_id>/   Processed results for one recorded launch
 
-launch.py       Launch all enabled suites
-process.py      Process all enabled suites
+launch.py              Launch all enabled suites
+process.py             Process one recorded launch
 ```
 
 MC/DC-VVP uses **suite** and **case** as standard terms for its two organizational levels:
@@ -58,13 +59,20 @@ python launch.py --platform tuolumne
 
 The `--platform` option selects suites with a matching configured platform.
 
-After all jobs have completed, process every enabled suite:
+After the latest launch has completed, process all suites submitted by that launch:
 
 ```bash
 python process.py
 ```
 
-Processed figures, metadata, and summary results are written to the `results/` directory.
+Process a specific recorded launch by passing the launch ID printed by `launch.py` and stored in `results/metadata.yaml`:
+
+```bash
+python process.py 20260817T120000123456Z
+```
+
+Each launch is processed into its own `results/<launch_id>/` directory, which contains a metadata snapshot and the suite result hierarchy.
+Reprocessing one launch replaces only that launch's subfolder and does not affect results from other launches.
 
 ## Suites
 
