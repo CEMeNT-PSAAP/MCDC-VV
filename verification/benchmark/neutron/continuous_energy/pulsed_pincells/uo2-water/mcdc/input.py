@@ -1,6 +1,8 @@
 import mcdc
 import numpy as np
 
+simulation = mcdc.Simulation("Pulsed UO2-water pincell")
+
 # Material
 fuel = mcdc.Material(
     nuclide_composition={
@@ -25,17 +27,19 @@ x1 = mcdc.Surface.PlaneX(x=pitch / 2, boundary_condition="reflective")
 y0 = mcdc.Surface.PlaneY(y=-pitch / 2, boundary_condition="reflective")
 y1 = mcdc.Surface.PlaneY(y=pitch / 2, boundary_condition="reflective")
 #
-mcdc.Cell(-cylinder, fill=fuel)
-mcdc.Cell(+x0 & -x1 & +y0 & -y1 & +cylinder, fill=moderator)
+fuel_cell = mcdc.Cell(-cylinder, fill=fuel)
+moderator_cell = mcdc.Cell(+x0 & -x1 & +y0 & -y1 & +cylinder, fill=moderator)
+simulation.set_model([fuel_cell, moderator_cell])
 
 # Source
-mcdc.Source(position=[0.0, 0.0, 0.0], isotropic=True, time=0.0, energy=14.1e6)
+source = mcdc.Source(position=[0.0, 0.0, 0.0], isotropic=True, time=0.0, energy=14.1e6)
+simulation.set_sources([source])
 
 # Setting
-mcdc.settings.N_particle = 10000
-mcdc.settings.N_batch = 30
-mcdc.settings.time_boundary = 1.0
-mcdc.settings.active_bank_buffer = 1000
+simulation.settings.N_particle = 10000
+simulation.settings.N_batch = 30
+simulation.settings.time_boundary = 1.0
+simulation.settings.active_bank_buffer = 1000
 
 # Tally
 t_grid = np.insert(np.logspace(-9, -4, 200), 0, 0.0)
@@ -43,6 +47,7 @@ e_min, e_max = 1e-5, 20.0e6
 groups = 500
 energies = np.logspace(np.log10(e_min), np.log10(e_max), groups + 1)
 
-mcdc.TallyGlobal(scores=["flux"], time=t_grid, energy=energies)
+tally = mcdc.Tally(scores=["flux"], time=t_grid, energy=energies)
+simulation.set_tallies([tally])
 
-mcdc.run()
+simulation.run()

@@ -10,12 +10,12 @@ from matplotlib.colors import TwoSlopeNorm
 
 # Get results
 with h5py.File("mcdc/output_4.h5", "r") as f:
-    fluxes_mcdc = f["tallies/mesh_tally_0/flux/mean"][()]
-    densities_mcdc = f["tallies/mesh_tally_1/density/mean"][()]
-    x = f["tallies/mesh_tally_0/grid/x"][()]
-    y = f["tallies/mesh_tally_0/grid/y"][()]
-    z = f["tallies/mesh_tally_0/grid/z"][()]
-    t = f["tallies/mesh_tally_0/grid/t"][()]
+    fluxes_mcdc = f["tallies/tracklength_tally_0/flux/mean"][()]
+    densities_mcdc = f["tallies/tracklength_tally_1/density/mean"][()]
+    x = f["tallies/tracklength_tally_0/grid/x"][()]
+    y = f["tallies/tracklength_tally_0/grid/y"][()]
+    z = f["tallies/tracklength_tally_0/grid/z"][()]
+    t = f["tallies/tracklength_tally_0/grid/time"][()]
 
 # Get results
 with openmc.StatePoint("openmc_/output_4.h5") as sp:

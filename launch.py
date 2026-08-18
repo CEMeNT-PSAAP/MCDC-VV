@@ -1,3 +1,5 @@
+"""Launch configured VVP suites and record enough context to reproduce each run."""
+
 import argparse
 import datetime
 import importlib.metadata
@@ -7,13 +9,13 @@ from pathlib import Path
 
 import yaml
 
-
 # ======================================================================================
 # Bootstrap VVP imports
 # ======================================================================================
 
 REPO_DIR = Path(__file__).resolve().parent
 
+# Support launching this script from any working directory without installing VVP.
 if str(REPO_DIR) not in sys.path:
     sys.path.insert(0, str(REPO_DIR))
 
@@ -22,14 +24,15 @@ if str(REPO_DIR) not in sys.path:
 # Load launch configuration
 # ======================================================================================
 
-from configs.launch_config import LAUNCH_CONFIG  # noqa: E402
-
+from configs.launch_config import LAUNCH_CONFIG
 
 # ======================================================================================
 # Helper functions
 # ======================================================================================
 
+
 def get_git_hash(repo_dir):
+    """Return the commit that identifies the VVP source used for the launch."""
     return subprocess.check_output(
         ["git", "-C", str(repo_dir), "rev-parse", "HEAD"],
         stderr=subprocess.DEVNULL,
@@ -38,6 +41,7 @@ def get_git_hash(repo_dir):
 
 
 def is_git_dirty(repo_dir):
+    """Report whether the launch includes changes not captured by the commit hash."""
     result = subprocess.run(
         ["git", "-C", str(repo_dir), "status", "--porcelain"],
         stdout=subprocess.PIPE,
@@ -49,10 +53,17 @@ def is_git_dirty(repo_dir):
 
 
 def get_mcdc_version():
+    """Return the installed MC/DC version when package metadata is available."""
     try:
         return importlib.metadata.version("mcdc")
     except importlib.metadata.PackageNotFoundError:
         return None
+
+
+def write_metadata(metadata_file, metadata):
+    """Persist launch metadata after each submission milestone."""
+    with metadata_file.open("w") as f:
+        yaml.dump(metadata, f, sort_keys=False)
 
 
 # ======================================================================================
@@ -63,7 +74,7 @@ parser = argparse.ArgumentParser(description="Launch enabled MC/DC VVP suites.")
 parser.add_argument(
     "--platform",
     default=None,
-    help="Active platform. Use None/omit for local suites.",
+    help="Select suites configured for PLATFORM; omit for local run.",
 )
 args = parser.parse_args()
 
@@ -87,24 +98,27 @@ else:
 
 metadata.setdefault("launches", [])
 
-metadata["launches"].append(
-    {
-        "launched_at": datetime.datetime.now(datetime.UTC).isoformat(),
-        "active_platform": active_platform,
-        "mcdc_version": get_mcdc_version(),
-        "mcdc_vvp_hash": get_git_hash(REPO_DIR),
-        "mcdc_vvp_dirty": is_git_dirty(REPO_DIR),
-        "launch_config": LAUNCH_CONFIG,
-    }
-)
+# Keep an append-only launch history so reruns do not erase provenance.
+launch_time = datetime.datetime.now(datetime.UTC)
+launch_record = {
+    "launch_id": launch_time.strftime("%Y%m%dT%H%M%S%fZ"),
+    "launched_at": launch_time.isoformat(),
+    "active_platform": active_platform,
+    "mcdc_version": get_mcdc_version(),
+    "mcdc_vvp_hash": get_git_hash(REPO_DIR),
+    "mcdc_vvp_dirty": is_git_dirty(REPO_DIR),
+    "launch_config": LAUNCH_CONFIG,
+    "suite_runs": {},
+}
+metadata["launches"].append(launch_record)
 
-with metadata_file.open("w") as f:
-    yaml.dump(metadata, f, sort_keys=False)
+write_metadata(metadata_file, metadata)
 
 print("=" * 80)
 print("Prepared VVP results metadata")
 print(f"Results directory : {results_dir}")
 print(f"Metadata file     : {metadata_file}")
+print(f"Launch ID         : {launch_record['launch_id']}")
 print(f"Active platform   : {active_platform}")
 print("=" * 80)
 
@@ -120,6 +134,7 @@ for suite, options in LAUNCH_CONFIG.items():
 
     suite_platform = options.get("platform")
 
+    # Launch only suites explicitly assigned to this invocation's platform.
     if suite_platform != active_platform:
         print(
             f"Skip platform mismatch: {suite} "
@@ -136,11 +151,13 @@ for suite, options in LAUNCH_CONFIG.items():
     if not launcher.is_file():
         raise FileNotFoundError(f"Suite launcher not found: {launcher}")
 
+    # Reuse the active interpreter so suite launchers inherit this environment.
     command = [
         sys.executable,
         str(launcher),
     ]
 
+    # Forward only options that are meaningful for the configured suite.
     if suite_platform is not None:
         command.extend(["--platform", suite_platform])
 
@@ -158,12 +175,30 @@ for suite, options in LAUNCH_CONFIG.items():
     print("Command:", " ".join(command))
     print("=" * 80)
 
+    maestro_runs_before = set(suite_dir.glob("maestro_run_*"))
     subprocess.run(command, cwd=suite_dir, check=True)
+
+    # Associate this campaign with the exact generated suite launch.
+    maestro_runs_after = set(suite_dir.glob("maestro_run_*"))
+    new_maestro_runs = maestro_runs_after - maestro_runs_before
+
+    if not new_maestro_runs:
+        raise RuntimeError(f"Suite did not create a new Maestro run: {suite}")
+
+    maestro_run = max(new_maestro_runs, key=lambda path: path.stat().st_mtime)
+    launch_record["suite_runs"][suite] = str(maestro_run.relative_to(REPO_DIR))
+    write_metadata(metadata_file, metadata)
 
 
 # ======================================================================================
 # Summary
 # ======================================================================================
 
+launch_record["submission_completed_at"] = datetime.datetime.now(
+    datetime.UTC
+).isoformat()
+write_metadata(metadata_file, metadata)
+
 print()
+print(f"Launch ID: {launch_record['launch_id']}")
 print("Launch complete.")

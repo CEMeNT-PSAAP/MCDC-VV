@@ -16,10 +16,10 @@ with openmc.StatePoint("output_4.h5") as sp:
 
 # The grids
 with h5py.File("../mcdc/output.h5", "r") as f:
-    x = f["tallies/mesh_tally_0/grid/x"][()]
-    y = f["tallies/mesh_tally_0/grid/y"][()]
-    z = f["tallies/mesh_tally_0/grid/z"][()]
-    t = f["tallies/mesh_tally_0/grid/t"][()]
+    x = f["tallies/tracklength_tally_0/grid/x"][()]
+    y = f["tallies/tracklength_tally_0/grid/y"][()]
+    z = f["tallies/tracklength_tally_0/grid/z"][()]
+    t = f["tallies/tracklength_tally_0/grid/time"][()]
 t_mid = 0.5 * (t[:-1] + t[1:])
 XY_X, XY_Y = np.meshgrid(x, y, indexing="ij")
 XZ_X, XZ_Z = np.meshgrid(x, z, indexing="ij")

@@ -45,7 +45,7 @@ def phi_t(t, x):
 
 
 def phiX(x, t0, t1):
-    return quad(phi_t, t0, t1, args=(x))[0]
+    return quad(phi_t, t0, t1, args=(x,))[0]
 
 
 phi_avg = np.zeros([K, J])
@@ -59,12 +59,6 @@ for k in range(K):
         t1 = t[k + 1]
         dt = t1 - t0
         phi_avg[k, j] = quad(phiX, x0, x1, args=(t0, t1))[0] / dx / dt
-
-for j in range(J + 1):
-    for k in range(K):
-        t0 = t[k]
-        t1 = t[k + 1]
-        dt = t1 - t0
 
 phi_avg = np.nan_to_num(phi_avg)
 

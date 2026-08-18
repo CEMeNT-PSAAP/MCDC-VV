@@ -10,7 +10,7 @@ output = sys.argv[1]
 with h5py.File(output, "r") as f:
     z = f["tallies/tracklength_tally_0/grid/z"][:]
     mu = f["tallies/tracklength_tally_0/grid/mu"][:]
-phi_ref, J_ref, psi_ref = reference(z, mu)
+phi_ref, _, psi_ref = reference(z, mu)
 
 # Load results
 with h5py.File(output, "r") as f:

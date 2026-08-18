@@ -1,10 +1,11 @@
+"""Build and launch the analytical fixed-source verification study with Maestro."""
+
 import argparse
 import os
 import subprocess
 from pathlib import Path
 
 import yaml
-
 
 # ======================================================================================
 # Bootstrap VVP imports
@@ -14,6 +15,7 @@ import sys
 
 REPO_DIR = Path(__file__).resolve().parents[4]
 
+# Support launching this suite directly without installing MC/DC-VVP.
 if str(REPO_DIR) not in sys.path:
     sys.path.insert(0, str(REPO_DIR))
 
@@ -22,10 +24,11 @@ if str(REPO_DIR) not in sys.path:
 # Load shared VVP configs
 # ======================================================================================
 
-from configs.platform_config import PLATFORMS  # noqa: E402
+from configs.platform_config import PLATFORMS
 
+# User overrides are optional for local runs.
 try:
-    from configs.user_config import USER_CONFIG  # noqa: E402
+    from configs.user_config import USER_CONFIG
 except ImportError:
     USER_CONFIG = {}
 
@@ -66,6 +69,7 @@ user_platform_config = USER_CONFIG.get(args.platform, {})
 
 mcdc_python = user_platform_config.get("mcdc_python")
 
+# Use the active interpreter unless this platform specifies another MC/DC environment.
 if mcdc_python is None:
     mcdc_python = sys.executable
 else:
@@ -76,6 +80,7 @@ if not local:
     scheduler = platform["scheduler"]
     cpu_cores = platform["cpu_cores_per_node"]
 
+    # Never request more walltime than the platform permits.
     walltime_hours = (
         platform["max_walltime_hours"]
         if args.walltime is None
@@ -109,10 +114,12 @@ with task_file.open("r") as f:
 steps = []
 
 for case_name in tasks:
+    # Normalize case names into stable Maestro step identifiers.
     safe_case_name = case_name.replace("-", "_")
 
     command = f"{mcdc_python} {run_case} --name {case_name}"
 
+    # Maestro replaces LAUNCHER with the scheduler-specific MPI launch command.
     if args.mpi:
         command += ' --mpi "$(LAUNCHER)"'
 
@@ -121,6 +128,7 @@ for case_name in tasks:
 
     run = {"cmd": command}
 
+    # Scheduled studies require explicit resources; local studies run directly.
     if not local:
         run["nodes"] = 1
         run["walltime"] = walltime
@@ -151,6 +159,7 @@ study = {
 }
 
 if not local:
+    # Attach batch settings only when Maestro submits to a scheduler.
     batch = {
         "type": scheduler,
         "host": platform["host"],
@@ -185,11 +194,13 @@ if not local:
 
 env = os.environ.copy()
 
+# Use the configured Maestro environment when it differs from the active one.
 if maestro_python is None:
     maestro_command = ["maestro", "run", "study.yaml"]
 else:
     maestro_python = Path(maestro_python).expanduser()
     maestro_bin = maestro_python.parent
+    # Keep executables spawned by Maestro in the same configured environment.
     env["PATH"] = f"{maestro_bin}:{env['PATH']}"
 
     maestro_command = [
@@ -207,6 +218,7 @@ subprocess.run(maestro_command, cwd=suite_dir, check=True, env=env)
 # Store launch metadata
 # ======================================================================================
 
+# Maestro creates timestamped run directories, so capture the newly generated launch.
 maestro_runs = sorted(
     suite_dir.glob("maestro_run_*"),
     key=lambda path: path.stat().st_mtime,
@@ -224,6 +236,7 @@ launch_config = {
     "rewrite": args.rewrite,
 }
 
+# Snapshot the effective launch and task configuration with the generated run.
 with (latest_run / "launch_config.yaml").open("w") as f:
     yaml.dump(launch_config, f, sort_keys=False)
 

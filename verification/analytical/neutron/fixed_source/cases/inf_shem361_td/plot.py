@@ -1,8 +1,12 @@
+from pathlib import Path
+
 import numpy as np
 import matplotlib.pyplot as plt
 import h5py
 import sys
 import matplotlib.animation as animation
+
+SHEM361_DATA = Path(__file__).resolve().parents[2] / "data" / "SHEM-361.npz"
 
 # Reference solution
 data = np.load("reference.npz")
@@ -11,9 +15,8 @@ n_ref = data["n"]
 
 # Load results
 output = sys.argv[1]
-with np.load("../../data/MGXS-SHEM361.npz") as data:
+with np.load(SHEM361_DATA) as data:
     E = data["E"]
-    G = data["G"]
     speed = data["v"]
     E_mid = 0.5 * (E[1:] + E[:-1])
     dE = E[1:] - E[:-1]
@@ -87,6 +90,6 @@ def animate(k):
     return line1, line2
 
 
-simulation = animation.FuncAnimation(fig, animate, frames=K)
-writervideo = animation.FFMpegWriter(fps=6)
+# Uncomment to animate all time bins.
+# _simulation = animation.FuncAnimation(fig, animate, frames=K)
 plt.show()

@@ -10,11 +10,11 @@ from matplotlib.colors import TwoSlopeNorm
 
 # Get results
 with h5py.File("mcdc/output_4.h5", "r") as f:
-    fissions_mcdc = f["tallies/mesh_tally_0/fission/mean"][()]
-    x = f["tallies/mesh_tally_0/grid/x"][()]
-    y = f["tallies/mesh_tally_0/grid/y"][()]
-    z = f["tallies/mesh_tally_0/grid/z"][()]
-    t = f["tallies/mesh_tally_0/grid/t"][()]
+    fissions_mcdc = f["tallies/tracklength_tally_0/fission/mean"][()]
+    x = f["tallies/tracklength_tally_0/grid/x"][()]
+    y = f["tallies/tracklength_tally_0/grid/y"][()]
+    z = f["tallies/tracklength_tally_0/grid/z"][()]
+    t = f["tallies/tracklength_tally_0/grid/time"][()]
 
 # Get results
 Nt = 200

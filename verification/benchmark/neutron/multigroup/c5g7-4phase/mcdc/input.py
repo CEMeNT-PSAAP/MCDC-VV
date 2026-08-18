@@ -1,5 +1,11 @@
+import math
+
+import h5py
 import numpy as np
-import h5py, mcdc, math
+
+import mcdc
+
+simulation = mcdc.Simulation("C5G7 four-phase transient")
 
 # =============================================================================
 # Materials
@@ -11,7 +17,7 @@ lib = h5py.File("MGXS-C5G7.h5", "r")
 
 # Setter
 def set_mat(mat):
-    return mcdc.MaterialMG(
+    return mcdc.Material.multigroup(
         capture=mat["capture"][:],
         scatter=mat["scatter"][:],
         fission=mat["fission"][:],
@@ -313,9 +319,9 @@ reflector_bottom = mcdc.Cell(+x0 & -x3 & +y0 & -y3 & +z0 & -z1, mat_mod)
 reflector_south = mcdc.Cell(+x0 & -x3 & +y0 & -y1 & +z1 & -z2, mat_mod)
 reflector_east = mcdc.Cell(+x2 & -x3 & +y1 & -y3 & +z1 & -z2, mat_mod)
 
-# Root universe
-mcdc.simulation.set_root_universe(
-    cells=[
+# Set model
+simulation.set_model(
+    [
         assembly_1,
         assembly_2,
         assembly_3,
@@ -323,7 +329,7 @@ mcdc.simulation.set_root_universe(
         reflector_bottom,
         reflector_south,
         reflector_east,
-    ],
+    ]
 )
 
 # =============================================================================
@@ -336,9 +342,11 @@ source = mcdc.Source(
     x=np.array([pitch * 17 * 3 / 2] * 2) + np.array([-pitch / 2, +pitch / 2]),
     y=np.array([-pitch * 17 * 3 / 2] * 2) + np.array([-pitch / 2, +pitch / 2]),
     z=[-core_height / 2, core_height / 2],
-    energy_group=0,
+    isotropic=True,
+    energy=0,
     time=[0.0, 15.0],
 )
+simulation.set_sources([source])
 
 # =============================================================================
 # Set tallies, settings, and run MC/DC
@@ -354,12 +362,13 @@ x = np.linspace(0.0, pitch * 17 * 2, Nx + 1)
 y = np.linspace(-pitch * 17 * 2, 0.0, Ny + 1)
 z = np.linspace(-core_height / 2, core_height / 2, Nz + 1)
 mesh = mcdc.MeshStructured(x=x, y=y, z=z)
-mcdc.Tally(mesh=mesh, scores=["fission"], time=t)
+tally = mcdc.Tally(mesh=mesh, scores=["fission"], time=t)
+simulation.set_tallies([tally])
 
 # Settings
-mcdc.settings.N_particle = int(1e6)
-mcdc.settings.N_batch = 30
-mcdc.settings.active_bank_buffer = 10000
+simulation.settings.N_particle = int(1e6)
+simulation.settings.N_batch = 30
+simulation.settings.active_bank_buffer = 10000
 
 # Run
-mcdc.run()
+simulation.run()

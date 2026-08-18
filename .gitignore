@@ -1,19 +1,29 @@
-configs/launch_config.py
-configs/user_config.py
+# Local configuration
+/configs/launch_config.py
+/configs/user_config.py
 
-results
+# Python caches
+__pycache__/
 
-tallies.out
-statepoint*
-tmp*
-submit.pbs
-*png
-__pycache__
+# Verification results
+/results/
+
+# Simulation output
 output*
-*.core
-*xml
-*DS_Store
+statepoint*
+tallies.out
 summary.h5
 mgxs.h5
-*gif
+*.xml
 
+# Generated plots
+*.png
+*.gif
+
+# Batch and temporary files
+submit.pbs
+tmp*
+*.core
+
+# Operating-system files
+.DS_Store

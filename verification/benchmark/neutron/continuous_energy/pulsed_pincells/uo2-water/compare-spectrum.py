@@ -13,15 +13,15 @@ with openmc.StatePoint("openmc_/statepoint.30.h5") as sp:
     sdev_openmc = tally.std_dev.reshape((200, 500))
 
 with h5py.File("mcdc/output.h5", "r") as f:
-    flux_mcdc = f["tallies/global_tally_0/flux/mean"][()].transpose()
-    sdev_mcdc = f["tallies/global_tally_0/flux/sdev"][()].transpose()
+    flux_mcdc = f["tallies/tracklength_tally_0/flux/mean"][()].transpose()
+    sdev_mcdc = f["tallies/tracklength_tally_0/flux/sdev"][()].transpose()
 
     # Grids
-    t = f["tallies/global_tally_0/grid/time"][()]
+    t = f["tallies/tracklength_tally_0/grid/time"][()]
     dt = t[1:] - t[:-1]
     t_mid = 0.5 * (t[1:] + t[:-1])
 
-    E = f["tallies/global_tally_0/grid/energy"][()]
+    E = f["tallies/tracklength_tally_0/grid/energy"][()]
     E_mid = 0.5 * (E[1:] + E[:-1])
     dE = E[1:] - E[:-1]
 

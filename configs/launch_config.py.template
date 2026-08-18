@@ -6,4 +6,11 @@ LAUNCH_CONFIG = {
         "walltime": None,
         "rewrite": False,
     },
+    "verification/analytical/neutron/k_eigenvalue": {
+        "enabled": False,
+        "platform": None,
+        "mpi": False,
+        "walltime": None,
+        "rewrite": False,
+    },
 }

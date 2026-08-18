@@ -1,6 +1,8 @@
 import numpy as np
 import mcdc
 
+simulation = mcdc.Simulation("Kobayashi dog-leg transient benchmark")
+
 # ======================================================================================
 # Set model
 # ======================================================================================
@@ -8,8 +10,8 @@ import mcdc
 # (PNE 2001, https://doi.org/10.1016/S0149-1970(01)00007-5)
 
 # Set materials
-m = mcdc.MaterialMG(capture=np.array([0.05]), scatter=np.array([[0.05]]))
-m_void = mcdc.MaterialMG(capture=np.array([5e-5]), scatter=np.array([[5e-5]]))
+m = mcdc.Material.multigroup(capture=np.array([0.05]), scatter=np.array([[0.05]]))
+m_void = mcdc.Material.multigroup(capture=np.array([5e-5]), scatter=np.array([[5e-5]]))
 
 # Set surfaces
 sx1 = mcdc.Surface.PlaneX(x=0.0, boundary_condition="reflective")
@@ -41,20 +43,22 @@ void_cell = mcdc.Cell(region=void_channel, fill=m_void)
 # Shield
 box = +sx1 & -sx5 & +sy1 & -sy5 & +sz1 & -sz5
 shield_cell = mcdc.Cell(region=box & ~void_channel, fill=m)
+simulation.set_model([source_cell, void_cell, shield_cell])
 
 # ======================================================================================
 # Set source
 # ======================================================================================
 # The source pulses in t=[0,5]
 
-mcdc.Source(
+source = mcdc.Source(
     x=[0.0, 10.0],
     y=[0.0, 10.0],
     z=[0.0, 10.0],
     isotropic=True,
-    energy_group=0,
+    energy=0,
     time=[0.0, 50.0],
 )
+simulation.set_sources([source])
 
 # ======================================================================================
 # Set tallies, settings, and run MC/DC
@@ -62,15 +66,16 @@ mcdc.Source(
 
 # Tallies
 time_grid = np.linspace(0.0, 200.0, 101)
-#mesh = mcdc.MeshUniform(x=(0.0, 1.0, 60), y=(0.0, 1.0, 100), z=(0.0, 1.0, 60))
+# mesh = mcdc.MeshUniform(x=(0.0, 1.0, 60), y=(0.0, 1.0, 100), z=(0.0, 1.0, 60))
 mesh = mcdc.MeshUniform(x=(0.0, 1.0, 60))
-mcdc.Tally(mesh=mesh, scores=["flux"], time=time_grid)
-mcdc.Tally(scores=["density"], time=time_grid)
+flux_tally = mcdc.Tally(mesh=mesh, scores=["flux"], time=time_grid)
+density_tally = mcdc.Tally(scores=["density"], time=time_grid)
+simulation.set_tallies([flux_tally, density_tally])
 
 # Settings
-#mcdc.settings.N_particle = int(1e9)
-mcdc.settings.N_particle = int(1e2)
-mcdc.settings.N_batch = 30
+# simulation.settings.N_particle = int(1e9)
+simulation.settings.N_particle = int(1e2)
+simulation.settings.N_batch = 30
 
 # Run
-mcdc.run()
+simulation.run()

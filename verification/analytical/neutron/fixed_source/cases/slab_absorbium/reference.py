@@ -48,13 +48,13 @@ def reference(x, mu):
 
     # Flux
     def phi1(x):
-        return quad(psi1, -1, 1, args=(x), points=[0.0])[0]
+        return quad(psi1, -1, 1, args=(x,), points=[0.0])[0]
 
     def phi2(x):
-        return quad(psi2, -1, 1, args=(x), points=[0.0])[0]
+        return quad(psi2, -1, 1, args=(x,), points=[0.0])[0]
 
     def phi3(x):
-        return quad(psi3, -1, 1, args=(x), points=[0.0])[0]
+        return quad(psi3, -1, 1, args=(x,), points=[0.0])[0]
 
     # Integrands for current
     def mu_psi1(mu, x):
@@ -77,23 +77,23 @@ def reference(x, mu):
 
     # Current
     def J1(x):
-        return quad(mu_psi1, -1, 1, args=(x), points=[0.0])[0]
+        return quad(mu_psi1, -1, 1, args=(x,), points=[0.0])[0]
 
     def J2(x):
-        return quad(mu_psi2, -1, 1, args=(x), points=[0.0])[0]
+        return quad(mu_psi2, -1, 1, args=(x,), points=[0.0])[0]
 
     def J3(x):
-        return quad(mu_psi3, -1, 1, args=(x), points=[0.0])[0]
+        return quad(mu_psi3, -1, 1, args=(x,), points=[0.0])[0]
 
     # Angular flux
     def psi1_(x, mu0, mu1):
-        return quad(psi1, mu0, mu1, args=(x), points=[0.0])[0]
+        return quad(psi1, mu0, mu1, args=(x,), points=[0.0])[0]
 
     def psi2_(x, mu0, mu1):
-        return quad(psi2, mu0, mu1, args=(x), points=[0.0])[0]
+        return quad(psi2, mu0, mu1, args=(x,), points=[0.0])[0]
 
     def psi3_(x, mu0, mu1):
-        return quad(psi3, mu0, mu1, args=(x), points=[0.0])[0]
+        return quad(psi3, mu0, mu1, args=(x,), points=[0.0])[0]
 
     phi = np.zeros(I)
     psi = np.zeros((I, N))
@@ -120,8 +120,4 @@ def reference(x, mu):
             mu0 = mu[n]
             mu1 = mu[n + 1]
             psi[i, n] = quad(psi3_, x[i], x[i + 1], args=(mu0, mu1))[0] / dx[i] / dmu[n]
-    for n in range(N):
-        mu0 = mu[n]
-        mu1 = mu[n + 1]
-
     return phi, J, psi

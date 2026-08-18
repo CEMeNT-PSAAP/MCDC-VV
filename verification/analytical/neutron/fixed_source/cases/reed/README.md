@@ -1,1 +1,0 @@
-Four slab layers with different materials. Based on William H. Reed, NSE (1971), 46:2, 309-314, DOI: 10.13182/NSE46-309. Reference solution is generated from OpenMC run with 30 batches and 1000M particles per batch.

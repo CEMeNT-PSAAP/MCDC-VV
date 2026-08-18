@@ -6,17 +6,17 @@ import sys
 sys.path.append("../../")
 import util
 
-# Cases run
+# Particle counts
 N_min = int(sys.argv[1])
 N_max = int(sys.argv[2])
 N = int(sys.argv[3])
-N_particle_list = np.logspace(N_min, N_max, N)
+N_particle_list = np.logspace(N_min, N_max, N, dtype=int)
 
 # Reference solution
 with h5py.File("output_%i.h5" % (int(N_particle_list[0])), "r") as f:
     z = f["tallies/tracklength_tally_0/grid/z"][:]
     mu = f["tallies/tracklength_tally_0/grid/mu"][:]
-phi_ref, J_ref, psi_ref = reference(z, mu)
+phi_ref, _, psi_ref = reference(z, mu)
 
 # Error containers
 error = np.zeros(len(N_particle_list))
@@ -34,7 +34,7 @@ for k, N_particle in enumerate(N_particle_list):
         mu = f["tallies/tracklength_tally_0/grid/mu"][:]
         dmu = mu[1:] - mu[:-1]
         I = len(z) - 1
-        N = len(mu) - 1
+        N_mu = len(mu) - 1
 
         psi = f["tallies/tracklength_tally_0/flux/mean"][:]
         psi = np.transpose(psi)
@@ -44,10 +44,9 @@ for k, N_particle in enumerate(N_particle_list):
     for i in range(I):
         phi[i] += np.sum(psi[i, :])
 
-    psi_norm = np.zeros(psi.shape)
     # Normalize
     phi /= dz
-    for n in range(N):
+    for n in range(N_mu):
         psi[:, n] = psi[:, n] / dz / dmu[n]
 
     # Get error
@@ -60,6 +59,4 @@ for k, N_particle in enumerate(N_particle_list):
 
 # Plot
 util.plot_convergence("flux", N_particle_list, error, error_max)
-util.plot_convergence(
-    "flux", N_particle_list, error_psi, error_max_psi
-)
+util.plot_convergence("angular_flux", N_particle_list, error_psi, error_max_psi)

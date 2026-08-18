@@ -3,7 +3,7 @@ import numpy as np
 # Warsa, J.S., "Analytical SN solutions in heterogeneous slabs, using symbolic algebra computer programs"
 # Ann. Nucl. Energy, 29(7), 851-874 (2002). DOI: 10.1016/S0306-4549(01)00080-9
 
-# reproduced reference equations from Warsa, 2002
+# Reproduce the reference equations from Warsa (2002).
 
 
 def reference():

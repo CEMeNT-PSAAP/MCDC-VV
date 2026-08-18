@@ -6,11 +6,11 @@ import sys
 sys.path.append("../../")
 import util
 
-# Cases run
+# Particle counts
 N_min = int(sys.argv[1])
 N_max = int(sys.argv[2])
 N = int(sys.argv[3])
-N_particle_list = np.logspace(N_min, N_max, N)
+N_particle_list = np.logspace(N_min, N_max, N, dtype=int)
 
 # Reference solution
 with h5py.File("output_%i.h5" % (int(N_particle_list[0])), "r") as f:

@@ -1,15 +1,19 @@
+from pathlib import Path
+
 import numpy as np
 import h5py
 import sys
 
+SHEM361_DATA = Path(__file__).resolve().parents[2] / "data" / "SHEM-361.npz"
+
 sys.path.append("../../")
 import util
 
-# Cases run
+# Particle counts
 N_min = int(sys.argv[1])
 N_max = int(sys.argv[2])
 N = int(sys.argv[3])
-N_particle_list = np.logspace(N_min, N_max, N)
+N_particle_list = np.logspace(N_min, N_max, N, dtype=int)
 
 # Reference solution
 data = np.load("reference.npz")
@@ -26,9 +30,8 @@ error_max_n = np.zeros(len(N_particle_list))
 # Calculate error
 for i, N_particle in enumerate(N_particle_list):
     # Get results
-    with np.load("SHEM-361.npz") as data:
+    with np.load(SHEM361_DATA) as data:
         E = data["E"]
-        G = data["G"]
         speed = data["v"]
         E_mid = 0.5 * (E[1:] + E[:-1])
         dE = E[1:] - E[:-1]

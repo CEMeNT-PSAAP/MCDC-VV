@@ -1,0 +1,26 @@
+# =============================================================================
+# MC/DC Verification Task Definitions
+# =============================================================================
+#
+# This file defines the analytical neutron k-eigenvalue cases.
+#
+# Each top-level key corresponds to a case directory under this suite.
+# The active-cycle counts are generated with:
+#
+#     numpy.rint(
+#         numpy.geomspace(N_active_min, N_active_max, N_task)
+#     ).astype(int)
+#
+# The fixed particle and inactive-cycle counts are set in each input.py.
+#
+# =============================================================================
+
+inf_shem361_subcritical:
+  N_active_min: 20
+  N_active_max: 2000
+  N_task: 5
+
+inf_shem361_supercritical:
+  N_active_min: 20
+  N_active_max: 2000
+  N_task: 5
