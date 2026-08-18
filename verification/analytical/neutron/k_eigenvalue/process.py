@@ -28,7 +28,6 @@ args = parser.parse_args()
 # ======================================================================================
 
 suite_dir = Path(__file__).resolve().parent
-task_file = suite_dir / "task.yaml"
 
 if args.maestro_run is None:
     maestro_runs = sorted(
@@ -44,8 +43,11 @@ else:
         maestro_run = suite_dir / maestro_run
 
 launch_config_file = maestro_run / "launch_config.yaml"
+task_file = maestro_run / "task.yaml"
 if not launch_config_file.is_file():
     raise FileNotFoundError(f"Launch config not found: {launch_config_file}")
+if not task_file.is_file():
+    raise FileNotFoundError(f"Task config not found: {task_file}")
 
 with launch_config_file.open("r") as f:
     launch_config = yaml.safe_load(f)
