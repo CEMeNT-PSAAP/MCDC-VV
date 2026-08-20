@@ -15,6 +15,16 @@
 #
 # =============================================================================
 
+one_group_slab:
+  N_active_min: 20
+  N_active_max: 2000
+  N_task: 5
+
+kornreich:
+  N_active_min: 20
+  N_active_max: 2000
+  N_task: 5
+
 inf_shem361_subcritical:
   N_active_min: 20
   N_active_max: 2000
