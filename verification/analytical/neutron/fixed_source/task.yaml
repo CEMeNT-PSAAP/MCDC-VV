@@ -110,3 +110,8 @@ reed:
   logN_min: 5
   logN_max: 7
   N_task: 7
+
+mms_two_group_slab:
+  logN_min: 4
+  logN_max: 6
+  N_task: 7
