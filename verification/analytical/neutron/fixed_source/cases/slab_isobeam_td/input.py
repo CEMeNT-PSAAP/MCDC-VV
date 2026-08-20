@@ -13,8 +13,8 @@ simulation = mcdc.Simulation("Slab isotropic beam time dependent")
 m = mcdc.Material.multigroup(capture=np.array([1.0]))
 
 # Set surfaces
-s1 = mcdc.Surface.PlaneX(x=0.0, boundary_condition="vacuum")
-s2 = mcdc.Surface.PlaneX(x=5.0, boundary_condition="vacuum")
+s1 = mcdc.Surface.PlaneY(y=0.0, boundary_condition="vacuum")
+s2 = mcdc.Surface.PlaneY(y=5.0, boundary_condition="vacuum")
 
 # Set cells
 cell = mcdc.Cell(region=+s1 & -s2, fill=m)
@@ -23,11 +23,11 @@ simulation.set_model([cell])
 # ======================================================================================
 # Set source
 # ======================================================================================
-# Isotropic beam from left-end
+# Isotropic beam from the lower-y boundary
 
 source = mcdc.Source(
-    position=(1e-10, 0.0, 0.0),
-    white_direction=(1.0, 0.0, 0.0),
+    position=(0.0, 1e-10, 0.0),
+    white_direction=(0.0, 1.0, 0.0),
     energy=0,
     time=[0.0, 5.0],
 )
@@ -38,7 +38,7 @@ simulation.set_sources([source])
 # ======================================================================================
 
 # Tallies
-mesh = mcdc.MeshUniform(x=(0.0, 0.1, 50))
+mesh = mcdc.MeshUniform(y=(0.0, 0.1, 50))
 tally = mcdc.Tally(
     mesh=mesh,
     scores=["flux"],
