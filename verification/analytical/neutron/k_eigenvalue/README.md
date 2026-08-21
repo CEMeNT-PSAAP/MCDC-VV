@@ -25,6 +25,15 @@ cleanup.py          Remove generated outputs and figures
 util.py             Provide shared processing and plotting utilities
 ```
 
+Each case contains a common set of files:
+
+```text
+input.py            Define and run the MC/DC model
+reference.py        Generate the analytical reference solution
+process.py          Evaluate convergence across the study
+plot.py             Inspect one MC/DC result against the reference
+```
+
 The multigroup cases use the SHEM-361 dataset in the neighboring fixed-source suite at `../fixed_source/data/SHEM-361.npz`.
 
 ## Configuration

@@ -1,4 +1,4 @@
-import math
+from pathlib import Path
 
 import h5py
 import numpy as np
@@ -11,8 +11,9 @@ simulation = mcdc.Simulation("C5G7 four-phase transient")
 # Materials
 # =============================================================================
 
-# Load material data
-lib = h5py.File("MGXS-C5G7.h5", "r")
+# Load the suite's canonical C5G7 multigroup cross sections.
+DATA_FILE = Path(__file__).resolve().parents[2] / "data" / "MGXS-C5G7.h5"
+lib = h5py.File(DATA_FILE, "r")
 
 
 # Setter
@@ -39,6 +40,7 @@ mat_gt = set_mat(lib["gt"])  # Guide tube
 mat_fc = set_mat(lib["fc"])  # Fission chamber
 mat_cr = set_mat(lib["cr"])  # Control rod
 mat_mod = set_mat(lib["mod"])  # Moderator
+lib.close()
 
 # =============================================================================
 # Pin cells

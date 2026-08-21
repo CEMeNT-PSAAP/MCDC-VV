@@ -48,7 +48,7 @@ simulation.set_model([source_cell, void_cell, shield_cell])
 # ======================================================================================
 # Set source
 # ======================================================================================
-# The source pulses in t=[0,5]
+# The source pulses over t=[0, 50].
 
 source = mcdc.Source(
     x=[0.0, 10.0],
@@ -66,15 +66,17 @@ simulation.set_sources([source])
 
 # Tallies
 time_grid = np.linspace(0.0, 200.0, 101)
-# mesh = mcdc.MeshUniform(x=(0.0, 1.0, 60), y=(0.0, 1.0, 100), z=(0.0, 1.0, 60))
-mesh = mcdc.MeshUniform(x=(0.0, 1.0, 60))
+mesh = mcdc.MeshUniform(
+    x=(0.0, 1.0, 60),
+    y=(0.0, 1.0, 100),
+    z=(0.0, 1.0, 60),
+)
 flux_tally = mcdc.Tally(mesh=mesh, scores=["flux"], time=time_grid)
 density_tally = mcdc.Tally(scores=["density"], time=time_grid)
 simulation.set_tallies([flux_tally, density_tally])
 
 # Settings
-# simulation.settings.N_particle = int(1e9)
-simulation.settings.N_particle = int(1e2)
+simulation.settings.N_particle = 100
 simulation.settings.N_batch = 30
 
 # Run

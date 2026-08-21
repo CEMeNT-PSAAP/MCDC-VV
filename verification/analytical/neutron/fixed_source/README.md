@@ -25,6 +25,15 @@ cleanup.py          Remove generated outputs and figures
 util.py             Provide shared processing and plotting utilities
 ```
 
+Each case contains a common set of files:
+
+```text
+input.py            Define and run the MC/DC model
+reference.py        Generate the analytical reference solution
+process.py          Evaluate convergence across the study
+plot.py             Inspect one MC/DC result against the reference
+```
+
 ## Configuration
 
 The `task.yaml` file selects the cases and defines the particle-count range and number of tasks for each case.

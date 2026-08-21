@@ -1,9 +1,0 @@
-kobayashi:
-    logN_min: 8
-    logN_max: 10
-    N_runs: 5
-
-c5g7-4phase:
-    logN_min: 5
-    logN_max: 7
-    N_runs: 5
