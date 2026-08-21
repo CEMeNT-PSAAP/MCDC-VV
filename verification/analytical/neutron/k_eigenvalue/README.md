@@ -98,7 +98,7 @@ MC/DC assigns all non-scattering fuel removal to fission to preserve the publish
 For each multigroup case, the analytical multiplication factor and spectrum are obtained from
 
 $$
-\left[\operatorname{diag}(\Sigma_t)-\Sigma_s\right]\phi
+\left[\mathrm{diag}(\Sigma_t)-\Sigma_s\right]\phi
 = \frac{1}{k}\nu\Sigma_f\phi.
 $$
 
