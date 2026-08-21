@@ -14,7 +14,7 @@ def get_case_walltime(task, platform, walltime_base=None):
         or not math.isfinite(walltime_base)
         or walltime_base <= 0.0
     ):
-        raise ValueError("Launch walltime must be positive.")
+        raise ValueError("Launch walltime must be greater than zero.")
 
     # Validate the multiplier supplied by the individual case.
     if (
@@ -23,7 +23,7 @@ def get_case_walltime(task, platform, walltime_base=None):
         or not math.isfinite(walltime_factor)
         or walltime_factor <= 0.0
     ):
-        raise ValueError("Case walltime_factor must be positive.")
+        raise ValueError("Case walltime_factor must be greater than zero.")
 
     # Use the platform limit as the base when the launch does not specify one.
     if walltime_base is None:
