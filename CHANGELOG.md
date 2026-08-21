@@ -11,6 +11,7 @@ Target release: 0.16.0, the first versioned MC/DC-VVP release.
 
 ### Added
 
+- Add Kornreich k-eigenvalue slabs problem
 - Add the analytical neutron $k$-eigenvalue MMS one-group slab, from [@ilhamv]
 - Add the analytical neutron fixed-source MMS two-group slab, from [@ilhamv]
 - Add the analytical neutron $k$-eigenvalue suite with subcritical and supercritical SHEM-361 cases, analytical matrix-eigenvalue references, active-cycle convergence studies, and uncertainty plots, from [@ilhamv]
