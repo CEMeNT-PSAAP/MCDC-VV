@@ -42,7 +42,12 @@ parser = argparse.ArgumentParser(
     description="Launch the MC/DC VVP analytical neutron fixed-source suite."
 )
 parser.add_argument("--platform", default="local", choices=["local"] + list(PLATFORMS))
-parser.add_argument("--mpi", action="store_true")
+parser.add_argument(
+    "--N_node",
+    type=int,
+    default=1,
+    help="Set the number of compute nodes.",
+)
 parser.add_argument(
     "--walltime",
     type=float,
@@ -52,8 +57,11 @@ parser.add_argument(
 parser.add_argument("--rewrite", action="store_true")
 args = parser.parse_args()
 
-if args.mpi and args.platform == "local":
-    parser.error("--mpi requires a cluster platform. Specify --platform <platform>.")
+if args.N_node < 1:
+    parser.error("--N_node must be at least one.")
+
+if args.platform == "local" and args.N_node != 1:
+    parser.error("Local execution supports only --N_node 1.")
 
 
 # ======================================================================================
@@ -85,6 +93,12 @@ if not local:
     platform = PLATFORMS[args.platform]
     scheduler = platform["scheduler"]
     cpu_cores = platform["cpu_cores_per_node"]
+
+    if args.N_node > platform["max_nodes"]:
+        parser.error(
+            f"--N_node exceeds the {platform['max_nodes']}-node limit for "
+            f"{args.platform}."
+        )
 
     account = user_platform_config.get("account")
     queue = user_platform_config.get("queue")
@@ -119,9 +133,9 @@ for case_name, task in tasks.items():
 
     command = f"{mcdc_python} {run_case} --name {case_name}"
 
-    # Maestro replaces LAUNCHER with the scheduler-specific MPI launch command.
-    if args.mpi:
-        command += ' --mpi "$(LAUNCHER)"'
+    # Maestro replaces LAUNCHER with the scheduler-specific process launcher.
+    if not local:
+        command += ' --launcher "$(LAUNCHER)"'
 
     if args.rewrite:
         command += " --rewrite"
@@ -130,16 +144,12 @@ for case_name, task in tasks.items():
 
     # Scheduled studies require explicit resources; local studies run directly.
     if not local:
-        run["nodes"] = 1
+        run["nodes"] = args.N_node
         walltime = get_case_walltime(task, platform, args.walltime)
         run["walltime"] = walltime
         case_walltimes[case_name] = walltime
-
-        if args.mpi:
-            run["procs"] = cpu_cores
-            run["exclusive"] = True
-        else:
-            run["procs"] = 1
+        run["procs"] = args.N_node * cpu_cores
+        run["exclusive"] = True
 
     steps.append(
         {
@@ -234,7 +244,7 @@ latest_run = maestro_runs[-1]
 
 launch_config = {
     "platform": args.platform,
-    "mpi": args.mpi,
+    "N_node": args.N_node,
     "walltime": args.walltime,
     "rewrite": args.rewrite,
 }
@@ -255,7 +265,7 @@ with (latest_run / "task.yaml").open("w") as f:
 # ======================================================================================
 
 print(f"Platform : {args.platform}")
-print(f"MPI      : {args.mpi}")
+print(f"Nodes    : {args.N_node}")
 print(f"Rewrite  : {args.rewrite}")
 print(f"Python   : {mcdc_python}")
 print(f"Study    : {study_file}")
@@ -268,7 +278,6 @@ if not local:
     print("Walltimes:")
     for case_name, walltime in case_walltimes.items():
         print(f"  {case_name}: {walltime}")
-    print(f"Nodes    : 1")
-    print(f"Procs    : {cpu_cores if args.mpi else 1}")
+    print(f"Procs    : {args.N_node * cpu_cores}")
 
 print(f"Cases    : {len(steps)}")

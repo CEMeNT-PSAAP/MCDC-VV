@@ -96,7 +96,7 @@ for case_name, task in tasks.items():
 print()
 print(f"Maestro run: {maestro_run}")
 print(f"Platform   : {launch_config['platform']}")
-print(f"MPI        : {launch_config['mpi']}")
+print(f"Nodes      : {launch_config['N_node']}")
 print(f"Rewrite    : {launch_config['rewrite']}")
 print(f"Cases      : {len(tasks)}")
 print("Processing complete.")

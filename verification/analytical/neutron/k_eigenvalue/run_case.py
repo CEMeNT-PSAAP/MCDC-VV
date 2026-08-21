@@ -18,9 +18,9 @@ parser = argparse.ArgumentParser(
 parser.add_argument("--name", required=True, help="Verification case name.")
 parser.add_argument("--task-file", default="task.yaml")
 parser.add_argument(
-    "--mpi",
+    "--launcher",
     default="",
-    help="MPI launch command supplied by Maestro, e.g. 'srun -n 112'.",
+    help="Process launch command supplied by Maestro.",
 )
 parser.add_argument(
     "--rewrite",
@@ -77,7 +77,7 @@ for N_active in active_cycle_counts:
             continue
 
     command = (
-        f"{args.mpi} {sys.executable} input.py "
+        f"{args.launcher} {sys.executable} input.py "
         "--mode=numba "
         f"--N_active={N_active} "
         f"--output={output} "

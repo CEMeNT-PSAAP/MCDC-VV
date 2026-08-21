@@ -162,8 +162,8 @@ for suite, options in LAUNCH_CONFIG.items():
     if suite_platform is not None:
         command.extend(["--platform", suite_platform])
 
-    if options.get("mpi", False):
-        command.append("--mpi")
+    if options.get("N_node") is not None:
+        command.extend(["--N_node", str(options["N_node"])])
 
     if options.get("walltime") is not None:
         command.extend(["--walltime", str(options["walltime"])])

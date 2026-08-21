@@ -46,6 +46,7 @@ Local execution ignores walltime.
 
 The fixed particle and inactive-cycle counts are defined in each case's `input.py` and should be tuned with a preliminary source-convergence and variance study before running the active-cycle campaign.
 HPC runs use the shared platform settings in the repository's `configs/platform_config.py` and the user-specific settings in `configs/user_config.py`.
+The `N_node` option sets the number of nodes, with all available CPU cores used on each node.
 
 ## Launching and processing
 
@@ -58,7 +59,7 @@ python launch.py
 Launch the study on a supported HPC platform:
 
 ```bash
-python launch.py --platform tuolumne --mpi
+python launch.py --platform tuolumne --N_node 1
 ```
 
 Use `--walltime HOURS` to set the base walltime and `--rewrite` to replace existing case output.
