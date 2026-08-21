@@ -40,7 +40,7 @@ cp configs/launch_config.py.template configs/launch_config.py
 
 Edit `configs/launch_config.py` to enable the desired suites and set their platform and launch options.
 Use `platform=None` for local execution or a name from `configs/platform_config.py` for HPC execution.
-For HPC execution, a suite's `walltime` is a positive real-valued base in hours that is scaled by each case's `walltime_factor` in that suite's `task.yaml`.
+For HPC execution, a suite's base `walltime` in hours is scaled by each case's `walltime_factor` in that suite's `task.yaml`.
 The scaled value is rounded up to the scheduler's supported resolution, the platform maximum remains the final limit, and local execution ignores walltime settings.
 
 For HPC execution, also create `configs/user_config.py` from its template and provide the account and optional queue, reservation, and Python paths for the target platform.
