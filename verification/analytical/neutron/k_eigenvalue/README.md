@@ -31,6 +31,9 @@ The multigroup cases use the SHEM-361 dataset in the neighboring fixed-source su
 
 The `task.yaml` file selects the cases and defines the minimum and maximum active-cycle counts and the number of tasks for each case.
 The active-cycle counts are geometrically spaced so that convergence can be assessed efficiently over a range of tens to thousands of cycles.
+An optional `walltime_factor` scales the launch-level walltime for an individual HPC case and defaults to `1.0`.
+The base walltime is specified in hours, and the scaled value is rounded up to the scheduler resolution and limited by the platform maximum.
+Local execution ignores walltime.
 
 The fixed particle and inactive-cycle counts are defined in each case's `input.py` and should be tuned with a preliminary source-convergence and variance study before running the active-cycle campaign.
 HPC runs use the shared platform settings in the repository's `configs/platform_config.py` and the user-specific settings in `configs/user_config.py`.
@@ -49,7 +52,7 @@ Launch the study on a supported HPC platform:
 python launch.py --platform tuolumne --mpi
 ```
 
-Use `--walltime HOURS` to limit the requested walltime and `--rewrite` to replace existing case output.
+Use `--walltime HOURS` to set the base walltime and `--rewrite` to replace existing case output.
 
 After all jobs have completed, process the latest Maestro run:
 
