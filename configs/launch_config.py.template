@@ -13,4 +13,11 @@ LAUNCH_CONFIG = {
         "walltime": None,
         "rewrite": False,
     },
+    "verification/code_to_code/neutron": {
+        "enabled": False,
+        "platform": None,
+        "mpi": False,
+        "walltime": None,
+        "rewrite": False,
+    },
 }

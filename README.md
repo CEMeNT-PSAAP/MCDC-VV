@@ -40,6 +40,8 @@ cp configs/launch_config.py.template configs/launch_config.py
 
 Edit `configs/launch_config.py` to enable the desired suites and set their platform and launch options.
 Use `platform=None` for local execution or a name from `configs/platform_config.py` for HPC execution.
+For HPC execution, a suite's `walltime` is a positive real-valued base in hours that is scaled by each case's `walltime_factor` in that suite's `task.yaml`.
+The scaled value is rounded up to the scheduler's supported resolution, the platform maximum remains the final limit, and local execution ignores walltime settings.
 
 For HPC execution, also create `configs/user_config.py` from its template and provide the account and optional queue, reservation, and Python paths for the target platform.
 
@@ -85,14 +87,15 @@ Analytical verification demonstrates the expected statistical convergence of MC/
 | Neutron transport | [Fixed-source](verification/analytical/neutron/fixed_source/README.md) | Multigroup steady-state and transient cases, including a two-group manufactured solution, Reed's problem, AZURV1 variants, and infinite SHEM-361 benchmarks. |
 | Neutron transport | [k-eigenvalue](verification/analytical/neutron/k_eigenvalue/README.md) | Homogeneous and Kornreich-Parsons one-group slab benchmarks, plus infinite homogeneous SHEM-361 cases. |
 
-### Benchmark verification
+### Code-to-code verification
 
-Benchmark verification compares MC/DC against established reference Monte Carlo codes for cases without analytical solutions.
+Code-to-code verification assesses whether relative differences among independently implemented transport codes decrease at the expected statistical rate as their sampling effort increases.
+Convergence proportional to $N^{-1/2}$ supports that the participating codes are approaching the same solution at the expected Monte Carlo rate, although agreement alone cannot exclude shared bias.
+The arithmetic mean of all participating code estimates at the largest sampling level defines a fixed comparison reference for every level, allowing a case to include two or more codes without designating one as exact.
 
 | Physics | Suite | Description |
 | :------ | :---- | :---------- |
-| Neutron transport (multigroup) | Benchmark multigroup | Time-dependent benchmark cases, including the Kobayashi Dog-Leg and C5G7 transient benchmarks. |
-| Neutron transport (continuous energy) | [Benchmark continuous energy](verification/benchmark/neutron/continuous_energy/README.md) | Continuous-energy benchmark cases for representative reactor systems. |
+| Neutron transport | [Code-to-code](verification/code_to_code/neutron/README.md) | Time-dependent C5G7 and Kobayashi comparisons against OpenMC. |
 
 ## Validation
 
