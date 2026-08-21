@@ -90,6 +90,7 @@ metadata_file = results_dir / "metadata.yaml"
 
 results_dir.mkdir(parents=True, exist_ok=True)
 
+# Preserve earlier launch records when adding the current campaign.
 if metadata_file.is_file():
     with metadata_file.open("r") as f:
         metadata = yaml.safe_load(f) or {}
@@ -175,10 +176,10 @@ for suite, options in LAUNCH_CONFIG.items():
     print("Command:", " ".join(command))
     print("=" * 80)
 
+    # Identify the Maestro directory created by this suite invocation.
     maestro_runs_before = set(suite_dir.glob("maestro_run_*"))
     subprocess.run(command, cwd=suite_dir, check=True)
 
-    # Associate this campaign with the exact generated suite launch.
     maestro_runs_after = set(suite_dir.glob("maestro_run_*"))
     new_maestro_runs = maestro_runs_after - maestro_runs_before
 
