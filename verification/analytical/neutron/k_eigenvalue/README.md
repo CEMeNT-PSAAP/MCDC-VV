@@ -12,7 +12,9 @@ The suite can be executed independently or as part of the top-level MC/DC-VVP wo
 ```text
 cases/              Verification case definitions and processing scripts
 maestro_run_*/      Generated Maestro workflow directories
-results/            Generated figures from processed cases
+results/
+  convergence/      Active-cycle convergence and uncertainty figures
+  comparison/       Highest-statistics flux and cycle-history comparisons
 
 task.yaml           Configure the active-cycle study for each case
 study.yaml          Generated Maestro study definition
@@ -76,13 +78,14 @@ Pass a Maestro run directory to process a specific run:
 python process.py maestro_run_<timestamp>
 ```
 
-Processed figures are written to this suite's `results/` directory.
+Convergence figures are written to `results/convergence/`.
+Flux and cycle-history plots from each case's largest active-cycle result are written to `results/comparison/`.
 The top-level `process.py` collects these figures under the repository's `results/` directory.
 
-Each case's `plot.py` can inspect one result interactively, showing its flux shape and the cycle-by-cycle multiplication factor:
+Each case's `plot.py` saves the flux shape and cycle-by-cycle multiplication factor for one result:
 
 ```bash
-python cases/inf_shem361_subcritical/plot.py cases/inf_shem361_subcritical/output_320.h5
+python cases/inf_shem361_subcritical/plot.py cases/inf_shem361_subcritical/output_2000.h5
 ```
 
 ## Cases

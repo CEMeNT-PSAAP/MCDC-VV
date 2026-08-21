@@ -60,4 +60,5 @@ axes[1].set_ylabel("Flux RMS relative difference")
 axes[1].grid()
 
 fig.suptitle("Time-dependent Kobayashi dog-leg")
-plt.show()
+fig.savefig("comparison.png", dpi=200, bbox_inches="tight")
+plt.close(fig)

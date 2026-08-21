@@ -65,6 +65,11 @@ def animate(k):
     return line1, line2, text
 
 
-# Uncomment to animate all time bins.
-# _simulation = animation.FuncAnimation(fig, animate, frames=K)
-plt.show()
+# Preserve the complete space-time comparison as a portable animation.
+simulation = animation.FuncAnimation(fig, animate, frames=K)
+simulation.save(
+    "flux.gif",
+    writer=animation.PillowWriter(fps=max(2, K // 10)),
+    dpi=120,
+)
+plt.close(fig)

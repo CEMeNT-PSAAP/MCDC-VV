@@ -16,7 +16,9 @@ The suite can be executed independently or as part of the top-level MC/DC-VVP wo
 cases/              Verification case definitions and processing scripts
 data/               Shared multigroup cross-section data
 maestro_run_*/      Generated Maestro workflow directories
-results/            Generated figures from processed cases
+results/
+  convergence/      Statistical-convergence figures
+  comparison/       Largest-sample comparisons between participating codes
 
 task.yaml           Configure the particle-count study for each case
 study.yaml          Generated Maestro study definition
@@ -88,7 +90,8 @@ Pass a Maestro run directory to process a specific run:
 python process.py maestro_run_<timestamp>
 ```
 
-Processed figures are written to this suite's `results/` directory.
+Convergence figures are written to `results/convergence/`.
+Direct comparisons at the largest shared sample size are written to `results/comparison/`.
 The top-level `process.py` collects these figures under the repository's `results/` directory.
 
 Each case's `plot.py` can inspect one MC/DC and OpenMC result pair using the largest-sample pair as the fixed comparison reference:

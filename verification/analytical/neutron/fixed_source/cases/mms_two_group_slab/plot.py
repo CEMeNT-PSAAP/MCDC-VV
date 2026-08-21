@@ -48,7 +48,7 @@ plt.xlabel(r"$x$, cm")
 plt.ylabel("Scalar flux per source particle")
 plt.grid()
 plt.legend()
-plt.savefig("solution.png", dpi=200, bbox_inches="tight")
+plt.savefig("flux.png", dpi=200, bbox_inches="tight")
 plt.close()
 
 x_plot = np.linspace(0.0, LENGTH, 201)

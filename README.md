@@ -75,6 +75,7 @@ python process.py 20260817T120000123456Z
 ```
 
 Each launch is processed into its own `results/<launch_id>/` directory, which contains a metadata snapshot and the suite result hierarchy.
+Within each suite, `convergence/` contains study-wide convergence figures and `comparison/` contains plots or animations from the largest-statistics result.
 Reprocessing one launch replaces only that launch's subfolder and does not affect results from other launches.
 
 ## Suites

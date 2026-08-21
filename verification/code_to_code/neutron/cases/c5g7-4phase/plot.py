@@ -53,4 +53,5 @@ axes[1].set_ylabel("RMS relative difference")
 axes[1].grid()
 
 fig.suptitle("Four-phase C5G7 transient")
-plt.show()
+fig.savefig("comparison.png", dpi=200, bbox_inches="tight")
+plt.close(fig)

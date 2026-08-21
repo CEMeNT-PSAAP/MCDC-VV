@@ -1,6 +1,5 @@
 """Measure convergence against the analytical manufactured solution."""
 
-import subprocess
 import sys
 from pathlib import Path
 
@@ -35,9 +34,3 @@ for index, N_particle in enumerate(particle_counts):
     error_max[index] = util.rerror_max(flux, reference)
 
 util.plot_convergence("flux", particle_counts, error, error_max)
-
-# Include a detailed comparison for the highest-statistics result.
-subprocess.run(
-    [sys.executable, "plot.py", f"output_{particle_counts[-1]}.h5"],
-    check=True,
-)

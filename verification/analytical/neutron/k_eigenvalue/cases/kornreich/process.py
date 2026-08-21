@@ -26,6 +26,8 @@ active_cycle_counts = np.rint(
 ).astype(int)
 
 k_error = np.zeros(N_task)
+k_estimate = np.zeros(N_task)
+k_uncertainty = np.zeros(N_task)
 flux_error = np.zeros(N_task)
 
 # Calculate the semi-analytical flux once and use the published multiplication factor.
@@ -35,15 +37,22 @@ k_reference, flux_reference = reference(x_reference)
 
 for index, N_active in enumerate(active_cycle_counts):
     with h5py.File(f"output_{N_active}.h5", "r") as output:
-        k_effective = output["k_mean"][()]
+        k_estimate[index] = output["k_mean"][()]
+        k_uncertainty[index] = output["k_sdev"][()]
         x = output["tallies/tracklength_tally_0/grid/x"][:]
         dx = np.diff(x)
         flux = output["tallies/tracklength_tally_0/flux/mean"][:] / dx
 
     # Eigenvectors have arbitrary amplitude, so compare unit-integral shapes.
     flux /= np.sum(flux * dx)
-    k_error[index] = abs(k_effective - k_reference) / k_reference
+    k_error[index] = abs(k_estimate[index] - k_reference) / k_reference
     flux_error[index] = util.relative_error(flux, flux_reference)
 
 util.plot_convergence("k-effective", active_cycle_counts, k_error)
+util.plot_k_estimates(
+    active_cycle_counts,
+    k_estimate,
+    k_uncertainty,
+    k_reference,
+)
 util.plot_convergence("flux", active_cycle_counts, flux_error)
