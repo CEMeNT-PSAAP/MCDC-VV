@@ -83,7 +83,7 @@ Analytical verification demonstrates the expected statistical convergence of MC/
 | Physics | Suite | Description |
 | :------ | :---- | :---------- |
 | Neutron transport | [Fixed-source](verification/analytical/neutron/fixed_source/README.md) | Multigroup steady-state and transient cases, including a two-group manufactured solution, Reed's problem, AZURV1 variants, and infinite SHEM-361 benchmarks. |
-| Neutron transport | [$k$-eigenvalue](verification/analytical/neutron/k_eigenvalue/README.md) | Homogeneous and Kornreich-Parsons one-group slab benchmarks, plus infinite homogeneous SHEM-361 cases. |
+| Neutron transport | [k-eigenvalue](verification/analytical/neutron/k_eigenvalue/README.md) | Homogeneous and Kornreich-Parsons one-group slab benchmarks, plus infinite homogeneous SHEM-361 cases. |
 
 ### Benchmark verification
 
