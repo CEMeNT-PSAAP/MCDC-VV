@@ -25,6 +25,7 @@ if str(REPO_DIR) not in sys.path:
 # ======================================================================================
 
 from configs.platform_config import PLATFORMS
+from configs.util import get_case_walltime
 
 # User overrides are optional for local runs.
 try:
@@ -42,7 +43,12 @@ parser = argparse.ArgumentParser(
 )
 parser.add_argument("--platform", default="local", choices=["local"] + list(PLATFORMS))
 parser.add_argument("--mpi", action="store_true")
-parser.add_argument("--walltime", type=int, default=None)
+parser.add_argument(
+    "--walltime",
+    type=float,
+    default=None,
+    help="Set the base walltime in hours; each case scales it by walltime_factor.",
+)
 parser.add_argument("--rewrite", action="store_true")
 args = parser.parse_args()
 
@@ -80,14 +86,6 @@ if not local:
     scheduler = platform["scheduler"]
     cpu_cores = platform["cpu_cores_per_node"]
 
-    # Never request more walltime than the platform permits.
-    walltime_hours = (
-        platform["max_walltime_hours"]
-        if args.walltime is None
-        else min(args.walltime, platform["max_walltime_hours"])
-    )
-    walltime = platform["walltime_format"].format(hours=walltime_hours)
-
     account = user_platform_config.get("account")
     queue = user_platform_config.get("queue")
     reservation = user_platform_config.get("reservation")
@@ -111,9 +109,11 @@ with task_file.open("r") as f:
 # Build Maestro study
 # ======================================================================================
 
+# Convert each configured case into one independent Maestro step.
 steps = []
+case_walltimes = {}
 
-for case_name in tasks:
+for case_name, task in tasks.items():
     # Normalize case names into stable Maestro step identifiers.
     safe_case_name = case_name.replace("-", "_")
 
@@ -131,7 +131,9 @@ for case_name in tasks:
     # Scheduled studies require explicit resources; local studies run directly.
     if not local:
         run["nodes"] = 1
+        walltime = get_case_walltime(task, platform, args.walltime)
         run["walltime"] = walltime
+        case_walltimes[case_name] = walltime
 
         if args.mpi:
             run["procs"] = cpu_cores
@@ -147,6 +149,7 @@ for case_name in tasks:
         }
     )
 
+# Assemble the complete Maestro study from the generated case steps.
 study = {
     "description": {
         "name": "maestro_run",
@@ -262,7 +265,9 @@ if not local:
     print(f"Account  : {account}")
     print(f"Queue    : {queue}")
     print(f"Reserv.  : {reservation}")
-    print(f"Walltime : {walltime}")
+    print("Walltimes:")
+    for case_name, walltime in case_walltimes.items():
+        print(f"  {case_name}: {walltime}")
     print(f"Nodes    : 1")
     print(f"Procs    : {cpu_cores if args.mpi else 1}")
 
