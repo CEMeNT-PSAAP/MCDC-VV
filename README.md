@@ -78,7 +78,7 @@ Remove generated case outputs and processed results from every registered suite:
 python cleanup.py
 ```
 
-Cleanup retains Maestro run directories and reference data.
+Cleanup removes Maestro run directories and retains reference data.
 
 ## Suites
 

@@ -16,3 +16,8 @@ for pattern in ("*/output*.h5", "*/*.png", "*/*.gif"):
 results_dir = suite_dir / "results"
 if results_dir.is_dir():
     shutil.rmtree(results_dir)
+
+# Remove generated Maestro workflow directories.
+for maestro_run in suite_dir.glob("maestro_run_*"):
+    if maestro_run.is_dir():
+        shutil.rmtree(maestro_run)
