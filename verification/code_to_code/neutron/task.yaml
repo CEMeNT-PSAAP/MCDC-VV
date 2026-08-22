@@ -8,4 +8,4 @@ kobayashi:
   logN_min: 8
   logN_max: 10
   N_task: 5
-  walltime_factor: 0.5
+  walltime_factor: 1.0
