@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="930" height="470" viewBox="0 0 930 470">
+  <rect width="930" height="470" fill="#fbfbf8"/>
+  <text x="465" y="38" text-anchor="middle" font-family="sans-serif" font-size="23" font-weight="bold">FNG SiC integral experiment</text>
+  <circle cx="105" cy="225" r="9" fill="#dc2626"/>
+  <text x="105" y="197" text-anchor="middle" font-family="sans-serif" font-size="15">D-T source</text>
+  <line x1="114" y1="225" x2="170" y2="225" stroke="#dc2626" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="175" y="85" width="650" height="280" rx="3" fill="#d9e8ce" stroke="#4d7c0f" stroke-width="3"/>
+  <text x="500" y="116" text-anchor="middle" font-family="sans-serif" font-size="18">Homogenized SiC brick assembly</text>
+  <line x1="175" y1="225" x2="825" y2="225" stroke="#64748b" stroke-width="2" stroke-dasharray="7 6"/>
+  <g fill="#2563eb" stroke="#1e3a8a" stroke-width="2">
+    <circle cx="270" cy="195" r="8"/><circle cx="409" cy="195" r="8"/><circle cx="549" cy="195" r="8"/><circle cx="688" cy="195" r="8"/>
+  </g>
+  <g fill="#ea580c" stroke="#7c2d12" stroke-width="2">
+    <rect x="308" y="246" width="16" height="16"/><rect x="447" y="246" width="16" height="16"/><rect x="587" y="246" width="16" height="16"/><rect x="726" y="246" width="16" height="16"/>
+  </g>
+  <g font-family="sans-serif" font-size="13" fill="#1e293b" text-anchor="middle">
+    <text x="270" y="176">A1</text><text x="409" y="176">A2</text><text x="549" y="176">A3</text><text x="688" y="176">A4</text>
+    <text x="316" y="284">H1</text><text x="455" y="284">H2</text><text x="595" y="284">H3</text><text x="734" y="284">H4</text>
+  </g>
+  <circle cx="235" cy="406" r="8" fill="#2563eb"/><text x="252" y="411" font-family="sans-serif" font-size="14">Activation-foil depths</text>
+  <rect x="460" y="398" width="16" height="16" fill="#ea580c"/><text x="486" y="411" font-family="sans-serif" font-size="14">TLD heating depths</text>
+  <text x="465" y="454" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#64748b">Reconstructed diagram—not an original SINBAD figure; dimensions are not to scale.</text>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#dc2626"/></marker></defs>
+</svg>
