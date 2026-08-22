@@ -19,6 +19,7 @@ results/               Processed results organized by suite
 
 launch.py              Launch all enabled suites
 process.py             Collect available suite results
+cleanup.py             Remove generated outputs and processed results
 ```
 
 MC/DC-VVP uses **suite** and **case** as standard terms for its two organizational levels:
@@ -70,6 +71,14 @@ python process.py
 The top-level processor checks every suite registered in `configs/launch_config.py` and moves each available suite `results/` directory under the same suite path in the top-level `results/` directory.
 Within each suite, `convergence/` contains study-wide convergence figures and `comparison/` contains plots or animations from the largest-statistics result.
 Collecting a suite replaces that suite's existing top-level results.
+
+Remove generated case outputs and processed results from every registered suite:
+
+```bash
+python cleanup.py
+```
+
+Cleanup retains Maestro run directories and reference data.
 
 ## Suites
 
