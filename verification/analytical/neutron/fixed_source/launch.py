@@ -244,9 +244,13 @@ latest_run = maestro_runs[-1]
 
 launch_config = {
     "platform": args.platform,
+    "scheduler": "local" if local else scheduler,
     "N_node": args.N_node,
+    "N_process": 1 if local else args.N_node * cpu_cores,
     "walltime": args.walltime,
+    "case_walltimes": case_walltimes,
     "rewrite": args.rewrite,
+    "mcdc_python": mcdc_python,
 }
 
 # Snapshot the effective launch and task configuration with the generated run.

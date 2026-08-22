@@ -13,6 +13,8 @@ The suite can be executed independently or as part of the top-level MC/DC-VVP wo
 cases/              Verification case definitions and processing scripts
 maestro_run_*/      Generated Maestro workflow directories
 results/
+  launch_config.yaml Effective suite launch configuration
+  task.yaml          Case study configuration used by the launch
   convergence/      Active-cycle convergence and uncertainty figures
   comparison/       Highest-statistics flux and cycle-history comparisons
 

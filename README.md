@@ -15,11 +15,10 @@ Workflow orchestration is performed using [Maestro](https://github.com/llnl/maes
 ```text
 configs/               Shared platform, user, and launch configurations
 verification/          Verification suites and their cases
-results/metadata.yaml  Append-only launch and processing history
-results/<launch_id>/   Processed results for one recorded launch
+results/               Processed results organized by suite
 
 launch.py              Launch all enabled suites
-process.py             Process one recorded launch
+process.py             Collect available suite results
 ```
 
 MC/DC-VVP uses **suite** and **case** as standard terms for its two organizational levels:
@@ -27,7 +26,7 @@ MC/DC-VVP uses **suite** and **case** as standard terms for its two organization
 - A **suite** is a self-contained collection of related VVP cases with a shared launch and processing workflow.
 - A **case** is one individual problem definition and its inputs, reference solution or data, and processing logic.
 
-The top-level workflow launches and processes enabled suites, while each suite workflow runs and processes its cases.
+The top-level workflow launches enabled suites and collects available suite results, while each suite workflow runs and processes its cases.
 Every integrated suite provides a README that describes its layout, configuration, workflow, and cases.
 
 ## Configuration
@@ -62,21 +61,15 @@ python launch.py --platform tuolumne
 
 The `--platform` option selects suites with a matching configured platform.
 
-After the latest launch has completed, process all suites submitted by that launch:
+After processing the desired suites, collect their available `results/` directories:
 
 ```bash
 python process.py
 ```
 
-Process a specific recorded launch by passing the launch ID printed by `launch.py` and stored in `results/metadata.yaml`:
-
-```bash
-python process.py 20260817T120000123456Z
-```
-
-Each launch is processed into its own `results/<launch_id>/` directory, which contains a metadata snapshot and the suite result hierarchy.
+The top-level processor checks every suite registered in `configs/launch_config.py` and moves each available suite `results/` directory under the same suite path in the top-level `results/` directory.
 Within each suite, `convergence/` contains study-wide convergence figures and `comparison/` contains plots or animations from the largest-statistics result.
-Reprocessing one launch replaces only that launch's subfolder and does not affect results from other launches.
+Collecting a suite replaces that suite's existing top-level results.
 
 ## Suites
 

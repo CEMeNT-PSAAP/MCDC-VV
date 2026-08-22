@@ -17,6 +17,8 @@ cases/              Verification case definitions and processing scripts
 data/               Shared multigroup cross-section data
 maestro_run_*/      Generated Maestro workflow directories
 results/
+  launch_config.yaml Effective suite launch configuration
+  task.yaml          Case study configuration used by the launch
   convergence/      Statistical-convergence figures
   comparison/       Largest-sample comparisons between participating codes
 

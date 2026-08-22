@@ -94,6 +94,10 @@ if results_dir.is_dir():
 convergence_dir.mkdir(parents=True, exist_ok=True)
 comparison_dir.mkdir(parents=True, exist_ok=True)
 
+# Keep the effective launch and task definitions beside the processed figures.
+shutil.copy2(launch_config_file, results_dir / "launch_config.yaml")
+shutil.copy2(task_file, results_dir / "task.yaml")
+
 
 # ======================================================================================
 # Process cases
@@ -149,6 +153,7 @@ print()
 print(f"Maestro run: {maestro_run}")
 print(f"Platform   : {launch_config['platform']}")
 print(f"Nodes      : {launch_config['N_node']}")
+print(f"Processes  : {launch_config['N_process']}")
 print(f"Rewrite    : {launch_config['rewrite']}")
 print(f"Cases      : {len(tasks)}")
 print("Processing complete.")
