@@ -18,17 +18,32 @@ verification/          Verification suites and their cases
 results/               Processed results organized by suite
 
 launch.py              Launch all enabled suites
-process.py             Collect available suite results
+process.py             Process suites and collect their results
 cleanup.py             Remove generated outputs and processed results
 ```
 
-MC/DC-VVP uses **suite** and **case** as standard terms for its two organizational levels:
+MC/DC-VVP uses **suite**, **case**, and **task** as standard terms for its organizational hierarchy:
+
+```text
+suite
+└── case
+    └── task
+```
 
 - A **suite** is a self-contained collection of related VVP cases with a shared launch and processing workflow.
 - A **case** is one individual problem definition and its inputs, reference solution or data, and processing logic.
+- A **task** is one execution of a case at one sampling level, such as one `N_particle` or `N_active` value.
 
-The top-level workflow launches enabled suites and collects available suite results, while each suite workflow runs and processes its cases.
+A suite contains cases, and each case generates one or more tasks from the suite's `task.yaml` configuration.
+Maestro currently represents each case as one workflow step, and `run_case.py` executes that case's tasks sequentially.
+The hierarchy also defines restart behavior: an existing output skips its task, a case with all task outputs is omitted, and a suite with all cases complete does not launch.
 Every integrated suite provides a README that describes its layout, configuration, workflow, and cases.
+
+## Adding content
+
+To add a case, create its directory under the appropriate suite's `cases/`, implement the common files described in the suite README, and register its task sequence in the suite's `task.yaml`.
+Place data shared by multiple cases in the suite's `data/` directory when appropriate.
+A new suite should provide its own README, `launch.py`, `process.py`, and `cleanup.py`, then be registered in `configs/launch_config.py.template`.
 
 ## Configuration
 

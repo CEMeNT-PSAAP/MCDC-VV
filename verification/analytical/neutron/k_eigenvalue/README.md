@@ -14,15 +14,15 @@ cases/              Verification case definitions and processing scripts
 maestro_run_*/      Generated Maestro workflow directories
 results/
   launch_config.yaml Effective suite launch configuration
-  task.yaml          Case study configuration used by the launch
+  task.yaml          Task-generation configuration used by the launch
   convergence/      Active-cycle convergence and uncertainty figures
   comparison/       Highest-statistics flux and cycle-history comparisons
 
-task.yaml           Configure the active-cycle study for each case
+task.yaml           Configure task generation for each case
 study.yaml          Generated Maestro study definition
 
 launch.py           Build and launch the Maestro study
-run_case.py         Run one case over its active-cycle study
+run_case.py         Run the tasks for one case
 process.py          Process a completed Maestro study
 
 cleanup.py          Remove generated outputs and figures
@@ -43,6 +43,7 @@ The multigroup cases use the SHEM-361 dataset in the neighboring fixed-source su
 ## Configuration
 
 The `task.yaml` file selects the cases and defines the minimum and maximum active-cycle counts and the number of tasks for each case.
+One task is one MC/DC execution at one generated `N_active` value.
 The active-cycle counts are geometrically spaced so that convergence can be assessed efficiently over a range of tens to thousands of cycles.
 An optional `walltime_factor` scales the launch-level walltime for an individual HPC case and defaults to `1.0`.
 The base walltime is specified in hours, and the scaled value is rounded up to the scheduler resolution and limited by the platform maximum.

@@ -14,15 +14,15 @@ data/               Shared multigroup cross-section data
 maestro_run_*/      Generated Maestro workflow directories
 results/
   launch_config.yaml Effective suite launch configuration
-  task.yaml          Case study configuration used by the launch
+  task.yaml          Task-generation configuration used by the launch
   convergence/      Statistical-convergence figures
   comparison/       Highest-statistics reference comparisons and animations
 
-task.yaml           Configure the particle-count study for each case
+task.yaml           Configure task generation for each case
 study.yaml          Generated Maestro study definition
 
 launch.py           Build and launch the Maestro study
-run_case.py         Run one case over its particle-count study
+run_case.py         Run the tasks for one case
 process.py          Process a completed Maestro study
 
 cleanup.py          Remove generated outputs and figures
@@ -41,6 +41,7 @@ plot.py             Inspect one MC/DC result against the reference
 ## Configuration
 
 The `task.yaml` file selects the cases and defines the particle-count range and number of tasks for each case.
+One task is one MC/DC execution at one generated `N_particle` value.
 An optional `walltime_factor` scales the launch-level walltime for an individual HPC case and defaults to `1.0`.
 The base walltime is specified in hours, and the scaled value is rounded up to the scheduler resolution and limited by the platform maximum.
 Local execution ignores walltime.
