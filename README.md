@@ -64,13 +64,14 @@ python launch.py --platform tuolumne
 
 The `--platform` option selects suites with a matching configured platform.
 
-After processing the desired suites, collect their available `results/` directories:
+Process registered suites and collect their results:
 
 ```bash
 python process.py
 ```
 
-The top-level processor checks every suite registered in `configs/launch_config.py` and moves each available suite `results/` directory under the same suite path in the top-level `results/` directory.
+For each suite registered in `configs/launch_config.py`, the top-level processor invokes the suite processor when a Maestro run is available and then moves the generated `results/` directory under the same suite path in the top-level `results/` directory.
+An existing suite `results/` directory can still be collected when no Maestro run is present, and suites with neither are skipped.
 Within each suite, `convergence/` contains study-wide convergence figures and `comparison/` contains plots or animations from the largest-statistics result.
 Collecting a suite replaces that suite's existing top-level results.
 

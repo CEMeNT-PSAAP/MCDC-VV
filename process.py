@@ -1,6 +1,7 @@
-"""Collect available VVP suite results at the repository level."""
+"""Process registered VVP suites and collect their results."""
 
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -30,18 +31,33 @@ results_dir.mkdir(parents=True, exist_ok=True)
 
 
 # ======================================================================================
-# Collect available suite results
+# Process registered suites and collect their results
 # ======================================================================================
 
 for suite in LAUNCH_CONFIG:
     suite_dir = REPO_DIR / suite
+    processor = suite_dir / "process.py"
+    suite_results = suite_dir / "results"
 
     if not suite_dir.is_dir():
         raise FileNotFoundError(f"Suite directory not found: {suite_dir}")
 
-    suite_results = suite_dir / "results"
+    maestro_runs = list(suite_dir.glob("maestro_run_*"))
+
+    # Generate suite results from the latest Maestro run when one is available.
+    if processor.is_file() and maestro_runs:
+        print("=" * 80)
+        print(f"Processing suite: {suite}")
+        print("=" * 80)
+        subprocess.run(
+            [sys.executable, str(processor)],
+            cwd=suite_dir,
+            check=True,
+        )
+
+    # Existing suite results remain collectable without a recorded Maestro run.
     if not suite_results.is_dir():
-        print(f"Skip suite without results: {suite}")
+        print(f"Skip suite without processable results: {suite}")
         continue
 
     print("=" * 80)
@@ -63,4 +79,4 @@ for suite in LAUNCH_CONFIG:
 
 print()
 print(f"Results: {results_dir}")
-print("Collection complete.")
+print("Processing and collection complete.")
