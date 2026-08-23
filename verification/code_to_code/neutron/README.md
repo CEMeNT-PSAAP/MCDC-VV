@@ -1,6 +1,7 @@
 # Neutron Code-to-Code Verification
 
-This suite compares neutron transport results from independently implemented codes, currently MC/DC and OpenMC.
+This suite compares neutron transport results from multiple independently implemented codes.
+The current participating codes are MC/DC and OpenMC, and the workflow is intended to accommodate additional codes.
 It exercises time-dependent multigroup transport, moving geometry, delayed neutrons, void streaming, and multidimensional space-time tallies.
 The arithmetic mean of the participating code estimates at the largest sampling level defines the fixed comparison reference for every level.
 The reported metric is the pair-averaged L2 norm of pairwise relative differences normalized by that fixed reference.
@@ -20,7 +21,7 @@ results/
   launch_config.yaml Effective suite launch configuration
   task.yaml          Task-generation configuration used by the launch
   convergence/      Statistical-convergence figures
-  comparison/       Largest-sample comparisons between participating codes
+  comparison/       Largest-sample comparison and difference animations
 
 task.yaml           Configure task generation for each case
 study.yaml          Generated Maestro study definition
@@ -39,7 +40,7 @@ Each case contains a common set of files:
 input.py            Define and run the MC/DC model
 reference.py        Download and verify the participating OpenMC outputs
 process.py          Evaluate code-to-code convergence
-plot.py             Inspect one MC/DC and OpenMC result pair
+plot.py             Animate one MC/DC and OpenMC result pair
 ```
 
 ## Configuration
@@ -96,7 +97,8 @@ python process.py maestro_run_<timestamp>
 ```
 
 Convergence figures are written to `results/convergence/`.
-Direct comparisons at the largest shared sample size are written to `results/comparison/`.
+Animated spatial comparisons and relative-difference evolution at the largest shared sample size are written to `results/comparison/`.
+Each case produces `comparison.gif` for the participating-code solutions and `difference.gif` for their relative differences.
 The top-level `process.py` collects these figures under the repository's `results/` directory.
 
 Each case's `plot.py` can inspect one MC/DC and OpenMC result pair using the largest-sample pair as the fixed comparison reference:

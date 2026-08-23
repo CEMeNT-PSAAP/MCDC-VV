@@ -117,7 +117,7 @@ The arithmetic mean of all participating code estimates at the largest sampling 
 
 | Physics | Suite | Description |
 | :------ | :---- | :---------- |
-| Neutron transport | [Code-to-code](verification/code_to_code/neutron/README.md) | Time-dependent C5G7 and Kobayashi comparisons against OpenMC. |
+| Neutron transport | [Code-to-code](verification/code_to_code/neutron/README.md) | Time-dependent C5G7 and Kobayashi comparisons among participating codes. |
 
 ## Validation
 

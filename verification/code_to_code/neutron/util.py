@@ -3,8 +3,10 @@
 from pathlib import Path
 
 import h5py
+import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.colors import LogNorm, Normalize
 
 
 def particle_counts(logN_min, logN_max, N_task):
@@ -67,6 +69,21 @@ def comparison_reference(*results):
     return reference / len(results)
 
 
+def relative_difference(reference, first, second):
+    """Return the pointwise difference between two codes relative to a reference."""
+    reference = np.asarray(reference)
+    first = np.asarray(first)
+    second = np.asarray(second)
+
+    if first.shape != reference.shape or second.shape != reference.shape:
+        raise ValueError("The reference and code estimates must have the same shape.")
+
+    difference = np.zeros_like(reference, dtype=np.float64)
+    nonzero = np.abs(reference) > 0.0
+    difference[nonzero] = (first[nonzero] - second[nonzero]) / reference[nonzero]
+    return difference
+
+
 def relative_difference_l2(reference, *results):
     """Return the pair-averaged L2 norm against a fixed comparison reference."""
     reference = np.asarray(reference)
@@ -91,6 +108,195 @@ def relative_difference_l2(reference, *results):
             squared_norms.append(np.linalg.norm(relative_difference) ** 2)
 
     return np.sqrt(np.mean(squared_norms))
+
+
+def _spatial_projections(result):
+    """Integrate a time-dependent 3D field into its three planar projections."""
+    result = np.asarray(result)
+    if result.ndim != 4:
+        raise ValueError("A space-time result must have shape (time, x, y, z).")
+
+    return (
+        np.sum(result, axis=3),
+        np.sum(result, axis=2),
+        np.sum(result, axis=1),
+    )
+
+
+def _positive_norm(*results):
+    """Return a shared logarithmic scale for nonnegative code estimates."""
+    maximum = max(float(np.nanmax(result)) for result in results)
+    if maximum <= 0.0:
+        return Normalize(vmin=0.0, vmax=1.0)
+
+    minima = [
+        float(np.nanmin(result[result > 0.0]))
+        for result in results
+        if np.any(result > 0.0)
+    ]
+    minimum = max(min(minima), maximum * 1.0e-6)
+    if minimum >= maximum:
+        minimum = 0.5 * maximum
+    return LogNorm(vmin=minimum, vmax=maximum)
+
+
+def animate_spatial_comparison(
+    score,
+    time,
+    spatial_edges,
+    first,
+    second,
+    first_label,
+    second_label,
+    filename="comparison.gif",
+):
+    """Animate orthogonal projections of two participating-code estimates."""
+    time = np.asarray(time)
+    x, y, z = (np.asarray(edges) for edges in spatial_edges)
+    first_projections = _spatial_projections(first)
+    second_projections = _spatial_projections(second)
+    projection_data = (
+        ("XY", x, y, first_projections[0], second_projections[0]),
+        ("XZ", x, z, first_projections[1], second_projections[1]),
+        ("YZ", y, z, first_projections[2], second_projections[2]),
+    )
+
+    fig, axes = plt.subplots(2, 3, figsize=(12, 7), constrained_layout=True)
+    images = []
+    for column, (plane, horizontal, vertical, first_data, second_data) in enumerate(
+        projection_data
+    ):
+        norm = _positive_norm(first_data, second_data)
+        first_image = axes[0, column].imshow(
+            first_data[0].T,
+            extent=(horizontal[0], horizontal[-1], vertical[0], vertical[-1]),
+            origin="lower",
+            aspect="auto",
+            cmap="viridis",
+            norm=norm,
+        )
+        second_image = axes[1, column].imshow(
+            second_data[0].T,
+            extent=(horizontal[0], horizontal[-1], vertical[0], vertical[-1]),
+            origin="lower",
+            aspect="auto",
+            cmap="viridis",
+            norm=norm,
+        )
+        axes[0, column].set_title(f"{first_label} {plane}")
+        axes[1, column].set_title(f"{second_label} {plane}")
+        axes[1, column].set_xlabel(plane[0].lower())
+        axes[0, column].set_ylabel(plane[1].lower())
+        axes[1, column].set_ylabel(plane[1].lower())
+        fig.colorbar(first_image, ax=axes[:, column], label=score.capitalize())
+        images.append((first_image, second_image, first_data, second_data))
+
+    title = fig.suptitle(f"{score.capitalize()} comparison, t = {time[0]:.3g}")
+
+    def update(frame):
+        for first_image, second_image, first_data, second_data in images:
+            first_image.set_data(first_data[frame].T)
+            second_image.set_data(second_data[frame].T)
+        title.set_text(f"{score.capitalize()} comparison, t = {time[frame]:.3g}")
+        return [title, *(image for pair in images for image in pair[:2])]
+
+    simulation = animation.FuncAnimation(fig, update, frames=len(time))
+    simulation.save(
+        filename,
+        writer=animation.PillowWriter(fps=max(2, len(time) // 10)),
+        dpi=120,
+    )
+    plt.close(fig)
+
+
+def animate_spatial_difference(
+    score,
+    time,
+    spatial_edges,
+    reference,
+    first,
+    second,
+    metric,
+    metric_label,
+    filename="difference.gif",
+):
+    """Animate the history and spatial projections of code-to-code differences."""
+    time = np.asarray(time)
+    metric = 100.0 * np.asarray(metric)
+    x, y, z = (np.asarray(edges) for edges in spatial_edges)
+
+    reference_projections = _spatial_projections(reference)
+    first_projections = _spatial_projections(first)
+    second_projections = _spatial_projections(second)
+    differences = tuple(
+        100.0 * relative_difference(current_reference, current_first, current_second)
+        for current_reference, current_first, current_second in zip(
+            reference_projections,
+            first_projections,
+            second_projections,
+        )
+    )
+    projection_data = (
+        ("XY", x, y, differences[0]),
+        ("XZ", x, z, differences[1]),
+        ("YZ", y, z, differences[2]),
+    )
+
+    percentiles = [
+        float(np.nanpercentile(np.abs(difference), 99.0)) for difference in differences
+    ]
+    color_limit = min(100.0, max(1.0, *percentiles))
+    norm = Normalize(vmin=-color_limit, vmax=color_limit)
+
+    fig, axes = plt.subplots(2, 2, figsize=(12, 9), constrained_layout=True)
+    metric_axis = axes[0, 0]
+    positive_metric = np.where(metric > 0.0, metric, np.nan)
+    metric_axis.plot(time, positive_metric, "b")
+    marker = metric_axis.plot([], [], "ro", fillstyle="none")[0]
+    if np.any(metric > 0.0):
+        metric_axis.set_yscale("log")
+    metric_axis.set_xlabel("Time")
+    metric_axis.set_ylabel(metric_label)
+    metric_axis.grid()
+
+    images = []
+    for axis, (plane, horizontal, vertical, difference) in zip(
+        (axes[0, 1], axes[1, 0], axes[1, 1]), projection_data
+    ):
+        image = axis.imshow(
+            difference[0].T,
+            extent=(horizontal[0], horizontal[-1], vertical[0], vertical[-1]),
+            origin="lower",
+            aspect="auto",
+            cmap="RdBu_r",
+            norm=norm,
+        )
+        axis.set_title(f"{score.capitalize()}-{plane}")
+        axis.set_xlabel(plane[0].lower())
+        axis.set_ylabel(plane[1].lower())
+        images.append((image, difference))
+
+    fig.colorbar(
+        images[0][0],
+        ax=(axes[0, 1], axes[1, 0], axes[1, 1]),
+        label="Relative difference (%)",
+    )
+    title = fig.suptitle(f"MC/DC and OpenMC relative difference, t = {time[0]:.3g}")
+
+    def update(frame):
+        marker.set_data([time[frame]], [metric[frame]])
+        for image, difference in images:
+            image.set_data(difference[frame].T)
+        title.set_text(f"MC/DC and OpenMC relative difference, t = {time[frame]:.3g}")
+        return [title, marker, *(image for image, _ in images)]
+
+    simulation = animation.FuncAnimation(fig, update, frames=len(time))
+    simulation.save(
+        filename,
+        writer=animation.PillowWriter(fps=max(2, len(time) // 10)),
+        dpi=120,
+    )
+    plt.close(fig)
 
 
 def plot_convergence(score, N_history, difference):

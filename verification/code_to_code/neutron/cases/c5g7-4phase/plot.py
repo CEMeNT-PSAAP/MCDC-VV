@@ -1,13 +1,17 @@
-"""Inspect one C5G7 MC/DC and OpenMC result pair."""
+"""Animate one C5G7 MC/DC and OpenMC result pair."""
 
 import argparse
 
 import h5py
-import matplotlib.pyplot as plt
 import numpy as np
 
 from process import load_mcdc_fission, load_openmc_fission
-from util import comparison_reference
+from util import (
+    animate_spatial_comparison,
+    animate_spatial_difference,
+    comparison_reference,
+    relative_difference,
+)
 
 parser = argparse.ArgumentParser()
 parser.add_argument("mcdc_output")
@@ -24,34 +28,39 @@ del mcdc_reference, openmc_reference
 with h5py.File(args.mcdc_output, "r") as f:
     fission_mcdc = f["tallies/tracklength_tally_0/fission/mean"][:]
     time = f["tallies/tracklength_tally_0/grid/time"][:]
+    x = f["tallies/tracklength_tally_0/grid/x"][:]
+    y = f["tallies/tracklength_tally_0/grid/y"][:]
+    z = f["tallies/tracklength_tally_0/grid/z"][:]
 
 fission_openmc = load_openmc_fission(args.openmc_output)
 time_mid = 0.5 * (time[:-1] + time[1:])
 
-fission_total_mcdc = np.sum(fission_mcdc, axis=(1, 2, 3))
-fission_total_openmc = np.sum(fission_openmc, axis=(1, 2, 3))
+animate_spatial_comparison(
+    "fission",
+    time_mid,
+    (x, y, z),
+    fission_mcdc,
+    fission_openmc,
+    "MC/DC",
+    "OpenMC",
+)
 
-relative_difference = np.zeros_like(reference)
-nonzero = np.abs(reference) > 0.0
-relative_difference[nonzero] = (
-    fission_mcdc[nonzero] - fission_openmc[nonzero]
-) / reference[nonzero]
-rms_difference = np.sqrt(np.mean(np.square(relative_difference), axis=(1, 2, 3)))
+rms_difference = np.empty(len(time_mid))
+for index in range(len(time_mid)):
+    difference = relative_difference(
+        reference[index],
+        fission_mcdc[index],
+        fission_openmc[index],
+    )
+    rms_difference[index] = np.sqrt(np.mean(np.square(difference)))
 
-fig, axes = plt.subplots(2, 1, sharex=True)
-axes[0].plot(time_mid, fission_total_mcdc, "b", label="MC/DC")
-axes[0].plot(time_mid, fission_total_openmc, "r--", label="OpenMC")
-axes[0].set_yscale("log")
-axes[0].set_ylabel("Total fission rate")
-axes[0].grid()
-axes[0].legend()
-
-axes[1].plot(time_mid, rms_difference, "k")
-axes[1].set_yscale("log")
-axes[1].set_xlabel("Time (s)")
-axes[1].set_ylabel("RMS relative difference")
-axes[1].grid()
-
-fig.suptitle("Four-phase C5G7 transient")
-fig.savefig("comparison.png", dpi=200, bbox_inches="tight")
-plt.close(fig)
+animate_spatial_difference(
+    "fission",
+    time_mid,
+    (x, y, z),
+    reference,
+    fission_mcdc,
+    fission_openmc,
+    rms_difference,
+    "RMS relative difference (%)",
+)
