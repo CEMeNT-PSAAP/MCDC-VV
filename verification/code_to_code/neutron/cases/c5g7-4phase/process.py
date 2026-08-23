@@ -16,7 +16,7 @@ from util import (
     load_openmc_tally,
     particle_counts,
     plot_convergence,
-    relative_difference_l2,
+    relative_difference_metrics,
     require_reference_files,
 )
 
@@ -53,7 +53,8 @@ def main():
     case_dir = Path(__file__).resolve().parent
     N_particle = particle_counts(args.logN_min, args.logN_max, args.N_task)
     reference_files = require_reference_files(case_dir, args.N_task)
-    difference = np.zeros(args.N_task)
+    difference_l2 = np.zeros(args.N_task)
+    difference_max = np.zeros(args.N_task)
 
     mcdc_reference, N_batch = load_mcdc_fission(
         case_dir / f"output_{int(N_particle[-1])}.h5"
@@ -67,7 +68,7 @@ def main():
             case_dir / f"output_{int(count)}.h5"
         )
         openmc_fission = load_openmc_fission(reference_file)
-        difference[index] = relative_difference_l2(
+        difference_l2[index], difference_max[index] = relative_difference_metrics(
             reference,
             mcdc_fission,
             openmc_fission,
@@ -76,7 +77,12 @@ def main():
         if current_N_batch != N_batch:
             raise ValueError("All MC/DC outputs must use the same number of batches.")
 
-    plot_convergence("fission", N_particle * N_batch, difference)
+    plot_convergence(
+        "fission",
+        N_particle * N_batch,
+        difference_l2,
+        difference_max,
+    )
 
 
 if __name__ == "__main__":

@@ -4,8 +4,8 @@ This suite compares neutron transport results from multiple independently implem
 The current participating codes are MC/DC and OpenMC, and the workflow is intended to accommodate additional codes.
 It exercises time-dependent multigroup transport, moving geometry, delayed neutrons, void streaming, and multidimensional space-time tallies.
 The arithmetic mean of the participating code estimates at the largest sampling level defines the fixed comparison reference for every level.
-The reported metric is the pair-averaged L2 norm of pairwise relative differences normalized by that fixed reference.
-Verification checks for $N^{-1/2}$ decay in this metric as the participating calculations scale their sampling efforts together.
+The reported metrics are the pair-averaged L2 norm and maximum absolute pairwise relative difference normalized by that fixed reference.
+Verification checks for $N^{-1/2}$ decay in both metrics as the participating calculations scale their sampling efforts together.
 Observing that rate supports that the codes are converging statistically toward the same solution, while a plateau can indicate bias or a modeling discrepancy.
 Agreement does not by itself establish correctness because independently implemented codes can still share a common bias.
 

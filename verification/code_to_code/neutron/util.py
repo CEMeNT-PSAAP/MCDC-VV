@@ -84,8 +84,8 @@ def relative_difference(reference, first, second):
     return difference
 
 
-def relative_difference_l2(reference, *results):
-    """Return the pair-averaged L2 norm against a fixed comparison reference."""
+def relative_difference_metrics(reference, *results):
+    """Return pairwise L2 and maximum differences against a fixed reference."""
     reference = np.asarray(reference)
     results = tuple(np.asarray(result) for result in results)
 
@@ -97,17 +97,29 @@ def relative_difference_l2(reference, *results):
     nonzero = np.abs(reference) > 0.0
 
     if not np.any(nonzero):
-        return 0.0
+        return 0.0, 0.0
 
     squared_norms = []
+    maximum = 0.0
     for first in range(len(results) - 1):
         for second in range(first + 1, len(results)):
-            relative_difference = (
+            difference = (
                 results[first][nonzero] - results[second][nonzero]
             ) / reference[nonzero]
-            squared_norms.append(np.linalg.norm(relative_difference) ** 2)
+            squared_norms.append(np.linalg.norm(difference) ** 2)
+            maximum = max(maximum, float(np.max(np.abs(difference))))
 
-    return np.sqrt(np.mean(squared_norms))
+    return np.sqrt(np.mean(squared_norms)), maximum
+
+
+def relative_difference_l2(reference, *results):
+    """Return the pair-averaged L2 norm against a fixed comparison reference."""
+    return relative_difference_metrics(reference, *results)[0]
+
+
+def relative_difference_max(reference, *results):
+    """Return the maximum absolute pairwise difference against a fixed reference."""
+    return relative_difference_metrics(reference, *results)[1]
 
 
 def _spatial_projections(result):
@@ -299,31 +311,44 @@ def animate_spatial_difference(
     plt.close(fig)
 
 
-def plot_convergence(score, N_history, difference):
-    """Plot code-to-code difference alongside the Monte Carlo convergence rate."""
+def plot_convergence(score, N_history, difference_l2, difference_max):
+    """Plot code-to-code differences with Monte Carlo convergence guides."""
     N_history = np.asarray(N_history)
-    difference = np.asarray(difference)
+    difference_l2 = np.asarray(difference_l2)
+    difference_max = np.asarray(difference_max)
 
     fig, ax = plt.subplots()
     ax.plot(
         N_history,
-        difference,
+        difference_l2,
         "bo",
         fillstyle="none",
-        label="Code-to-code difference",
+        label="2-norm",
+    )
+    ax.plot(
+        N_history,
+        difference_max,
+        "gD",
+        fillstyle="none",
+        label="Maximum",
     )
 
-    positive = difference > 0.0
-    if np.any(positive):
-        anchor = np.flatnonzero(positive)[len(np.flatnonzero(positive)) // 2]
+    for index, difference in enumerate((difference_l2, difference_max)):
+        positive = difference > 0.0
+        if not np.any(positive):
+            continue
+
+        positive_indices = np.flatnonzero(positive)
+        anchor = positive_indices[len(positive_indices) // 2]
         expected = 1.0 / np.sqrt(N_history)
         expected *= difference[anchor] / expected[anchor]
-        ax.plot(N_history, expected, "r--", label=r"$O(N^{-1/2})$")
+        label = r"$O(N^{-1/2})$" if index == 0 else None
+        ax.plot(N_history, expected, "r--", label=label)
 
     ax.set_xscale("log")
     ax.set_yscale("log")
     ax.set_xlabel(r"Number of particle histories, $N$")
-    ax.set_ylabel("L2 norm of relative difference")
+    ax.set_ylabel("Relative difference")
     ax.set_title(f"{score.capitalize()} convergence")
     ax.grid()
     ax.legend()
