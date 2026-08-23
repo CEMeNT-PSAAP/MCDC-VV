@@ -5,6 +5,7 @@ import os
 import subprocess
 from pathlib import Path
 
+import numpy as np
 import yaml
 
 # ======================================================================================
@@ -25,7 +26,7 @@ if str(REPO_DIR) not in sys.path:
 # ======================================================================================
 
 from configs.platform_config import PLATFORMS
-from configs.util import get_case_walltime
+from configs.util import case_outputs_complete, get_case_walltime
 
 # User overrides are optional for local runs.
 try:
@@ -54,7 +55,6 @@ parser.add_argument(
     default=None,
     help="Set the base walltime in hours; each case scales it by walltime_factor.",
 )
-parser.add_argument("--rewrite", action="store_true")
 args = parser.parse_args()
 
 if args.N_node < 1:
@@ -126,8 +126,23 @@ with task_file.open("r") as f:
 # Convert each configured case into one independent Maestro step.
 steps = []
 case_walltimes = {}
+skipped_cases = []
 
 for case_name, task in tasks.items():
+    case_dir = suite_dir / "cases" / case_name
+    counts = np.logspace(
+        task["logN_min"],
+        task["logN_max"],
+        task["N_task"],
+        dtype=int,
+    )
+
+    # Do not allocate a Maestro step when every sampling level is already present.
+    if case_outputs_complete(case_dir, counts):
+        skipped_cases.append(case_name)
+        print(f"Skip complete case: {case_name}")
+        continue
+
     # Normalize case names into stable Maestro step identifiers.
     safe_case_name = case_name.replace("-", "_")
 
@@ -136,9 +151,6 @@ for case_name, task in tasks.items():
     # Maestro replaces LAUNCHER with the scheduler-specific process launcher.
     if not local:
         command += ' --launcher "$(LAUNCHER)"'
-
-    if args.rewrite:
-        command += " --rewrite"
 
     run = {"cmd": command}
 
@@ -158,6 +170,10 @@ for case_name, task in tasks.items():
             "run": run,
         }
     )
+
+if not steps:
+    print("All configured cases are complete; nothing to launch.")
+    raise SystemExit(0)
 
 # Assemble the complete Maestro study from the generated case steps.
 study = {
@@ -249,7 +265,6 @@ launch_config = {
     "N_process": 1 if local else args.N_node * cpu_cores,
     "walltime": args.walltime,
     "case_walltimes": case_walltimes,
-    "rewrite": args.rewrite,
     "mcdc_python": mcdc_python,
 }
 
@@ -270,7 +285,6 @@ with (latest_run / "task.yaml").open("w") as f:
 
 print(f"Platform : {args.platform}")
 print(f"Nodes    : {args.N_node}")
-print(f"Rewrite  : {args.rewrite}")
 print(f"Python   : {mcdc_python}")
 print(f"Study    : {study_file}")
 
@@ -285,3 +299,4 @@ if not local:
     print(f"Procs    : {args.N_node * cpu_cores}")
 
 print(f"Cases    : {len(steps)}")
+print(f"Skipped  : {len(skipped_cases)}")

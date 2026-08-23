@@ -43,6 +43,8 @@ Use `platform=None` for local execution or a name from `configs/platform_config.
 For HPC execution, `N_node` sets the number of nodes and each node uses all available CPU cores.
 For HPC execution, a suite's base `walltime` in hours is scaled by each case's `walltime_factor` in that suite's `task.yaml`.
 The scaled value is rounded up to the scheduler's supported resolution, the platform maximum remains the final limit, and local execution ignores walltime settings.
+Cases with every expected output are skipped, while partially complete cases retain their existing outputs and run only the missing sampling levels.
+Run the top-level `python cleanup.py` before launching when the entire configured campaign should start fresh.
 
 For HPC execution, also create `configs/user_config.py` from its template and provide the account and optional queue, reservation, and Python paths for the target platform.
 

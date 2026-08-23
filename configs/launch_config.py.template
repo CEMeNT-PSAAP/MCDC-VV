@@ -4,20 +4,17 @@ LAUNCH_CONFIG = {
         "platform": None,
         "N_node": 1,
         "walltime": None,
-        "rewrite": False,
     },
     "verification/analytical/neutron/k_eigenvalue": {
         "enabled": False,
         "platform": None,
         "N_node": 1,
         "walltime": None,
-        "rewrite": False,
     },
     "verification/code_to_code/neutron": {
         "enabled": False,
         "platform": None,
         "N_node": 1,
         "walltime": None,
-        "rewrite": False,
     },
 }

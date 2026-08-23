@@ -63,7 +63,9 @@ Launch the study on a supported HPC platform:
 python launch.py --platform tuolumne --N_node 1
 ```
 
-Use `--walltime HOURS` to set the base walltime and `--rewrite` to replace existing case output.
+Use `--walltime HOURS` to set the base walltime.
+Cases with every expected MC/DC output are omitted from the Maestro study, while partially complete cases run only their missing particle levels.
+Run `python cleanup.py` before launching to remove existing case outputs and start the suite fresh.
 
 After all jobs have completed, process the latest Maestro run:
 

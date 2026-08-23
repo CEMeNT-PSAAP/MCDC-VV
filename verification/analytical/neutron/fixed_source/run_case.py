@@ -20,11 +20,6 @@ parser.add_argument(
     default="",
     help="Process launch command supplied by Maestro.",
 )
-parser.add_argument(
-    "--rewrite",
-    action="store_true",
-    help="Rewrite existing output files instead of skipping them.",
-)
 args = parser.parse_args()
 
 
@@ -71,12 +66,8 @@ for N_particle in particle_counts:
     output_file = case_dir / f"{output}.h5"
 
     if output_file.is_file():
-        if args.rewrite:
-            print(f"Rewrite (remove existing output): {args.name}, N={N_particle}")
-            output_file.unlink()
-        else:
-            print(f"Skip (output exists): {args.name}, N={N_particle}")
-            continue
+        print(f"Skip existing output: {args.name}, N={N_particle}")
+        continue
 
     command = (
         f"{args.launcher} {sys.executable} input.py "
