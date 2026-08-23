@@ -6,6 +6,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+import numpy as np
 import yaml
 
 # ======================================================================================
@@ -24,6 +25,7 @@ if str(REPO_DIR) not in sys.path:
 # ======================================================================================
 
 from configs.platform_config import PLATFORMS
+from configs.util import case_outputs_complete, get_case_walltime
 
 # User overrides are optional for local runs.
 try:
@@ -40,17 +42,29 @@ parser = argparse.ArgumentParser(
     description="Launch the MC/DC VVP analytical neutron k-eigenvalue suite."
 )
 parser.add_argument("--platform", default="local", choices=["local"] + list(PLATFORMS))
-parser.add_argument("--mpi", action="store_true")
-parser.add_argument("--walltime", type=int, default=None)
-parser.add_argument("--rewrite", action="store_true")
+parser.add_argument(
+    "--N_node",
+    type=int,
+    default=1,
+    help="Set the number of compute nodes.",
+)
+parser.add_argument(
+    "--walltime",
+    type=float,
+    default=None,
+    help="Set the base walltime in hours; each case scales it by walltime_factor.",
+)
 args = parser.parse_args()
 
-if args.mpi and args.platform == "local":
-    parser.error("--mpi requires a cluster platform. Specify --platform <platform>.")
+if args.N_node < 1:
+    parser.error("--N_node must be at least one.")
+
+if args.platform == "local" and args.N_node != 1:
+    parser.error("Local execution supports only --N_node 1.")
 
 
 # ======================================================================================
-# Paths and platform settings
+# Paths
 # ======================================================================================
 
 suite_dir = Path(__file__).resolve().parent
@@ -58,10 +72,17 @@ task_file = suite_dir / "task.yaml"
 run_case = suite_dir / "run_case.py"
 study_file = suite_dir / "study.yaml"
 
+
+# ======================================================================================
+# Platform settings
+# ======================================================================================
+
 local = args.platform == "local"
 user_platform_config = USER_CONFIG.get(args.platform, {})
 
 mcdc_python = user_platform_config.get("mcdc_python")
+
+# Use the active interpreter unless this platform specifies another MC/DC environment.
 if mcdc_python is None:
     mcdc_python = sys.executable
 else:
@@ -72,13 +93,11 @@ if not local:
     scheduler = platform["scheduler"]
     cpu_cores = platform["cpu_cores_per_node"]
 
-    # Never request more walltime than the platform permits.
-    walltime_hours = (
-        platform["max_walltime_hours"]
-        if args.walltime is None
-        else min(args.walltime, platform["max_walltime_hours"])
-    )
-    walltime = platform["walltime_format"].format(hours=walltime_hours)
+    if args.N_node > platform["max_nodes"]:
+        parser.error(
+            f"--N_node exceeds the {platform['max_nodes']}-node limit for "
+            f"{args.platform}."
+        )
 
     account = user_platform_config.get("account")
     queue = user_platform_config.get("queue")
@@ -92,36 +111,56 @@ if not local:
 
 
 # ======================================================================================
-# Build Maestro study
+# Load tasks
 # ======================================================================================
 
 with task_file.open("r") as f:
     tasks = yaml.safe_load(f)
 
-steps = []
 
-for case_name in tasks:
+# ======================================================================================
+# Build Maestro study
+# ======================================================================================
+
+# Convert each configured case into one independent Maestro step.
+steps = []
+case_walltimes = {}
+skipped_cases = []
+
+for case_name, task in tasks.items():
+    case_dir = suite_dir / "cases" / case_name
+    counts = np.rint(
+        np.geomspace(
+            task["N_active_min"],
+            task["N_active_max"],
+            task["N_task"],
+        )
+    ).astype(int)
+
+    # Do not allocate a Maestro step when every sampling level is already present.
+    if case_outputs_complete(case_dir, counts):
+        skipped_cases.append(case_name)
+        print(f"Skip complete case: {case_name}")
+        continue
+
+    # Normalize case names into stable Maestro step identifiers.
     safe_case_name = case_name.replace("-", "_")
     command = f"{mcdc_python} {run_case} --name {case_name}"
 
-    # Maestro replaces LAUNCHER with the scheduler-specific MPI launch command.
-    if args.mpi:
-        command += ' --mpi "$(LAUNCHER)"'
-
-    if args.rewrite:
-        command += " --rewrite"
+    # Maestro replaces LAUNCHER with the scheduler-specific process launcher.
+    if not local:
+        command += ' --launcher "$(LAUNCHER)"'
 
     run = {"cmd": command}
 
     # Scheduled studies require explicit resources; local studies run directly.
     if not local:
-        run["nodes"] = 1
+        run["nodes"] = args.N_node
+        walltime = get_case_walltime(task, platform, args.walltime)
         run["walltime"] = walltime
-        if args.mpi:
-            run["procs"] = cpu_cores
-            run["exclusive"] = True
-        else:
-            run["procs"] = 1
+        case_walltimes[case_name] = walltime
+        run["procs"] = args.N_node * cpu_cores
+        run["exclusive"] = True
 
     steps.append(
         {
@@ -131,6 +170,11 @@ for case_name in tasks:
         }
     )
 
+if not steps:
+    print("All configured cases are complete; nothing to launch.")
+    raise SystemExit(0)
+
+# Assemble the complete Maestro study from the generated case steps.
 study = {
     "description": {
         "name": "maestro_run",
@@ -141,6 +185,7 @@ study = {
 }
 
 if not local:
+    # Attach batch settings only when Maestro submits to a scheduler.
     batch = {
         "type": scheduler,
         "host": platform["host"],
@@ -151,6 +196,11 @@ if not local:
     if reservation is not None:
         batch["reservation"] = reservation
     study["batch"] = batch
+
+
+# ======================================================================================
+# Write Maestro study
+# ======================================================================================
 
 with study_file.open("w") as f:
     yaml.dump(study, f, sort_keys=False)
@@ -165,11 +215,14 @@ if not local:
     maestro_python = user_platform_config.get("maestro_python")
 
 env = os.environ.copy()
+
+# Use the configured Maestro environment when it differs from the active one.
 if maestro_python is None:
     maestro_command = ["maestro", "run", "study.yaml"]
 else:
     maestro_python = Path(maestro_python).expanduser()
     maestro_bin = maestro_python.parent
+    # Keep executables spawned by Maestro in the same configured environment.
     env["PATH"] = f"{maestro_bin}:{env['PATH']}"
     maestro_command = [
         str(maestro_python),
@@ -186,6 +239,7 @@ subprocess.run(maestro_command, cwd=suite_dir, check=True, env=env)
 # Store launch metadata
 # ======================================================================================
 
+# Maestro creates timestamped run directories, so capture the newly generated launch.
 maestro_runs = sorted(
     suite_dir.glob("maestro_run_*"),
     key=lambda path: path.stat().st_mtime,
@@ -196,11 +250,15 @@ if not maestro_runs:
 latest_run = maestro_runs[-1]
 launch_config = {
     "platform": args.platform,
-    "mpi": args.mpi,
+    "scheduler": "local" if local else scheduler,
+    "N_node": args.N_node,
+    "N_process": 1 if local else args.N_node * cpu_cores,
     "walltime": args.walltime,
-    "rewrite": args.rewrite,
+    "case_walltimes": case_walltimes,
+    "mcdc_python": mcdc_python,
 }
 
+# Snapshot the effective launch and task configuration with the generated run.
 with (latest_run / "launch_config.yaml").open("w") as f:
     yaml.dump(launch_config, f, sort_keys=False)
 
@@ -213,8 +271,7 @@ with (latest_run / "task.yaml").open("w") as f:
 # ======================================================================================
 
 print(f"Platform : {args.platform}")
-print(f"MPI      : {args.mpi}")
-print(f"Rewrite  : {args.rewrite}")
+print(f"Nodes    : {args.N_node}")
 print(f"Python   : {mcdc_python}")
 print(f"Study    : {study_file}")
 
@@ -223,8 +280,10 @@ if not local:
     print(f"Account  : {account}")
     print(f"Queue    : {queue}")
     print(f"Reserv.  : {reservation}")
-    print(f"Walltime : {walltime}")
-    print("Nodes    : 1")
-    print(f"Procs    : {cpu_cores if args.mpi else 1}")
+    print("Walltimes:")
+    for case_name, walltime in case_walltimes.items():
+        print(f"  {case_name}: {walltime}")
+    print(f"Procs    : {args.N_node * cpu_cores}")
 
 print(f"Cases    : {len(steps)}")
+print(f"Skipped  : {len(skipped_cases)}")

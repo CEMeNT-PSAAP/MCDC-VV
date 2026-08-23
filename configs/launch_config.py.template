@@ -2,15 +2,19 @@ LAUNCH_CONFIG = {
     "verification/analytical/neutron/fixed_source": {
         "enabled": False,
         "platform": None,
-        "mpi": False,
+        "N_node": 1,
         "walltime": None,
-        "rewrite": False,
     },
     "verification/analytical/neutron/k_eigenvalue": {
         "enabled": False,
         "platform": None,
-        "mpi": False,
+        "N_node": 1,
         "walltime": None,
-        "rewrite": False,
+    },
+    "verification/code_to_code/neutron": {
+        "enabled": False,
+        "platform": None,
+        "N_node": 1,
+        "walltime": None,
     },
 }

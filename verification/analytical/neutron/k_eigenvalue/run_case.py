@@ -18,14 +18,9 @@ parser = argparse.ArgumentParser(
 parser.add_argument("--name", required=True, help="Verification case name.")
 parser.add_argument("--task-file", default="task.yaml")
 parser.add_argument(
-    "--mpi",
+    "--launcher",
     default="",
-    help="MPI launch command supplied by Maestro, e.g. 'srun -n 112'.",
-)
-parser.add_argument(
-    "--rewrite",
-    action="store_true",
-    help="Rewrite existing output files instead of skipping them.",
+    help="Process launch command supplied by Maestro.",
 )
 args = parser.parse_args()
 
@@ -69,15 +64,11 @@ for N_active in active_cycle_counts:
     output_file = case_dir / f"{output}.h5"
 
     if output_file.is_file():
-        if args.rewrite:
-            print(f"Rewrite (remove existing output): {args.name}, N_active={N_active}")
-            output_file.unlink()
-        else:
-            print(f"Skip (output exists): {args.name}, N_active={N_active}")
-            continue
+        print(f"Skip existing output: {args.name}, N_active={N_active}")
+        continue
 
     command = (
-        f"{args.mpi} {sys.executable} input.py "
+        f"{args.launcher} {sys.executable} input.py "
         "--mode=numba "
         f"--N_active={N_active} "
         f"--output={output} "

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="430" viewBox="0 0 920 430">
+  <rect width="920" height="430" fill="#fbfbf8"/>
+  <text x="460" y="38" text-anchor="middle" font-family="sans-serif" font-size="23" font-weight="bold">RFNC photon measurement arrangement</text>
+  <circle cx="135" cy="215" r="58" fill="#dbeafe" stroke="#1d4ed8" stroke-width="3"/>
+  <circle cx="135" cy="215" r="7" fill="#dc2626"/>
+  <text x="135" y="300" text-anchor="middle" font-family="sans-serif" font-size="15">Compound sample</text>
+  <rect x="205" y="202" width="150" height="26" fill="#94a3b8" stroke="#475569" stroke-width="2"/>
+  <text x="280" y="190" text-anchor="middle" font-family="sans-serif" font-size="14">Steel delay rod</text>
+  <rect x="390" y="105" width="95" height="220" fill="#d6d3d1" stroke="#57534e" stroke-width="3"/>
+  <rect x="390" y="191" width="95" height="48" fill="#ffffff" stroke="#57534e" stroke-width="2"/>
+  <text x="437" y="92" text-anchor="middle" font-family="sans-serif" font-size="14">1.5 m concrete wall</text>
+  <rect x="505" y="198" width="130" height="34" rx="15" fill="#e2f2df" stroke="#15803d" stroke-width="2"/>
+  <text x="570" y="188" text-anchor="middle" font-family="sans-serif" font-size="14">Polyethylene insert</text>
+  <rect x="700" y="160" width="115" height="110" fill="#cbd5e1" stroke="#475569" stroke-width="3"/>
+  <rect x="730" y="185" width="55" height="60" fill="#fde68a" stroke="#a16207" stroke-width="3"/>
+  <text x="757" y="148" text-anchor="middle" font-family="sans-serif" font-size="14">Lead shield</text>
+  <text x="757" y="292" text-anchor="middle" font-family="sans-serif" font-size="14">Stilbene detector</text>
+  <line x1="193" y1="215" x2="700" y2="215" stroke="#dc2626" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#arrow)"/>
+  <text x="460" y="408" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#64748b">Reconstructed diagram—not an original SINBAD figure; spacing is schematic.</text>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#dc2626"/></marker></defs>
+</svg>

@@ -11,6 +11,9 @@ Target release: 0.16.0, the first versioned MC/DC-VVP release.
 
 ### Added
 
+- Add Kornreich k-eigenvalue slabs problem
+- Add the analytical neutron $k$-eigenvalue MMS one-group slab, from [@ilhamv]
+- Add the analytical neutron fixed-source MMS two-group slab, from [@ilhamv]
 - Add the analytical neutron $k$-eigenvalue suite with subcritical and supercritical SHEM-361 cases, analytical matrix-eigenvalue references, active-cycle convergence studies, and uncertainty plots, from [@ilhamv]
 - Add energy-dependent weight-window and time-census variants of the infinite homogeneous SHEM-361 problem, from [@ilhamv]
 - Add AZURV1 variants for basic variance-reduction techniques, analytical spatial weight windows, time censuses, and census-based tallies, from [@ilhamv]
@@ -19,6 +22,7 @@ Target release: 0.16.0, the first versioned MC/DC-VVP release.
 
 ### Changed
 
+- Distribute the analytical fixed-source slab cases across the $x$, $y$, and $z$ axes to exercise every Cartesian slab orientation, from [@ilhamv]
 - Migration to Maestro-based launch, from [@ilhamv]
 - Update analytical fixed-source cases for the simulation-owned MC/DC interface and unified material model, from [@ilhamv]
 - Standardize **suite** and **case** as the VVP repository's organizational terminology, from [@ilhamv]

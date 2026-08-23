@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="470" viewBox="0 0 760 470">
+  <rect width="760" height="470" fill="#fbfbf8"/>
+  <text x="380" y="38" text-anchor="middle" font-family="sans-serif" font-size="23" font-weight="bold">RFNC compound-sphere geometry</text>
+  <circle cx="300" cy="235" r="150" fill="#dbeafe" stroke="#1d4ed8" stroke-width="3"/>
+  <circle cx="300" cy="235" r="75" fill="#ffffff" stroke="#475569" stroke-width="3"/>
+  <circle cx="300" cy="235" r="8" fill="#dc2626"/>
+  <text x="300" y="230" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#991b1b">D-T</text>
+  <text x="300" y="252" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#991b1b">source</text>
+  <line x1="300" y1="235" x2="375" y2="235" stroke="#334155" stroke-width="2"/>
+  <text x="337" y="222" text-anchor="middle" font-family="sans-serif" font-size="14">5 cm</text>
+  <line x1="300" y1="235" x2="450" y2="235" stroke="#334155" stroke-width="2"/>
+  <text x="412" y="222" text-anchor="middle" font-family="sans-serif" font-size="14">10 cm</text>
+  <rect x="515" y="170" width="28" height="28" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="558" y="191" font-family="sans-serif" font-size="15">H₂O, SiO₂, or NaCl</text>
+  <rect x="515" y="218" width="28" height="28" fill="#ffffff" stroke="#475569" stroke-width="2"/>
+  <text x="558" y="239" font-family="sans-serif" font-size="15">Central target void</text>
+  <text x="380" y="450" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#64748b">Reconstructed diagram—not an original SINBAD figure; target and container details are omitted.</text>
+</svg>

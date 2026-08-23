@@ -31,3 +31,26 @@ def plot_convergence(name, active_cycles, error):
     plt.legend()
     plt.savefig(f"{name}.png")
     plt.clf()
+
+
+def plot_k_estimates(active_cycles, estimates, uncertainties, reference):
+    """Plot multiplication-factor estimates with their reported uncertainties."""
+    fig, ax = plt.subplots()
+    ax.errorbar(
+        active_cycles,
+        estimates,
+        yerr=uncertainties,
+        fmt="bo",
+        fillstyle="none",
+        capsize=3,
+        label="MC/DC",
+    )
+    ax.axhline(reference, color="r", linestyle="--", label="Reference")
+    ax.set_xscale("log")
+    ax.set_xlabel(r"Active cycles, $N_\mathrm{active}$")
+    ax.set_ylabel(r"$k$")
+    ax.set_title("k-effective estimates")
+    ax.grid()
+    ax.legend()
+    fig.savefig("k-effective_errorbar.png", bbox_inches="tight")
+    plt.close(fig)

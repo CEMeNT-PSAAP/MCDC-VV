@@ -12,7 +12,8 @@ PLATFORMS = {
         "gpus_per_node": 0,
         "max_nodes": 128,
         "max_walltime_hours": 24,
-        "walltime_format": "{hours}:00:00",
+        "walltime_resolution_seconds": 1,
+        "walltime_format": "{hours}:{minutes:02d}:{seconds:02d}",
     },
     "lassen": {
         "host": "lassen",
@@ -23,7 +24,8 @@ PLATFORMS = {
         "gpus_per_node": 4,
         "max_nodes": 128,  # actual system limit: 256
         "max_walltime_hours": 24,  # actual system limit may be lower
-        "walltime_format": "{hours}:00",
+        "walltime_resolution_seconds": 60,
+        "walltime_format": "{hours}:{minutes:02d}",
     },
     "tuolumne": {
         "host": "tuolumne",
@@ -34,6 +36,7 @@ PLATFORMS = {
         "gpus_per_node": 4,
         "max_nodes": 128,
         "max_walltime_hours": 24,
-        "walltime_format": "{hours}:00:00",
+        "walltime_resolution_seconds": 1,
+        "walltime_format": "{hours}:{minutes:02d}:{seconds:02d}",
     },
 }

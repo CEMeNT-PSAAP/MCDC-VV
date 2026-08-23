@@ -51,11 +51,18 @@ plt.xlabel(r"$E$, eV")
 plt.ylabel(r"$E\phi(E)$")
 plt.grid()
 plt.legend()
-plt.show()
+plt.savefig("flux.png", dpi=200, bbox_inches="tight")
+plt.close()
 
 # Show convergence of the cycle estimates and distinguish active statistics.
 cycles = np.arange(1, len(k_cycle) + 1)
 active_cycles = cycles[N_inactive:]
+active_k = k_cycle[N_inactive:]
+k_min = np.min(active_k)
+k_max = np.max(active_k)
+k_padding = 0.05 * (k_max - k_min)
+if k_padding == 0.0:
+    k_padding = max(0.01 * abs(k_min), 1.0e-6)
 
 plt.plot(cycles, k_cycle, "-b", label="MC/DC cycle")
 plt.axhline(k_reference, color="k", linestyle="--", label="analytical")
@@ -83,6 +90,9 @@ if N_inactive > 0:
 
 plt.xlabel("Cycle")
 plt.ylabel(r"$k$")
+# Focus the vertical scale on fluctuations after source convergence.
+plt.ylim(k_min - k_padding, k_max + k_padding)
 plt.grid()
 plt.legend()
-plt.show()
+plt.savefig("k_history.png", dpi=200, bbox_inches="tight")
+plt.close()

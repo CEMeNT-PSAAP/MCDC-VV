@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540">
+  <rect width="960" height="540" fill="#ffffff"/>
+  <text x="480" y="38" text-anchor="middle" font-family="sans-serif" font-size="25" fill="#173f5f">Public-entry measurement arrangement</text>
+  <text x="480" y="64" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#555555">Schematic only; distances are labeled but the drawing is not to scale.</text>
+  <line x1="90" y1="390" x2="750" y2="390" stroke="#d1495b" stroke-width="3"/>
+  <polygon points="770,390 750,380 750,400" fill="#d1495b"/>
+  <text x="88" y="374" font-family="sans-serif" font-size="15" fill="#d1495b">250 keV deuteron beam axis</text>
+  <circle cx="360" cy="390" r="92" fill="#8ecae6" stroke="#5f6670" stroke-width="8"/>
+  <circle cx="360" cy="390" r="26" fill="#ffffff" stroke="#5f6670" stroke-width="4"/>
+  <circle cx="360" cy="390" r="6" fill="#d1495b"/>
+  <text x="360" y="503" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#173f5f">60 cm silicon pile</text>
+  <line x1="360" y1="390" x2="553" y2="115" stroke="#173f5f" stroke-width="2.5" stroke-dasharray="8 6"/>
+  <path d="M 430 390 A 70 70 0 0 0 400 333" fill="none" stroke="#173f5f" stroke-width="2"/>
+  <text x="415" y="342" font-family="sans-serif" font-size="16" fill="#173f5f">55°</text>
+  <rect x="450" y="190" width="50" height="70" fill="#c8a96b" stroke="#173f5f" stroke-width="2"/>
+  <line x1="462" y1="190" x2="462" y2="260" stroke="#173f5f" stroke-width="2"/>
+  <line x1="475" y1="190" x2="475" y2="260" stroke="#173f5f" stroke-width="2"/>
+  <line x1="488" y1="190" x2="488" y2="260" stroke="#173f5f" stroke-width="2"/>
+  <text x="420" y="171" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#173f5f">Polyethylene–iron</text>
+  <text x="420" y="189" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#173f5f">pre-collimator</text>
+  <rect x="533" y="77" width="40" height="76" rx="8" fill="#f2c14e" stroke="#173f5f" stroke-width="3"/>
+  <text x="610" y="94" font-family="sans-serif" font-size="16" fill="#173f5f">NE-218 detector</text>
+  <text x="610" y="116" font-family="sans-serif" font-size="14" fill="#555555">12.7 cm diameter</text>
+  <text x="610" y="136" font-family="sans-serif" font-size="14" fill="#555555">5.1 cm long</text>
+  <text x="500" y="313" transform="rotate(-55 500 313)" font-family="sans-serif" font-size="15" fill="#173f5f">about 11 m source-to-detector</text>
+  <rect x="80" y="505" width="800" height="34" rx="5" fill="#f3f6f8" stroke="#b9c4cc"/>
+  <text x="480" y="527" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#555555">Reconstructed diagram—not an original SINBAD figure and not a transport-model representation of the detector hall.</text>
+</svg>

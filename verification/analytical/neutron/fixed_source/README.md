@@ -12,25 +12,43 @@ The suite can be executed independently or as part of the top-level MC/DC-VVP wo
 cases/              Verification case definitions and processing scripts
 data/               Shared multigroup cross-section data
 maestro_run_*/      Generated Maestro workflow directories
-results/            Generated figures from processed cases
+results/
+  launch_config.yaml Effective suite launch configuration
+  task.yaml          Task-generation configuration used by the launch
+  convergence/      Statistical-convergence figures
+  comparison/       Highest-statistics reference comparisons and animations
 
-task.yaml           Configure the particle-count study for each case
+task.yaml           Configure task generation for each case
 study.yaml          Generated Maestro study definition
 
 launch.py           Build and launch the Maestro study
-run_case.py         Run one case over its particle-count study
+run_case.py         Run the tasks for one case
 process.py          Process a completed Maestro study
 
 cleanup.py          Remove generated outputs and figures
 util.py             Provide shared processing and plotting utilities
 ```
 
+Each case contains a common set of files:
+
+```text
+input.py            Define and run the MC/DC model
+reference.py        Generate the analytical reference solution
+process.py          Evaluate convergence across the study
+plot.py             Inspect one MC/DC result against the reference
+```
+
 ## Configuration
 
 The `task.yaml` file selects the cases and defines the particle-count range and number of tasks for each case.
+One task is one MC/DC execution at one generated `N_particle` value.
+An optional `walltime_factor` scales the launch-level walltime for an individual HPC case and defaults to `1.0`.
+The base walltime is specified in hours, and the scaled value is rounded up to the scheduler resolution and limited by the platform maximum.
+Local execution ignores walltime.
 Edit this file to change the study without modifying the launch or processing scripts.
 
 HPC runs use the shared platform settings in the repository's `configs/platform_config.py` and the user-specific settings in `configs/user_config.py`.
+The `N_node` option sets the number of nodes, with all available CPU cores used on each node.
 
 ## Launching and processing
 
@@ -43,10 +61,12 @@ python launch.py
 Launch the study on a supported HPC platform:
 
 ```bash
-python launch.py --platform tuolumne --mpi
+python launch.py --platform tuolumne --N_node 1
 ```
 
-Use `--walltime HOURS` to limit the requested walltime and `--rewrite` to replace existing case output.
+Use `--walltime HOURS` to set the base walltime.
+Cases with every expected MC/DC output are omitted from the Maestro study, while partially complete cases run only their missing particle levels.
+Run `python cleanup.py` before launching to remove existing case outputs and start the suite fresh.
 
 After all jobs have completed, process the latest Maestro run:
 
@@ -60,7 +80,8 @@ Pass a Maestro run directory to process a specific run:
 python process.py maestro_run_<timestamp>
 ```
 
-Processed figures are written to this suite's `results/` directory.
+Convergence figures are written to `results/convergence/`.
+Comparisons using each case's largest particle count are written to `results/comparison/`, with time-dependent comparisons stored as GIF animations.
 The top-level `process.py` collects these figures under the repository's `results/` directory.
 
 ## Cases
@@ -68,6 +89,7 @@ The top-level `process.py` collects these figures under the repository's `result
 | Case | Description |
 | :--- | :---------- |
 | [`slab_absorbium`](cases/slab_absorbium/) | Steady-state flux distribution in a purely absorbing multilayer slab. |
+| [`mms_two_group_slab`](cases/mms_two_group_slab/) | Manufactured steady-state two-group slab with positive linear volume sources and isotropic incoming boundary fluxes. |
 | [`slab_isobeam_td`](cases/slab_isobeam_td/) | Time-dependent flux propagation from an isotropic planar source. |
 | [`reed`](cases/reed/) | Reed's classic one-dimensional transport benchmark. |
 | [`azurv1`](cases/azurv1/) | AZURV1 transient benchmark. |
@@ -81,6 +103,29 @@ The top-level `process.py` collects these figures under the repository's `result
 | [`inf_shem361_td`](cases/inf_shem361_td/) | Time-dependent SHEM-361 spectrum evolution. |
 | [`inf_shem361_td-census`](cases/inf_shem361_td-census/) | Time-dependent SHEM-361 spectrum evolution with time censuses. |
 | [`inf_shem361-weight_windows`](cases/inf_shem361-weight_windows/) | Infinite homogeneous SHEM-361 with energy-dependent weight windows derived from the analytical spectrum. |
+
+### MMS two-group slab
+
+This steady-state, one-dimensional problem uses a 10 cm slab with vacuum boundaries, two energy groups, and isotropic scattering.
+Both groups have $\Sigma_t=1$ cm$^{-1}$ and $\Sigma_c=0.6$ cm$^{-1}$, and every entry of the outgoing-by-incoming scattering matrix is $0.2$ cm$^{-1}$.
+We manufacture the right-hand sides (sum of in-scattering and non-homogeneous source) of the group-wise transport equation:
+
+$$
+R_1(x)=0.5+0.01x,
+\qquad
+R_2(x)=0.6-0.01x.
+$$
+
+The equal-and-opposite slopes yield isotropic incoming boundary fluxes and the positive, angle-integrated volume sources
+
+$$
+q_1(x)=0.56+0.02x,
+\qquad
+q_2(x)=0.76-0.02x.
+$$
+
+MC/DC samples these sources with piecewise-linear spatial distributions and the incoming fluxes with white half-space boundary sources.
+The analytical scalar flux is $\phi_g(x)=2R_g(x)+R'_g(x)[E_3(x)-E_3(10-x)]$.
 
 ### SHEM-361 multigroup data
 

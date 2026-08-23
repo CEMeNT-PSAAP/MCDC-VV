@@ -1,6 +1,7 @@
 """Process the analytical neutron k-eigenvalue verification suite."""
 
 import argparse
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -21,6 +22,25 @@ parser.add_argument(
     help="Maestro run directory to process. Defaults to the latest maestro_run_*.",
 )
 args = parser.parse_args()
+
+
+# ======================================================================================
+# Helper functions
+# ======================================================================================
+
+
+def clear_case_figures(case_dir):
+    """Remove figures left by an earlier processing run."""
+    for pattern in ("*.png", "*.gif"):
+        for figure in case_dir.glob(pattern):
+            figure.unlink()
+
+
+def collect_case_figures(case_dir, destination, case_name):
+    """Move generated case figures into a named suite results directory."""
+    for pattern in ("*.png", "*.gif"):
+        for figure in case_dir.glob(pattern):
+            figure.replace(destination / f"{case_name}_{figure.name}")
 
 
 # ======================================================================================
@@ -55,13 +75,25 @@ with launch_config_file.open("r") as f:
 with task_file.open("r") as f:
     tasks = yaml.safe_load(f)
 
+results_dir = suite_dir / "results"
+convergence_dir = results_dir / "convergence"
+comparison_dir = results_dir / "comparison"
+
+# Start with an empty suite results hierarchy on every processing run.
+if results_dir.is_dir():
+    shutil.rmtree(results_dir)
+
+convergence_dir.mkdir(parents=True, exist_ok=True)
+comparison_dir.mkdir(parents=True, exist_ok=True)
+
+# Keep the effective launch and task definitions beside the processed figures.
+shutil.copy2(launch_config_file, results_dir / "launch_config.yaml")
+shutil.copy2(task_file, results_dir / "task.yaml")
+
 
 # ======================================================================================
 # Process cases and collect their figures
 # ======================================================================================
-
-results_dir = suite_dir / "results"
-results_dir.mkdir(exist_ok=True)
 
 for case_name, task in tasks.items():
     case_dir = suite_dir / "cases" / case_name
@@ -72,6 +104,9 @@ for case_name, task in tasks.items():
         continue
 
     print(f"Processing {case_name}")
+    clear_case_figures(case_dir)
+
+    # Generate and collect convergence figures over the active-cycle study.
     subprocess.run(
         [
             sys.executable,
@@ -83,10 +118,17 @@ for case_name, task in tasks.items():
         cwd=case_dir,
         check=True,
     )
+    collect_case_figures(case_dir, convergence_dir, case_name)
 
-    for figure in case_dir.glob("*.png"):
-        destination = results_dir / f"{case_name}_{figure.name}"
-        figure.replace(destination)
+    # Inspect the result with the largest number of active cycles.
+    plot_script = case_dir / "plot.py"
+    output = case_dir / f"output_{task['N_active_max']}.h5"
+    subprocess.run(
+        [sys.executable, str(plot_script), str(output)],
+        cwd=case_dir,
+        check=True,
+    )
+    collect_case_figures(case_dir, comparison_dir, case_name)
 
 
 # ======================================================================================
@@ -96,7 +138,7 @@ for case_name, task in tasks.items():
 print()
 print(f"Maestro run: {maestro_run}")
 print(f"Platform   : {launch_config['platform']}")
-print(f"MPI        : {launch_config['mpi']}")
-print(f"Rewrite    : {launch_config['rewrite']}")
+print(f"Nodes      : {launch_config['N_node']}")
+print(f"Processes  : {launch_config['N_process']}")
 print(f"Cases      : {len(tasks)}")
 print("Processing complete.")

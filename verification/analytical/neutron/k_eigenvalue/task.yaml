@@ -15,12 +15,26 @@
 #
 # =============================================================================
 
+one_group_slab:
+  N_active_min: 20
+  N_active_max: 2000
+  N_task: 5
+  walltime_factor: 0.438
+
+kornreich:
+  N_active_min: 20
+  N_active_max: 2000
+  N_task: 5
+  walltime_factor: 0.470
+
 inf_shem361_subcritical:
   N_active_min: 20
   N_active_max: 2000
   N_task: 5
+  walltime_factor: 0.940
 
 inf_shem361_supercritical:
   N_active_min: 20
   N_active_max: 2000
   N_task: 5
+  walltime_factor: 0.971

@@ -15,20 +15,35 @@ Workflow orchestration is performed using [Maestro](https://github.com/llnl/maes
 ```text
 configs/               Shared platform, user, and launch configurations
 verification/          Verification suites and their cases
-results/metadata.yaml  Append-only launch and processing history
-results/<launch_id>/   Processed results for one recorded launch
+results/               Processed results organized by suite
 
 launch.py              Launch all enabled suites
-process.py             Process one recorded launch
+process.py             Process suites and collect their results
+cleanup.py             Remove generated outputs and processed results
 ```
 
-MC/DC-VVP uses **suite** and **case** as standard terms for its two organizational levels:
+MC/DC-VVP uses **suite**, **case**, and **task** as standard terms for its organizational hierarchy:
+
+```text
+suite
+└── case
+    └── task
+```
 
 - A **suite** is a self-contained collection of related VVP cases with a shared launch and processing workflow.
 - A **case** is one individual problem definition and its inputs, reference solution or data, and processing logic.
+- A **task** is one execution of a case at one sampling level, such as one `N_particle` or `N_active` value.
 
-The top-level workflow launches and processes enabled suites, while each suite workflow runs and processes its cases.
+A suite contains cases, and each case generates one or more tasks from the suite's `task.yaml` configuration.
+Maestro currently represents each case as one workflow step, and `run_case.py` executes that case's tasks sequentially.
+The hierarchy also defines restart behavior: an existing output skips its task, a case with all task outputs is omitted, and a suite with all cases complete does not launch.
 Every integrated suite provides a README that describes its layout, configuration, workflow, and cases.
+
+## Adding content
+
+To add a case, create its directory under the appropriate suite's `cases/`, implement the common files described in the suite README, and register its task sequence in the suite's `task.yaml`.
+Place data shared by multiple cases in the suite's `data/` directory when appropriate.
+A new suite should provide its own README, `launch.py`, `process.py`, and `cleanup.py`, then be registered in `configs/launch_config.py.template`.
 
 ## Configuration
 
@@ -40,6 +55,11 @@ cp configs/launch_config.py.template configs/launch_config.py
 
 Edit `configs/launch_config.py` to enable the desired suites and set their platform and launch options.
 Use `platform=None` for local execution or a name from `configs/platform_config.py` for HPC execution.
+For HPC execution, `N_node` sets the number of nodes and each node uses all available CPU cores.
+For HPC execution, a suite's base `walltime` in hours is scaled by each case's `walltime_factor` in that suite's `task.yaml`.
+The scaled value is rounded up to the scheduler's supported resolution, the platform maximum remains the final limit, and local execution ignores walltime settings.
+Cases with every expected output are skipped, while partially complete cases retain their existing outputs and run only the missing sampling levels.
+Run the top-level `python cleanup.py` before launching when the entire configured campaign should start fresh.
 
 For HPC execution, also create `configs/user_config.py` from its template and provide the account and optional queue, reservation, and Python paths for the target platform.
 
@@ -59,40 +79,45 @@ python launch.py --platform tuolumne
 
 The `--platform` option selects suites with a matching configured platform.
 
-After the latest launch has completed, process all suites submitted by that launch:
+Process registered suites and collect their results:
 
 ```bash
 python process.py
 ```
 
-Process a specific recorded launch by passing the launch ID printed by `launch.py` and stored in `results/metadata.yaml`:
+For each suite registered in `configs/launch_config.py`, the top-level processor invokes the suite processor when a Maestro run is available and then moves the generated `results/` directory under the same suite path in the top-level `results/` directory.
+An existing suite `results/` directory can still be collected when no Maestro run is present, and suites with neither are skipped.
+Within each suite, `convergence/` contains study-wide convergence figures and `comparison/` contains plots or animations from the largest-statistics result.
+Collecting a suite replaces that suite's existing top-level results.
+
+Remove generated case outputs and processed results from every registered suite:
 
 ```bash
-python process.py 20260817T120000123456Z
+python cleanup.py
 ```
 
-Each launch is processed into its own `results/<launch_id>/` directory, which contains a metadata snapshot and the suite result hierarchy.
-Reprocessing one launch replaces only that launch's subfolder and does not affect results from other launches.
+Cleanup removes Maestro run directories and retains reference data.
 
 ## Suites
 
 ### Analytical verification
 
-Analytical verification demonstrates the expected statistical convergence of MC/DC by comparing numerical solutions against analytical reference solutions as the sampling effort is increased.
+Analytical verification demonstrates the expected statistical convergence of MC/DC by comparing numerical solutions against analytical and semi-analytical reference solutions as the sampling effort is increased.
 
 | Physics | Suite | Description |
 | :------ | :---- | :---------- |
-| Neutron transport | [Fixed-source](verification/analytical/neutron/fixed_source/README.md) | Multigroup steady-state and transient fixed-source cases, including Reed's problem, AZURV1 variants, and infinite SHEM-361 benchmarks. |
-| Neutron transport | [$k$-eigenvalue](verification/analytical/neutron/k_eigenvalue/README.md) | Infinite homogeneous SHEM-361 criticality cases with analytical eigenvalue and energy-spectrum references. |
+| Neutron transport | [Fixed-source](verification/analytical/neutron/fixed_source/README.md) | Multigroup steady-state and transient cases, including a two-group manufactured solution, Reed's problem, AZURV1 variants, and infinite SHEM-361 benchmarks. |
+| Neutron transport | [k-eigenvalue](verification/analytical/neutron/k_eigenvalue/README.md) | Homogeneous and Kornreich-Parsons one-group slab benchmarks, plus infinite homogeneous SHEM-361 cases. |
 
-### Benchmark verification
+### Code-to-code verification
 
-Benchmark verification compares MC/DC against established reference Monte Carlo codes for cases without analytical solutions.
+Code-to-code verification assesses whether relative differences among independently implemented transport codes decrease at the expected statistical rate as their sampling effort increases.
+Convergence proportional to $N^{-1/2}$ supports that the participating codes are approaching the same solution at the expected Monte Carlo rate, although agreement alone cannot exclude shared bias.
+The arithmetic mean of all participating code estimates at the largest sampling level defines a fixed comparison reference for every level, allowing a case to include two or more codes without designating one as exact.
 
 | Physics | Suite | Description |
 | :------ | :---- | :---------- |
-| Neutron transport (multigroup) | Benchmark multigroup | Time-dependent benchmark cases, including the Kobayashi Dog-Leg and C5G7 transient benchmarks. |
-| Neutron transport (continuous energy) | [Benchmark continuous energy](verification/benchmark/neutron/continuous_energy/README.md) | Continuous-energy benchmark cases for representative reactor systems. |
+| Neutron transport | [Code-to-code](verification/code_to_code/neutron/README.md) | Time-dependent C5G7 and Kobayashi comparisons among participating codes. |
 
 ## Validation
 
