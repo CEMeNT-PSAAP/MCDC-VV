@@ -5,8 +5,9 @@
 # Python caches
 __pycache__/
 
-# Verification results
+# Generated results
 /results/
+/release/
 
 # Simulation output
 output*
