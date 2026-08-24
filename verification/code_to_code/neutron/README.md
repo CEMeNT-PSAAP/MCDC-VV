@@ -21,6 +21,7 @@ results/
   launch_config.yaml Effective suite launch configuration
   task.yaml          Task-generation configuration used by the launch
   convergence/      Statistical-convergence figures
+  reference/        Largest-sample fixed-reference figures and animations
   comparison/       Largest-sample comparison and difference animations
 
 task.yaml           Configure task generation for each case
@@ -97,7 +98,9 @@ python process.py maestro_run_<timestamp>
 ```
 
 Convergence figures are written to `results/convergence/`.
+Fixed-reference figures and animations are written to `results/reference/`.
 Animated spatial comparisons and relative-difference evolution at the largest shared sample size are written to `results/comparison/`.
+Each case may produce `reference_*.png` figures or `reference_*.gif` animations from the arithmetic mean of the largest-sample participating-code estimates.
 Each case produces `comparison.gif` for the participating-code solutions and `difference.gif` for their relative differences.
 The top-level `process.py` collects these figures under the repository's `results/` directory.
 

@@ -12,6 +12,7 @@ if str(SUITE_DIR) not in sys.path:
     sys.path.insert(0, str(SUITE_DIR))
 
 from util import (
+    animate_spatial_reference,
     comparison_reference,
     load_openmc_tally,
     particle_counts,
@@ -61,6 +62,22 @@ def main():
     )
     openmc_reference = load_openmc_fission(reference_files[-1])
     reference = comparison_reference(mcdc_reference, openmc_reference)
+
+    # Present the fixed largest-sample reference used by the convergence study.
+    largest_output = case_dir / f"output_{int(N_particle[-1])}.h5"
+    with h5py.File(largest_output, "r") as f:
+        time = f["tallies/tracklength_tally_0/grid/time"][:]
+        x = f["tallies/tracklength_tally_0/grid/x"][:]
+        y = f["tallies/tracklength_tally_0/grid/y"][:]
+        z = f["tallies/tracklength_tally_0/grid/z"][:]
+    animate_spatial_reference(
+        "fission",
+        0.5 * (time[:-1] + time[1:]),
+        (x, y, z),
+        reference,
+        filename="reference_fission.gif",
+    )
+
     del mcdc_reference, openmc_reference
 
     for index, (count, reference_file) in enumerate(zip(N_particle, reference_files)):

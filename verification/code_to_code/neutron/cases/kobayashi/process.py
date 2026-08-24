@@ -12,6 +12,7 @@ if str(SUITE_DIR) not in sys.path:
     sys.path.insert(0, str(SUITE_DIR))
 
 from util import (
+    animate_spatial_reference,
     comparison_reference,
     load_openmc_tally,
     particle_counts,
@@ -72,6 +73,24 @@ def main():
         mcdc_density_reference,
         openmc_density_reference,
     )
+
+    # Present the fixed largest-sample reference used by the convergence study.
+    largest_output = case_dir / f"output_{int(N_particle[-1])}.h5"
+    with h5py.File(largest_output, "r") as f:
+        time = f["tallies/tracklength_tally_0/grid/time"][:]
+        x = f["tallies/tracklength_tally_0/grid/x"][:]
+        y = f["tallies/tracklength_tally_0/grid/y"][:]
+        z = f["tallies/tracklength_tally_0/grid/z"][:]
+    animate_spatial_reference(
+        "flux",
+        0.5 * (time[:-1] + time[1:]),
+        (x, y, z),
+        flux_reference,
+        history=density_reference,
+        history_label="Neutron density",
+        filename="reference_flux.gif",
+    )
+
     del (
         mcdc_flux_reference,
         mcdc_density_reference,

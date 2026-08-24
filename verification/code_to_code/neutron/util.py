@@ -221,6 +221,91 @@ def animate_spatial_comparison(
     plt.close(fig)
 
 
+def animate_spatial_reference(
+    score,
+    time,
+    spatial_edges,
+    reference,
+    history=None,
+    history_label=None,
+    filename="reference.gif",
+):
+    """Animate a fixed comparison reference and its integral history."""
+    time = np.asarray(time)
+    reference = np.asarray(reference)
+    x, y, z = (np.asarray(edges) for edges in spatial_edges)
+    projections = _spatial_projections(reference)
+
+    if history is None:
+        history = np.sum(reference, axis=(1, 2, 3))
+    history = np.asarray(history)
+    if history.shape != time.shape:
+        raise ValueError(
+            "The reference history and time grid must have the same shape."
+        )
+    if history_label is None:
+        history_label = f"Total {score}"
+
+    projection_data = (
+        ("XY", x, y, projections[0]),
+        ("XZ", x, z, projections[1]),
+        ("YZ", y, z, projections[2]),
+    )
+    norm = _positive_norm(*projections)
+
+    fig, axes = plt.subplots(2, 2, figsize=(12, 9), constrained_layout=True)
+
+    # Show the transient's integral response beside its spatial projections.
+    history_axis = axes[0, 0]
+    positive_history = np.where(history > 0.0, history, np.nan)
+    history_axis.plot(time, positive_history, "b")
+    marker = history_axis.plot([], [], "ro", fillstyle="none")[0]
+    if np.any(history > 0.0):
+        history_axis.set_yscale("log")
+    history_axis.set_xlabel("Time")
+    history_axis.set_ylabel(history_label)
+    history_axis.grid()
+
+    images = []
+    for axis, (plane, horizontal, vertical, projection) in zip(
+        (axes[0, 1], axes[1, 0], axes[1, 1]), projection_data
+    ):
+        image = axis.imshow(
+            projection[0].T,
+            extent=(horizontal[0], horizontal[-1], vertical[0], vertical[-1]),
+            origin="lower",
+            aspect="auto",
+            cmap="viridis",
+            norm=norm,
+        )
+        axis.set_title(f"{score.capitalize()}-{plane}")
+        axis.set_xlabel(plane[0].lower())
+        axis.set_ylabel(plane[1].lower())
+        images.append((image, projection))
+
+    fig.colorbar(
+        images[0][0],
+        ax=(axes[0, 1], axes[1, 0], axes[1, 1]),
+        label=score.capitalize(),
+    )
+    title = fig.suptitle(f"{score.capitalize()} reference, t = {time[0]:.3g}")
+
+    def update(frame):
+        marker.set_data([time[frame]], [history[frame]])
+        for image, projection in images:
+            image.set_data(projection[frame].T)
+        title.set_text(f"{score.capitalize()} reference, t = {time[frame]:.3g}")
+        return [title, marker, *(image for image, _ in images)]
+
+    simulation = animation.FuncAnimation(fig, update, frames=len(time))
+    simulation.save(
+        filename,
+        writer=animation.PillowWriter(fps=max(2, len(time) // 10)),
+        dpi=120,
+    )
+    plt.close(fig)
+
+
 def animate_spatial_difference(
     score,
     time,

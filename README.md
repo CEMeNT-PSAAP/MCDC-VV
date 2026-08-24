@@ -16,10 +16,12 @@ Workflow orchestration is performed using [Maestro](https://github.com/llnl/maes
 configs/               Shared platform, user, and launch configurations
 verification/          Verification suites and their cases
 results/               Processed results organized by suite
+release/               Flattened figures prepared as release assets
 
 launch.py              Launch all enabled suites
 process.py             Process suites and collect their results
 cleanup.py             Remove generated outputs and processed results
+prepare_release.py     Prepare figures for a GitHub release
 ```
 
 MC/DC-VVP uses **suite**, **case**, and **task** as standard terms for its organizational hierarchy:
@@ -89,6 +91,15 @@ For each suite registered in `configs/launch_config.py`, the top-level processor
 An existing suite `results/` directory can still be collected when no Maestro run is present, and suites with neither are skipped.
 Within each suite, `convergence/` contains study-wide convergence figures and `comparison/` contains plots or animations from the largest-statistics result.
 Collecting a suite replaces that suite's existing top-level results.
+
+Prepare the collected PNG and GIF figures for upload as GitHub release assets:
+
+```bash
+python prepare_release.py
+```
+
+The script recreates `release/`, copies every figure from `results/`, and replaces each directory boundary in its relative path with `--` to form a unique flat asset name.
+The structured files in `results/` are not modified.
 
 Remove generated case outputs and processed results from every registered suite:
 
