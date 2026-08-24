@@ -38,9 +38,9 @@ def clear_case_figures(case_dir):
             figure.unlink()
 
 
-def collect_case_figures(case_dir, destination, case_name):
+def collect_case_figures(case_dir, destination, case_name, patterns):
     """Move generated case figures into a named suite results directory."""
-    for pattern in ("*.png", "*.gif"):
+    for pattern in patterns:
         for figure in case_dir.glob(pattern):
             figure.replace(destination / f"{case_name}_{figure.name}")
 
@@ -90,6 +90,7 @@ with task_file.open("r") as f:
 results_dir = suite_dir / "results"
 convergence_dir = results_dir / "convergence"
 comparison_dir = results_dir / "comparison"
+reference_dir = results_dir / "reference"
 
 # Start with an empty suite results hierarchy on every processing run.
 if results_dir.is_dir():
@@ -97,6 +98,7 @@ if results_dir.is_dir():
 
 convergence_dir.mkdir(parents=True, exist_ok=True)
 comparison_dir.mkdir(parents=True, exist_ok=True)
+reference_dir.mkdir(parents=True, exist_ok=True)
 
 # Keep the effective launch and task definitions beside the processed figures.
 shutil.copy2(launch_config_file, results_dir / "launch_config.yaml")
@@ -130,7 +132,18 @@ for case_name, task in tasks.items():
         cwd=case_dir,
         check=True,
     )
-    collect_case_figures(case_dir, convergence_dir, case_name)
+    collect_case_figures(
+        case_dir,
+        convergence_dir,
+        case_name,
+        ("convergence_*.png",),
+    )
+    collect_case_figures(
+        case_dir,
+        reference_dir,
+        case_name,
+        ("reference_*.png", "reference_*.gif"),
+    )
 
     # Compare the participating codes at the largest shared sample size.
     counts = particle_counts(task["logN_min"], task["logN_max"], task["N_task"])
@@ -149,7 +162,12 @@ for case_name, task in tasks.items():
         cwd=case_dir,
         check=True,
     )
-    collect_case_figures(case_dir, comparison_dir, case_name)
+    collect_case_figures(
+        case_dir,
+        comparison_dir,
+        case_name,
+        ("comparison.gif", "difference.gif"),
+    )
 
 
 # ======================================================================================
